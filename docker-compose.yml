@@ -6,4 +6,4 @@ models:
     - ./:/app
   ports:
     - "8001:8000"
-  command: bash -c "mod_wsgi-express start-server --working-directory . --reload-on-changes ./perhoos/wsgi.py"
+  command: bash -c "mod_wsgi-express start-server --working-directory . --reload-on-changes ./app-microservices/wsgi.py"
