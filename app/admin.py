@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import User, Item, Borrow, Review
+
+admin.site.register(User)
+admin.site.register(Item)
+admin.site.register(Borrow)
+admin.site.register(Review)
