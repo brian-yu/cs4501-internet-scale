@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.contrib.auth.models import User as DjangoUser
 
 class User(models.Model):
@@ -8,6 +8,10 @@ class User(models.Model):
         max_length = 10,
         validators=[RegexValidator(r'^\d{5}(?:[-\s]\d{4})?$')]
     )
+    lender_rating_total = models.IntegerField()
+    lender_rating_count = models.IntegerField()
+    borrower_rating_total = models.IntegerField()
+    borrower_rating_count = models.IntegerField()
 
 class Item(models.Model):
     EXCELLENT = 'E'
@@ -33,7 +37,6 @@ class Item(models.Model):
     )
     currently_borrowed = models.BooleanField()
 
-
 class Borrow(models.Model):
     lender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lent_items")
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="borrowed_items")
@@ -41,4 +44,12 @@ class Borrow(models.Model):
     borrow_date = models.DateTimeField('date borrowed')
     borrow_days = models.IntegerField(
         validators = [MinValueValidator(1)]
+    )
+
+class Review(models.Model):
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="written_reviews")
+    reviewee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_reviews")
+    text = models.TextField()
+    score = models.IntegerField(
+        validators = [MinValueValidator(1), MaxValueValidator(5)]
     )
