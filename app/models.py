@@ -4,6 +4,8 @@ from django.contrib.auth.models import User as DjangoUser
 
 class User(models.Model):
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    overview = models.TextField() # an optional introduction about the user's expertise/hobbies
     zip_code = models.CharField(
         max_length = 10,
         validators=[RegexValidator(r'^\d{5}(?:[-\s]\d{4})?$')]
@@ -12,6 +14,9 @@ class User(models.Model):
     lender_rating_count = models.IntegerField()
     borrower_rating_total = models.IntegerField()
     borrower_rating_count = models.IntegerField()
+
+    def __str__(self):
+        return "Name: " + self.name
 
 class Item(models.Model):
     EXCELLENT = 'E'
@@ -36,6 +41,9 @@ class Item(models.Model):
         validators = [MinValueValidator(1)]
     )
     currently_borrowed = models.BooleanField()
+
+    def __str__(self):
+        return "Item name: " + self.name + ", loaned by: " + self.owner
 
 class Borrow(models.Model):
     lender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lent_items")
