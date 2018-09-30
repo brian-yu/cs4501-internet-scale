@@ -17,6 +17,15 @@ class User(models.Model):
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
+    def as_json(self):
+        return dict(
+            id=self.id,
+            first_name=self.user.first_name,
+            last_name=self.user.last_name, 
+            overview=self.overview,
+            zip_code=self.zip_code,
+        )
+
 class Item(models.Model):
     EXCELLENT = 'E'
     GOOD = 'G'
@@ -42,7 +51,7 @@ class Item(models.Model):
     currently_borrowed = models.BooleanField()
 
     def __str__(self):
-        return self.title + ", owned by: " + self.owner
+        return self.title + " owned by " + self.owner.__str__()
 
 class Borrow(models.Model):
     lender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lent_items")
@@ -52,6 +61,8 @@ class Borrow(models.Model):
     borrow_days = models.IntegerField(
         validators = [MinValueValidator(1)]
     )
+    def __str__(self):
+        return self.borrower.__str__() + " borrowing " + self.item.__str__()
 
 class Review(models.Model):
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="written_reviews")
@@ -60,3 +71,4 @@ class Review(models.Model):
     score = models.IntegerField(
         validators = [MinValueValidator(1), MaxValueValidator(5)]
     )
+    

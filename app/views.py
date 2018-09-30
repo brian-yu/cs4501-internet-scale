@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from .models import User
+from django.forms.models import model_to_dict
+import json
 
 
 def index(request):
@@ -10,7 +12,8 @@ def user(request, id):
     if request.method == "GET":
         try:
             user = User.objects.get(pk=id)
-            return HttpResponse("GET user with id {} - {}".format(id, user.user.first_name + " " + user.user.last_name))
+            user_json = json.dumps(model_to_dict( user ))
+            return HttpResponse(user_json, content_type='application/json')
         except User.DoesNotExist:
             raise Http404("User does not exist")
         
