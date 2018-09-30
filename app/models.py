@@ -1,9 +1,11 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
-from django.contrib.auth.models import User as DjangoUser
 
 class User(models.Model):
-    user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
     overview = models.TextField() # an optional introduction about the user's expertise/hobbies
     zip_code = models.CharField(
         max_length = 10,
@@ -15,16 +17,7 @@ class User(models.Model):
     borrower_rating_count = models.IntegerField()
 
     def __str__(self):
-        return self.user.first_name + " " + self.user.last_name
-
-    def as_json(self):
-        return dict(
-            id=self.id,
-            first_name=self.user.first_name,
-            last_name=self.user.last_name, 
-            overview=self.overview,
-            zip_code=self.zip_code,
-        )
+        return self.first_name + " " + self.last_name
 
 class Item(models.Model):
     EXCELLENT = 'E'
