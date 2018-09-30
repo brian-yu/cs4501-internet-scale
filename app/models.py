@@ -42,7 +42,7 @@ class Item(models.Model):
     currently_borrowed = models.BooleanField()
 
     def __str__(self):
-        return self.name + ", owned by: " + self.owner
+        return self.title + ", owned by: " + self.owner
 
 class Borrow(models.Model):
     lender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lent_items")
