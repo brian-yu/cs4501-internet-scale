@@ -15,7 +15,7 @@ class User(models.Model):
     borrower_rating_count = models.IntegerField()
 
     def __str__(self):
-        return "Name: " + self.name
+        return self.user.first_name + " " + self.user.last_name
 
 class Item(models.Model):
     EXCELLENT = 'E'
@@ -42,7 +42,7 @@ class Item(models.Model):
     currently_borrowed = models.BooleanField()
 
     def __str__(self):
-        return "Item name: " + self.name + ", loaned by: " + self.owner
+        return self.name + ", owned by: " + self.owner
 
 class Borrow(models.Model):
     lender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lent_items")
