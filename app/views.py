@@ -16,7 +16,7 @@ def user(request, id):
             result = json.dumps({'result': user_dict, 'ok': True})
             return HttpResponse(result, content_type='application/json')
         except User.DoesNotExist:
-            result = {'error': 'user not found', 'ok': False}
+            result = json.dumps({'error': 'user not found', 'ok': False})
             return HttpResponse(result, content_type='application/json')
         
     elif request.method == "POST":
