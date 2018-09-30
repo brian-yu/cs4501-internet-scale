@@ -5,7 +5,6 @@ class User(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
     overview = models.TextField() # an optional introduction about the user's expertise/hobbies
     zip_code = models.CharField(
         max_length = 10,
