@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from .models import User, Review, Borrow, Item
 from django.forms.models import model_to_dict
-import simplejson as json
-
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 
 
 def index(request):
@@ -14,10 +14,10 @@ def get(request, model, id):
     try:
         obj = model.objects.get(pk=id)
         obj_dict = model_to_dict( obj )
-        result = json.dumps({'result': obj_dict, 'ok': True})
+        result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
         return HttpResponse(result, content_type='application/json')
-    except User.DoesNotExist:
-        result = json.dumps({'error': 'object not found', 'ok': False})
+    except model.DoesNotExist:
+        result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
         return HttpResponse(result, content_type='application/json')
 
 def user(request, id):

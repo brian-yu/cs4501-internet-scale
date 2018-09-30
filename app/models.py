@@ -63,4 +63,5 @@ class Review(models.Model):
     score = models.IntegerField(
         validators = [MinValueValidator(1), MaxValueValidator(5)]
     )
-    
+    def __str__(self):
+        return self.reviewer.__str__() + "'s review of " + self.reviewee.__str__()

@@ -1,7 +1,8 @@
 models:
-  image: brianyu/django
+  image: tp33/django
   external_links:
     - mysql:db
+  entrypoint: ./startup.sh
   volumes:
     - ./:/app
   ports:
