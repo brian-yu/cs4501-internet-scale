@@ -4,7 +4,6 @@ from django.contrib.auth.models import User as DjangoUser
 
 class User(models.Model):
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
     overview = models.TextField() # an optional introduction about the user's expertise/hobbies
     zip_code = models.CharField(
         max_length = 10,
