@@ -12,10 +12,12 @@ def user(request, id):
     if request.method == "GET":
         try:
             user = User.objects.get(pk=id)
-            user_json = json.dumps(model_to_dict( user ))
-            return HttpResponse(user_json, content_type='application/json')
+            user_dict = model_to_dict( user )
+            result = json.dumps({'result': user_dict, 'ok': True})
+            return HttpResponse(result, content_type='application/json')
         except User.DoesNotExist:
-            raise Http404("User does not exist")
+            result = {'error': 'user not found', 'ok': False}
+            return HttpResponse(result, content_type='application/json')
         
     elif request.method == "POST":
         return HttpResponse("POST user with id {}".format(id))
