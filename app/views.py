@@ -101,7 +101,7 @@ def delete_review(request, id):
 @csrf_exempt
 def create_user(request):
     if request.method == "POST":
-        form_data = request.CREATE
+        form_data = request.POST
         try:
             first_name = form_data['first_name']
             last_name = form_data['last_name']
@@ -137,7 +137,7 @@ def create_user(request):
 @csrf_exempt
 def create_item(request):
     if request.method == "POST":
-        form_data = request.CREATE
+        form_data = request.POST
         try:
             owner = form_data['owner']
             title = form_data['title']
@@ -164,7 +164,7 @@ def create_item(request):
 @csrf_exempt
 def create_borrow(request):
     if request.method == "POST":
-        form_data = request.CREATE
+        form_data = request.POST
         try:
             lender = form_data['lender']
             borrower = form_data['borrower']
@@ -190,7 +190,7 @@ def create_borrow(request):
 @csrf_exempt
 def create_review(request):
     if request.method == "POST":
-        form_data = request.CREATE
+        form_data = request.POST
         try:
             reviewer = form_data['reviewer']
             reviewee = form_data['reviewee']

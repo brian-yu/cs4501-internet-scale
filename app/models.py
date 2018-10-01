@@ -12,9 +12,9 @@ class User(models.Model):
         max_length = 10,
         validators=[RegexValidator(r'^\d{5}(?:[-\s]\d{4})?$')]
     )
-    lender_rating_total = models.IntegerField(default=5, blank=True)
+    lender_rating_total = models.IntegerField(default=0, blank=True)
     lender_rating_count = models.IntegerField(default=0, blank=True)
-    borrower_rating_total = models.IntegerField(default=5, blank=True)
+    borrower_rating_total = models.IntegerField(default=0, blank=True)
     borrower_rating_count = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
