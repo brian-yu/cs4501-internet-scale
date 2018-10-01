@@ -16,7 +16,7 @@ def get(request, model, id):
         obj_dict = model_to_dict( obj )
         result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
         return HttpResponse(result, content_type='application/json')
-    except model.DoesNotExist:
+    except model.DoesNotExist: # should never happen because we're always routing from a method
         result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
         return HttpResponse(result, content_type='application/json')
 
