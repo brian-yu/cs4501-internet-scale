@@ -27,6 +27,7 @@ def update(request, model, id):
         form_data = request.POST
         for item in form_data.items():
             setattr(obj, item[0], item[1])
+        obj.save()
         obj_dict = model_to_dict( obj )
         result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
         return HttpResponse(result, content_type='application/json')
