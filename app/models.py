@@ -5,15 +5,17 @@ class User(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
     overview = models.TextField() # an optional introduction about the user's expertise/hobbies
     zip_code = models.CharField(
         max_length = 10,
         validators=[RegexValidator(r'^\d{5}(?:[-\s]\d{4})?$')]
     )
-    lender_rating_total = models.IntegerField()
-    lender_rating_count = models.IntegerField()
-    borrower_rating_total = models.IntegerField()
-    borrower_rating_count = models.IntegerField()
+    lender_rating_total = models.IntegerField(default=5, blank=True)
+    lender_rating_count = models.IntegerField(default=0, blank=True)
+    borrower_rating_total = models.IntegerField(default=5, blank=True)
+    borrower_rating_count = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -40,7 +42,7 @@ class Item(models.Model):
     max_borrow_days = models.IntegerField(
         validators = [MinValueValidator(1)]
     )
-    currently_borrowed = models.BooleanField()
+    currently_borrowed = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
         return self.title + " owned by " + self.owner.__str__()

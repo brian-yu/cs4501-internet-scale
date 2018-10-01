@@ -34,22 +34,6 @@ def update(request, model, id):
     except model.DoesNotExist:
         result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
         return HttpResponse(result, content_type='application/json')
-
-def create(request, model, id):
-    try:
-        form_data = request.CREATE
-        # check if all fields are present in request
-        fields = model._meta.get_fields()
-        required_fields = []
-        for f in fields:
-            if hasattr(f, 'blank') and f.blank == False:
-                required_fields.append(f)
-        for f in required_fields:
-            if f not in form_data:
-                result = json.dumps({'error': 'Field {} is not present in CREATE request'.format(f), 'ok': False})
-                return HttpResponse(result, content_type='application/json')
-        for f in required_fields:
-        new_instance = model.objects.create()
         
 def delete(request, model, id):
     try:
@@ -117,19 +101,111 @@ def delete_review(request, id):
 @csrf_exempt
 def create_user(request):
     if request.method == "POST":
-        return create(request, User)
+        form_data = request.CREATE
+        try:
+            first_name = form_data['first_name']
+            last_name = form_data['last_name']
+            email = form_data['email']
+            overview = form_data['overview']
+            zip_code = form_data['zip_code']
+            if 'phone_number' in form_data:
+                phone_number = form_data['phone_number']
+                obj = User.objects.create(
+                    first_name = first_name,
+                    last_name = last_name,
+                    email = email,
+                    phone_number = phone_number,
+                    overview = overview,
+                    zip_code = zip_code
+                )
+            else:
+                obj = User.objects.create(
+                    first_name = first_name,
+                    last_name = last_name,
+                    email = email,
+                    overview = overview,
+                    zip_code = zip_code
+                )
+            obj.save()
+            obj_dict = model_to_dict( obj )
+            result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
+            return HttpResponse(result, content_type='application/json')
+        except:
+            result = json.dumps({'error': 'Missing field or malformed data in CREATE request', 'ok': False})
+            return HttpResponse(result, content_type='application/json')
 
 @csrf_exempt
 def create_item(request):
     if request.method == "POST":
-        return create(request, Item)
+        form_data = request.CREATE
+        try:
+            owner = form_data['owner']
+            title = form_data['title']
+            condition = form_data['condition']
+            description = form_data['description']
+            price_per_day = form_data['price_per_day']
+            max_borrow_days = form_data['max_borrow_days']
+            obj = Item.objects.create(
+                owner=owner,
+                title=title,
+                condition=condition,
+                description=description,
+                price_per_day=price_per_day,
+                max_borrow_days=max_borrow_days
+            )
+            obj.save()
+            obj_dict = model_to_dict( obj )
+            result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
+            return HttpResponse(result, content_type='application/json')
+        except:
+            result = json.dumps({'error': 'Missing field or malformed data in CREATE request', 'ok': False})
+            return HttpResponse(result, content_type='application/json')
 
 @csrf_exempt
 def create_borrow(request):
     if request.method == "POST":
-        return create(request, Borrow)
+        form_data = request.CREATE
+        try:
+            lender = form_data['lender']
+            borrower = form_data['borrower']
+            item = form_data['item']
+            borrow_date = form_data['borrow_date']
+            borrow_days = form_data['borrow_days']
+            obj = Borrow.objects.create(
+                lender=lender,
+                borrower=borrower,
+                item=item,
+                borrow_date=borrow_date,
+                borrow_days=borrow_days
+            )
+            obj.save()
+            obj_dict = model_to_dict( obj )
+            result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
+            return HttpResponse(result, content_type='application/json')
+        except:
+            result = json.dumps({'error': 'Missing field or malformed data in CREATE request', 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+
 
 @csrf_exempt
 def create_review(request):
     if request.method == "POST":
-        return create(request, Review)
+        form_data = request.CREATE
+        try:
+            reviewer = form_data['reviewer']
+            reviewee = form_data['reviewee']
+            text = form_data['text']
+            score = form_data['score']
+            obj = Review.objects.create(
+                reviewer=reviewer,
+                reviewee=reviewee,
+                text=text,
+                score=score
+            )
+            obj.save()
+            obj_dict = model_to_dict( obj )
+            result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
+            return HttpResponse(result, content_type='application/json')
+        except:
+            result = json.dumps({'error': 'Missing field or malformed data in CREATE request', 'ok': False})
+            return HttpResponse(result, content_type='application/json')
