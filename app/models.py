@@ -56,7 +56,7 @@ class Borrow(models.Model):
         validators = [MinValueValidator(1)]
     )
     def __str__(self):
-        return self.borrower.__str__() + " borrowing " + self.item.__str__()
+        return self.borrower.__str__() + " borrowing " + self.item.__str__() + " from " + self.lender.__str__()
 
 class Review(models.Model):
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="written_reviews")

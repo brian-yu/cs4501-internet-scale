@@ -131,7 +131,7 @@ def create_user(request):
             result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
             return HttpResponse(result, content_type='application/json')
         except:
-            result = json.dumps({'error': 'Missing field or malformed data in CREATE request', 'ok': False})
+            result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
 @csrf_exempt
@@ -139,7 +139,8 @@ def create_item(request):
     if request.method == "POST":
         form_data = request.POST
         try:
-            owner = form_data['owner']
+            owner_id = form_data['owner']
+            owner = User.objects.get(id=owner_id)
             title = form_data['title']
             condition = form_data['condition']
             description = form_data['description']
@@ -158,7 +159,7 @@ def create_item(request):
             result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
             return HttpResponse(result, content_type='application/json')
         except:
-            result = json.dumps({'error': 'Missing field or malformed data in CREATE request', 'ok': False})
+            result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
 @csrf_exempt
@@ -166,9 +167,14 @@ def create_borrow(request):
     if request.method == "POST":
         form_data = request.POST
         try:
-            lender = form_data['lender']
-            borrower = form_data['borrower']
-            item = form_data['item']
+            # can probably change this so you get the lender_id from the Item object
+            # might depend on frontend implementation
+            lender_id = form_data['lender']
+            lender = User.objects.get(id=lender_id)
+            borrower_id = form_data['borrower']
+            borrower = User.objects.get(id=borrower_id)
+            item_id = form_data['item']
+            item = Item.objects.get(id=item_id)
             borrow_date = form_data['borrow_date']
             borrow_days = form_data['borrow_days']
             obj = Borrow.objects.create(
@@ -183,7 +189,7 @@ def create_borrow(request):
             result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
             return HttpResponse(result, content_type='application/json')
         except:
-            result = json.dumps({'error': 'Missing field or malformed data in CREATE request', 'ok': False})
+            result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
 
@@ -192,8 +198,10 @@ def create_review(request):
     if request.method == "POST":
         form_data = request.POST
         try:
-            reviewer = form_data['reviewer']
-            reviewee = form_data['reviewee']
+            reviewer_id = form_data['reviewer']
+            reviewer = User.objects.get(id=reviewer_id)
+            reviewee_id = form_data['reviewee']
+            reviewee = User.objects.get(id=reviewee_id)
             text = form_data['text']
             score = form_data['score']
             obj = Review.objects.create(
@@ -207,5 +215,5 @@ def create_review(request):
             result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
             return HttpResponse(result, content_type='application/json')
         except:
-            result = json.dumps({'error': 'Missing field or malformed data in CREATE request', 'ok': False})
+            result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
