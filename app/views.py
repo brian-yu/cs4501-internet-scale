@@ -45,6 +45,10 @@ def delete(request, model, id):
         result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
         return HttpResponse(result, content_type='application/json')
 
+#create boilerplate
+def create(request, model):
+    return HttpResponse("boilerplate create", content_type='application/json')
+
 @csrf_exempt
 def user(request, id):
     if request.method == "GET":
@@ -96,3 +100,23 @@ def delete_borrow(request, id):
 def delete_review(request, id):
     if request.method == "DELETE":
         return delete(request, Review, id)
+
+@csrf_exempt
+def create_user(request):
+    if request.method == "POST":
+        return create(request, User)
+
+@csrf_exempt
+def create_item(request):
+    if request.method == "POST":
+        return create(request, Item)
+
+@csrf_exempt
+def create_borrow(request):
+    if request.method == "POST":
+        return create(request, Borrow)
+
+@csrf_exempt
+def create_review(request):
+    if request.method == "POST":
+        return create(request, Review)
