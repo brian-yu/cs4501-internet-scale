@@ -35,6 +35,26 @@ def update(request, model, id):
         result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
         return HttpResponse(result, content_type='application/json')
 
+def create(request, model, id):
+    try:
+        form_data = request.CREATE
+        # check if all fields are present in request
+        fields = model._meta.get_fields()
+        required_fields = []
+        for f in fields:
+            if hasattr(f, 'blank') and f.blank == False:
+                required_fields.append(f)
+        for f in required_fields:
+            if f not in form_data:
+                result = json.dumps({'error': 'Field {} is not present in CREATE request'.format(f), 'ok': False})
+                return HttpResponse(result, content_type='application/json')
+        for f in required_fields:
+        new_instance = model.objects.create()
+        
+    except model.DoesNotExist:
+        result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
+        return HttpResponse(result, content_type='application/json')
+
 @csrf_exempt
 def user(request, id):
     if request.method == "GET":
@@ -43,12 +63,18 @@ def user(request, id):
     elif request.method == "POST":
         return update(request, User, id)
 
+    elif request.method == "CREATE":
+        return create(request, User, id)
+
 def item(request, id):
     if request.method == "GET":
         return get(request, Item, id)
         
     elif request.method == "POST":
         return update(request, Item, id)
+
+    elif request.method == "CREATE":
+        return create(request, Item, id)
 
 def review(request, id):
     if request.method == "GET":
@@ -57,9 +83,15 @@ def review(request, id):
     elif request.method == "POST":
         return update(request, Review, id)
 
+    elif request.method == "CREATE":
+        return create(request, Review, id)
+
 def borrow(request, id):
     if request.method == "GET":
         return get(request, Borrow, id)
         
     elif request.method == "POST":
         return update(request, Borrow, id)
+
+    elif request.method == "CREATE":
+        return create(request, Borrow, id)
