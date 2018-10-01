@@ -51,9 +51,16 @@ def create(request, model, id):
         for f in required_fields:
         new_instance = model.objects.create()
         
+def delete(request, model, id):
+    try:
+        obj = model.objects.get(pk=id)
+        obj.delete()
+        result = json.dumps({'ok': True})
+        return HttpResponse(result, content_type='application/json')
     except model.DoesNotExist:
         result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
         return HttpResponse(result, content_type='application/json')
+
 
 @csrf_exempt
 def user(request, id):
@@ -63,9 +70,7 @@ def user(request, id):
     elif request.method == "POST":
         return update(request, User, id)
 
-    elif request.method == "CREATE":
-        return create(request, User, id)
-
+@csrf_exempt
 def item(request, id):
     if request.method == "GET":
         return get(request, Item, id)
@@ -73,9 +78,7 @@ def item(request, id):
     elif request.method == "POST":
         return update(request, Item, id)
 
-    elif request.method == "CREATE":
-        return create(request, Item, id)
-
+@csrf_exempt
 def review(request, id):
     if request.method == "GET":
         return get(request, Review, id)
@@ -83,9 +86,7 @@ def review(request, id):
     elif request.method == "POST":
         return update(request, Review, id)
 
-    elif request.method == "CREATE":
-        return create(request, Review, id)
-
+@csrf_exempt
 def borrow(request, id):
     if request.method == "GET":
         return get(request, Borrow, id)
@@ -93,5 +94,42 @@ def borrow(request, id):
     elif request.method == "POST":
         return update(request, Borrow, id)
 
-    elif request.method == "CREATE":
-        return create(request, Borrow, id)
+@csrf_exempt
+def delete_user(request, id):
+    if request.method == "DELETE":
+        return delete(request, User, id)
+
+@csrf_exempt
+def delete_item(request, id):
+    if request.method == "DELETE":
+        return delete(request, Item, id)
+
+@csrf_exempt
+def delete_borrow(request, id):
+    if request.method == "DELETE":
+        return delete(request, Borrow, id)
+
+@csrf_exempt
+def delete_review(request, id):
+    if request.method == "DELETE":
+        return delete(request, Review, id)
+
+@csrf_exempt
+def create_user(request):
+    if request.method == "POST":
+        return create(request, User)
+
+@csrf_exempt
+def create_item(request):
+    if request.method == "POST":
+        return create(request, Item)
+
+@csrf_exempt
+def create_borrow(request):
+    if request.method == "POST":
+        return create(request, Borrow)
+
+@csrf_exempt
+def create_review(request):
+    if request.method == "POST":
+        return create(request, Review)
