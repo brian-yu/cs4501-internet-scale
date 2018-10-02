@@ -42,19 +42,26 @@ Review
 
 Example routes
 
-    /api/v1/users/4 - GET to return info about user with id 4, POST to update the user's info.
-    /api/v1/items/17 - GET to return info about item with id 17, POST to update the item.
-    - NOTE: cannot change the item's owner
-    /api/v1/borrows/9 - GET to return info about borrow with id 9, POST to update the borrow's info.
-    - NOTE: cannot change lender, borrower, or item
-    /api/v1/reviews/9 - GET to return info about review with id 9, POST to update the review.
-    - NOTE: cannot change the reviewer or reviewee
-    /api/v1/items/create - POST to create a new item
-    /api/v1/borrows/create - POST to create a new borrow
-    - NOTE: DateTimeField input format is YYYY-MM-DD HH:MM
-    /api/v1/reviews/23/delete - DELETE to delete review with id 23
+    /api/v1/users/4 
+        - GET to return info about user with id 4, POST to update the user's info.
+    /api/v1/items/17 
+        - GET to return info about item with id 17, POST to update the item.
+        - NOTE: cannot change the item's owner
+    /api/v1/borrows/9
+        - GET to return info about borrow with id 9, POST to update the borrow's info.
+        - NOTE: cannot change lender, borrower, or item
+    /api/v1/reviews/9 
+        - GET to return info about review with id 9, POST to update the review.
+        - NOTE: cannot change the reviewer or reviewee
+    /api/v1/items/create 
+        - POST to create a new item
+    /api/v1/borrows/create 
+        - POST to create a new borrow
+        - NOTE: DateTimeField input format is YYYY-MM-DD HH:MM
+    /api/v1/reviews/23/delete 
+        - DELETE to delete review with id 23
     
-Example URLs
+Example URLs that work with fixtures
 
     http://localhost:8001/api/v1/items/9/
     http://localhost:8001/api/v1/users/4/
