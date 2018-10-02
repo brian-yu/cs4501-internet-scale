@@ -11,8 +11,7 @@ class User(models.Model):
         regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(
         validators=[phone_regex], max_length=17, blank=True)
-    # an optional introduction about the user's expertise/hobbies
-    overview = models.TextField()
+    overview = models.TextField() #introduction about the user
     zip_code = models.CharField(
         max_length=10,
         validators=[RegexValidator(r'^\d{5}(?:[-\s]\d{4})?$')]
