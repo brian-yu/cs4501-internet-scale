@@ -5,38 +5,38 @@ Our marketplace is a borrowing and lending site where users can post items they 
 ## Models Overview
 
 ### User
-- first_name CHARFIELD
-- last_name CHARFIELD
-- email CHARFIELD
-- phone_number CHARFIELD, not required
-- overview TEXTFIELD
-- zip_code CHARFIELD
-- lender_rating_total INTEGERFIELD, not required
-- lender_rating_count INTEGERFIELD, not required
-- borrower_rating_total INTEGERFIELD, not required
-- borrower_rating_count INTEGERFIELD, not required
+- `first_name` CHARFIELD
+- `last_name` CHARFIELD
+- `email` CHARFIELD
+- `phone_number` CHARFIELD, not required
+- `overview` TEXTFIELD
+- `zip_code` CHARFIELD
+- `lender_rating_total` INTEGERFIELD, not required
+- `lender_rating_count` INTEGERFIELD, not required
+- `borrower_rating_total` INTEGERFIELD, not required
+- `borrower_rating_count` INTEGERFIELD, not required
 
 ### Item
-- owner FOREIGNKEY
-- title CHARFIELD
-- condition CHARFIELD
-- description TEXTFIELD
-- price_per_day DECIMALFIELD
-- max_borrow_days INTEGERFIELD
-- currently_borrowed BOOLEANFIELD, not required
+- `owner` FOREIGNKEY
+- `title` CHARFIELD
+- `condition` CHARFIELD
+- `description` TEXTFIELD
+- `price_per_day` DECIMALFIELD
+- `max_borrow_days` INTEGERFIELD
+- `currently_borrowed` BOOLEANFIELD, not required
 
 ### Borrow
-- lender FOREIGNKEY
-- borrower FOREIGNKEY
-- item FOREIGNKEY
-- borrow_date DATETIMEFIELD
-- borrow_days INTEGERFIELD
+- `lender` FOREIGNKEY
+- `borrower` FOREIGNKEY
+- `item` FOREIGNKEY
+- `borrow_date` DATETIMEFIELD
+- `borrow_days` INTEGERFIELD
 
 ### Review
-- reviewer FOREIGNKEY
-- reviewee FOREIGNKEY
-- text TEXTFIELD
-- score INTEGERFIELD
+- `reviewer` FOREIGNKEY
+- `reviewee` FOREIGNKEY
+- `text` TEXTFIELD
+- `score` INTEGERFIELD
 
 ## API Overview
 
