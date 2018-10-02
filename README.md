@@ -40,7 +40,7 @@ Review
 
 ### API Overview
 
-Example routes
+####Example routes
 
     /api/v1/users/4 
         - GET to return info about user with id 4, POST to update the user's info.
@@ -61,13 +61,14 @@ Example routes
     /api/v1/reviews/23/delete 
         - DELETE to delete review with id 23
     
-Example URLs that work with fixtures
+####Example URLs that work with fixtures
 
     http://localhost:8001/api/v1/items/9/
     http://localhost:8001/api/v1/users/4/
     http://localhost:8001/api/v1/borrows/3/
     http://localhost:8001/api/v1/reviews/2/
 
+### Postman example screenshots
 
 ![postman example](img/create_review.png)
 ![postman example](img/create_borrow.png)
