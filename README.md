@@ -4,7 +4,7 @@ Our marketplace is a borrowing and lending site where users can post items they 
 
 ## Models Overview
 
-User
+### User
 - first_name CHARFIELD
 - last_name CHARFIELD
 - email CHARFIELD
@@ -16,7 +16,7 @@ User
 - borrower_rating_total INTEGERFIELD, not required
 - borrower_rating_count INTEGERFIELD, not required
 
-Item
+### Item
 - owner FOREIGNKEY
 - title CHARFIELD
 - condition CHARFIELD
@@ -25,14 +25,14 @@ Item
 - max_borrow_days INTEGERFIELD
 - currently_borrowed BOOLEANFIELD, not required
 
-Borrow
+### Borrow
 - lender FOREIGNKEY
 - borrower FOREIGNKEY
 - item FOREIGNKEY
 - borrow_date DATETIMEFIELD
 - borrow_days INTEGERFIELD
 
-Review
+### Review
 - reviewer FOREIGNKEY
 - reviewee FOREIGNKEY
 - text TEXTFIELD
