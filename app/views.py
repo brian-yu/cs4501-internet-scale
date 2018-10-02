@@ -10,40 +10,54 @@ import json
 def index(request):
     return HttpResponse("Hello, world. You're at the app index.")
 
+def jsonResponse(dic=None):
+    if dic == None:
+        result = json.dumps({'ok': True})
+    else:
+        result = json.dumps({'result': dic, 'ok': True}, cls=DjangoJSONEncoder)
+    return HttpResponse(result, content_type='application/json')
+
+def jsonErrorResponse(model_name, id):
+    result = json.dumps({'error': '{} with id={} not found'.format(model_name, id), 'ok': False})
+    return HttpResponse(result, content_type='application/json')
 
 def get(request, model, id):
     try:
         obj = model.objects.get(pk=id)
         obj_dict = model_to_dict( obj )
-        result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
-        return HttpResponse(result, content_type='application/json')
+        return jsonResponse(obj_dict)
     except model.DoesNotExist: # should never happen because we're always routing from a method
-        result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
-        return HttpResponse(result, content_type='application/json')
+        return jsonErrorResponse(type(model()).__name__, id)
 
 def update(request, model, id):
     try:
         obj = model.objects.get(pk=id)
         form_data = request.POST
-        for item in form_data.items():
-            setattr(obj, item[0], item[1])
+        for key, value in form_data.items():
+            if key in {'owner', 'lender', 'reviewer', 'reviewee', 'borrower'}:
+                try:
+                    value = User.objects.get(pk=value)
+                except:
+                    return jsonErrorResponse("User", value)
+            if key == 'item':
+                try:
+                    value = Item.objects.get(pk=value)
+                except:
+                    return jsonErrorResponse("Item", value)
+            setattr(obj, key, value)
         obj.save()
         obj_dict = model_to_dict( obj )
-        result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
-        return HttpResponse(result, content_type='application/json')
+        return jsonResponse(obj_dict)
     except model.DoesNotExist:
-        result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
-        return HttpResponse(result, content_type='application/json')
+        return jsonErrorResponse(type(model()).__name__, id)
         
 def delete(request, model, id):
     try:
         obj = model.objects.get(pk=id)
         obj.delete()
-        result = json.dumps({'ok': True})
-        return HttpResponse(result, content_type='application/json')
+        return jsonResponse({'ok': True})
     except model.DoesNotExist:
-        result = json.dumps({'error': '{} not found'.format(type(model()).__name__), 'ok': False})
-        return HttpResponse(result, content_type='application/json')
+        return jsonErrorResponse(type(model()).__name__, id)
 
 
 @csrf_exempt
