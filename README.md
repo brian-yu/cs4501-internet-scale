@@ -50,8 +50,9 @@ Example routes
     /api/v1/reviews/9 - GET to return info about review with id 9, POST to update the review.
     - NOTE: cannot change the reviewer or reviewee
     /api/v1/items/create - POST to create a new item
-    ![postman example](img/create_review.png)
     /api/v1/borrows/create - POST to create a new borrow
     - NOTE: DateTimeField input format is YYYY-MM-DD HH:MM
-    ![postman example](img/create_borrow.png)
     /api/v1/reviews/23/delete - DELETE to delete review with id 23
+    
+![postman example](img/create_review.png)
+![postman example](img/create_borrow.png)
