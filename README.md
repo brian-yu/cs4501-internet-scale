@@ -54,5 +54,13 @@ Example routes
     - NOTE: DateTimeField input format is YYYY-MM-DD HH:MM
     /api/v1/reviews/23/delete - DELETE to delete review with id 23
     
+Example URLs
+
+    http://localhost:8001/api/v1/items/9/
+    http://localhost:8001/api/v1/users/4/
+    http://localhost:8001/api/v1/borrows/3/
+    http://localhost:8001/api/v1/reviews/2/
+
+
 ![postman example](img/create_review.png)
 ![postman example](img/create_borrow.png)
