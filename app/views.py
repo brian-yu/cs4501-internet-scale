@@ -55,7 +55,7 @@ def delete(request, model, id):
     try:
         obj = model.objects.get(pk=id)
         obj.delete()
-        return jsonResponse({'ok': True})
+        return jsonResponse()
     except model.DoesNotExist:
         return jsonErrorResponse(type(model()).__name__, id)
 
@@ -142,8 +142,7 @@ def create_user(request):
                 )
             obj.save()
             obj_dict = model_to_dict( obj )
-            result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
-            return HttpResponse(result, content_type='application/json')
+            return jsonResponse(obj_dict)
         except:
             result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
@@ -170,8 +169,7 @@ def create_item(request):
             )
             obj.save()
             obj_dict = model_to_dict( obj )
-            result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
-            return HttpResponse(result, content_type='application/json')
+            return jsonResponse(obj_dict)
         except:
             result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
@@ -200,8 +198,7 @@ def create_borrow(request):
             )
             obj.save()
             obj_dict = model_to_dict( obj )
-            result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
-            return HttpResponse(result, content_type='application/json')
+            return jsonResponse(obj_dict)
         except:
             result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
@@ -226,8 +223,7 @@ def create_review(request):
             )
             obj.save()
             obj_dict = model_to_dict( obj )
-            result = json.dumps({'result': obj_dict, 'ok': True}, cls=DjangoJSONEncoder)
-            return HttpResponse(result, content_type='application/json')
+            return jsonResponse(obj_dict)
         except:
             result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
