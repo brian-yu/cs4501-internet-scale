@@ -1,10 +1,33 @@
 models:
   image: tp33/django
+  container_name: models
   external_links:
     - mysql:db
-  entrypoint: ./startup.sh
+  entrypoint: ./models/startup.sh
   volumes:
-    - ./:/app
+    - ./models:/app
   ports:
     - "8001:8000"
   command: bash -c "mod_wsgi-express start-server --working-directory . --reload-on-changes ./app-microservices/wsgi.py"
+
+exp:
+  image: tp33/django
+  container_name: exp
+  links:
+    - models:models-api
+  ports:
+    - "8002:8000"
+  volumes:
+    - ./exp:/app
+  command: "mod_wsgi-express start-server --reload-on-changes ./experience/wsgi.py"
+
+web:
+  image: tp33/django
+  container_name: web
+  links:
+    - exp:exp-api
+  ports:
+    - "8000:8000"
+  volumes:
+    - /home/tp/stuff-web:/app
+  command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
