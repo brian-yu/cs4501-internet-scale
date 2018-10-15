@@ -3,7 +3,7 @@ models:
   container_name: models
   external_links:
     - mysql:db
-  entrypoint: ./models/startup.sh
+  entrypoint: ./startup.sh
   volumes:
     - ./models:/app
   ports:
@@ -29,5 +29,5 @@ web:
   ports:
     - "8000:8000"
   volumes:
-    - /home/tp/stuff-web:/app
+    - ./web:/app
   command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
