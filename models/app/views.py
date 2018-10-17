@@ -8,7 +8,7 @@ import json
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the app index.")
+    return HttpResponse("Hello, world. You're at the app index (used for api calls to the database).")
 
 def jsonResponse(dic=None):
     if dic == None:
