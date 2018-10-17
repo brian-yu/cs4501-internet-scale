@@ -19,7 +19,7 @@ exp:
     - "8002:8000"
   volumes:
     - ./exp:/app
-  command: "mod_wsgi-express start-server --reload-on-changes ./experience/wsgi.py"
+  command: "mod_wsgi-express start-server --reload-on-changes ./exp/wsgi.py"
 
 web:
   image: tp33/django
