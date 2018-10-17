@@ -8,6 +8,7 @@ import time
 class TestBorrows(TestCase):
 
     fixtures = ['db.json']
+    
     #setUp method is called before each test in this class
     def setUp(self):
         pass #nothing to set up
@@ -15,6 +16,7 @@ class TestBorrows(TestCase):
     def test_get(self):
         response = self.client.get('http://localhost:8001/api/v1/borrows/3/')
         string = response.content.decode('utf-8')
+        print(string)
         response = json.loads(string)['result']
 
         self.assertEquals(response['lender'], 4)
@@ -54,16 +56,13 @@ class TestBorrows(TestCase):
             'borrow_days': 365
         }
 
-        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        response = self.client.post('http://models-api:8001/api/v1/borrows/create/', post_data, format='json')
+        self.assertEquals(response.status_code, 200)
 
-        req = urllib.request.Request('http://localhost:8001/api/v1/borrows/create/', data=post_encoded, method='POST')
-        print(req)
-        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-
-        resp = json.loads(resp_json)
-        print(resp)
-
-        self.assertEquals(resp['result'], 'ok')
+        string = response.content.decode('utf-8')
+        print(string)
+        response = json.loads(string)
+        self.assertEquals(response['ok'], True)
 
     def test_update(self):
         pass

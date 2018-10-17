@@ -61,7 +61,7 @@ class Borrow(models.Model):
     borrower = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="borrowed_items")
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    borrow_date = models.DateTimeField('date borrowed')
+    borrow_date = models.DateTimeField('date borrowed') #format: 2018-10-01 16:41
     borrow_days = models.IntegerField(
         validators=[MinValueValidator(1)]
     )

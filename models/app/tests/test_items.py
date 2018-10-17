@@ -63,24 +63,9 @@ class ItemTestCase(TestCase):
         post_data2 = {'owner': 4,
                       'title': "My Cat", 'condition': "G", "description": "Cats.", "price_per_day": "25.00", "max_borrow_days": 5, "currently_borrowed": False}
 
-        post_encoded1 = urllib.parse.urlencode(post_data1).encode('utf-8')
-        post_encoded2 = urllib.parse.urlencode(post_data2).encode('utf-8')
+        response1 = self.client.post('http://models-api:8001/api/v1/items/create/', post_data1, format='json')
+        response2 = self.client.post('http://models-api:8001/api/v1/borrows/create/', post_data2, format='json')
 
-        req1 = urllib.request.Request(
-            'http://localhost:8001/api/v1/items/create/', data=post_encoded1, method='POST')
-        req2 = urllib.request.Request(
-            'http://localhost:8001/api/v1/items/create/', data=post_encoded2, method='POST')
-
-        print(req1)
-        print(req2)
-
-        resp_json1 = json.loads(
-            urllib.request.urlopen(req1).decode('utf-8'))
-        resp_json2 = json.loads(
-            urllib.request.urlopen(req2).decode('utf-8'))
-
-        print(resp_json1)
-        print(resp_json2)
 
         # def test_updateItem(self):
         #     item1 = Item.objects.get(title="Paper")
