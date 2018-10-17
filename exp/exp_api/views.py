@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def home(id):
+	return "Home for exp_api!!"
