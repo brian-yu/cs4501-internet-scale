@@ -1,4 +1,38 @@
 {% load static %}
 <link href="{% static "css/uikit.min.css" %}" rel="stylesheet">
+<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
 
-<h1> ShareSh*t </h1>
+<link rel="shortcut icon" type="image/png" href="{% static "poop.png" %}"/>
+
+<nav class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-left">
+    	<a class="uk-navbar-item uk-logo" href="">
+    		<div class="uk-animation-toggle uk-animation-shake">
+    			<i class="em-svg em-hankey uk-animation-shake"></i>
+    		</div>
+			&nbsp ShareSh*t
+    	</a>
+    </div>
+<!--     <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+        	<li>
+	        	<a href="/about">
+	        		About
+	        	</a>
+        	</li>
+        </ul>
+    </div> -->
+</nav>
+
+<h1 class="uk-heading-hero uk-text-center"><span>ShareSh*t</span></h1>
+
+<div class="uk-container uk-container-medium">
+	
+	<ul class="uk-list uk-list-divider">
+
+		{% for i in range %}
+		  <li>List item {{ i }}</li>
+		{% endfor %}
+	</ul>
+
+</div>
