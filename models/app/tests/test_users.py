@@ -1,25 +1,89 @@
-from django.test import TestCase
-from django.urls import reverse
-from app.models import User
+from django.test import TestCase, Client
+import json
 
-class UserTestCase(TestCase):
-    #setUp method is called before each test in this class
+class TestUsers(TestCase):
+    fixtures = ["db.json"]
+
     def setUp(self):
-        pass #nothing to set up
+        self.client = Client()
 
-    def success_response(self):
-        #assumes user with id 1 is stored in db
-        response = self.client.get(reverse('all_orders_list', kwargs={'user_id':1}))
+    def test_get_user_success(self):
+        recv_json = self.client.get(
+            'http://localhost:8000/api/v1/users/4/'
+            ).content.decode("utf-8")
+        recv_dict = json.loads(recv_json)
+        expected_json = r"""{"ok": true, "result": {"last_name": "Yu", "borrower_rating_total": 0, "lender_rating_total": 0, "borrower_rating_count": 0, "email": "bry4xm@virginia.edu", "id": 4, "zip_code": "22903", "overview": "heh", "lender_rating_count": 0, "phone_number": "", "first_name": "Brian"}}"""
+        exp_dict = json.loads(expected_json)
+        self.assertEqual(recv_dict, exp_dict)
 
-        #checks that response contains parameter order list & implicitly
-        # checks that the HTTP status code is 200
-        self.assertContains(response, 'order_list')
+    def test_get_user_fail(self):
+        res = json.loads(self.client.get(
+            'http://localhost:8000/api/v1/users/100/'
+            ).content.decode("utf-8"))
+        expected = json.loads(
+            r"""{"error": "User with id=100 not found", "ok": false}"""
+            )
+        self.assertEqual(res, expected)
 
-    #user_id not given in url, so error
-    def fails_invalid(self):
-        response = self.client.get(reverse('all_orders_list'))
-        self.assertEquals(response.status_code, 404)
+    def test_create_user_success(self):
+        form_data = {
+            'first_name': 'Barack',
+            'last_name': 'Obama',
+            'email': 'obama@usa.gov',
+            'overview': 'I\'m President, bitch!',
+            'zip_code': '22903',
+            'phone_number': '1234567890'
+        }
+        res = json.loads(self.client.post('http://localhost:8000/api/v1/users/create/', form_data, format='json').content.decode('utf-8'))
 
-    #tearDown method is called after each test
-    def tearDown(self):
-        pass #nothing to tear down
+        exp = json.loads(r"""{"result": {"first_name": "Barack", "last_name": "Obama", "email": "obama@usa.gov", "zip_code": "22903", "borrower_rating_total": 0, "borrower_rating_count": 0, "lender_rating_count": 0, "phone_number": "1234567890", "id": 13, "overview": "I'm President, bitch!", "lender_rating_total": 0}, "ok": true}""")
+        self.assertEqual(res, exp)
+
+        recv = json.loads(self.client.get(
+            'http://localhost:8000/api/v1/users/13/'
+            ).content.decode("utf-8"))
+        self.assertEqual(recv, exp)
+
+    def test_create_user_fail(self):
+        form_data = {
+            'first_name': 'This',
+            'last_name': 'Fails'
+        }
+
+        res = json.loads(self.client.post('http://localhost:8000/api/v1/users/create/', form_data, format='json').content.decode('utf-8'))
+
+        self.assertEqual("error" in res, True)
+        self.assertEqual(res["ok"], False)
+
+    def test_update_user_success(self):
+        form_data = {'overview': 'i love writing tests'}
+        res = json.loads(self.client.post('http://localhost:8000/api/v1/users/4/', form_data, format='json').content.decode('utf-8'))
+        get = json.loads(self.client.get('http://localhost:8000/api/v1/users/4/').content.decode('utf-8'))
+        exp = json.loads(r"""{"ok": true, "result": {"last_name": "Yu", "borrower_rating_total": 0, "lender_rating_total": 0, "borrower_rating_count": 0, "email": "bry4xm@virginia.edu", "id": 4, "zip_code": "22903", "overview": "i love writing tests", "lender_rating_count": 0, "phone_number": "", "first_name": "Brian"}}""")
+        self.assertEqual(res, get)
+        self.assertEqual(res, exp)
+
+    def test_update_user_fail(self):
+        form_data = {'overview': 'i love writing tests'}
+        res = json.loads(self.client.post('http://localhost:8000/api/v1/users/100/', form_data, format='json').content.decode('utf-8'))
+        
+        exp = json.loads(r"""{"error": "User with id=100 not found", "ok": false}""")
+        self.assertEqual(res, exp)
+
+    def test_delete_user_success(self):
+        form_data = {'overview': 'i love writing tests'}
+        res = json.loads(self.client.delete('http://localhost:8000/api/v1/users/4/delete/', form_data, format='json').content.decode('utf-8'))
+        
+        exp = json.loads(r"""{"ok": true}""")
+        self.assertEqual(res, exp)
+
+        get = json.loads(self.client.get('http://localhost:8000/api/v1/users/4/').content.decode('utf-8'))
+        get_exp = json.loads(r"""{"error": "User with id=4 not found", "ok": false}""")
+        self.assertEqual(get, get_exp)
+
+    def test_delete_user_fail(self):
+        form_data = {'overview': 'i love writing tests'}
+        res = json.loads(self.client.delete('http://localhost:8000/api/v1/users/100/delete/', form_data, format='json').content.decode('utf-8'))
+        
+        exp = json.loads(r"""{"error": "User with id=100 not found", "ok": false}""")
+        self.assertEqual(res, exp)
