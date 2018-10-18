@@ -6,6 +6,8 @@ urlpatterns = [
     path('', views.home, name='index'),
     path('users/', views.users),
     path('users/<int:id>/', views.user_detail),
+    path('items/', views.items),
+    path('items/<int:id>/', views.item_detail),
 
     # # CREATE requests
     # path('users/create/', views.create_user),
