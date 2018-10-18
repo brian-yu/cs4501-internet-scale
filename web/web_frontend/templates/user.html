@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block css %}
+{% load static %}
+<link href="{% static "css/home.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}| Home{% endblock %}
+
+{% block content %}
+<h1 class="uk-heading-primary">
+	{{user.first_name}} {{user.last_name}}
+</h1>
+
+<p>Zipcode: {{user.zip_code}}</p>
+<p>Rating: {{score}}/5</p>
+
+<div class="uk-container uk-container-medium uk-margin">
+	<h2 class="uk-heading-divider">Overview</h2>
+	<p>{{user.overview}}</p>
+</div>
+
+<div class="featured-items uk-container uk-container-medium uk-margin">
+	<h2 class="uk-heading-divider">Items</h2>
+	
+	<ul class="uk-list uk-list-divider">
+		{% for i in items %}
+			<li>
+			  	<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
+			  	<p>{{ i.description }}</p>
+			</li>
+		{% endfor %}
+	</ul>
+
+</div>
+
+<div class="featured-items uk-container uk-container-medium">
+	<h2 class="uk-heading-divider">Reviews</h2>
+	
+	<ul class="uk-list uk-list-divider">
+		{% for review in reviews %}
+			<li>
+			  	{{review}}
+			</li>
+		{% endfor %}
+	</ul>
+
+</div>
+{% endblock %}
