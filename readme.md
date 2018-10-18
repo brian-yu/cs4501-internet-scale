@@ -5,6 +5,11 @@ Our marketplace is a borrowing and lending site where users can post items they 
 1. Run `docker-compose up`
 2. Navigate to `localhost:8000` in your browser
 
+### Example URLs
+- http://localhost:8000/
+- http://localhost:8000/users/4/
+- http://localhost:8000/items/9/
+
 ## Testing
 1. cd `models`
 2. run `./manage.py test app.tests`
