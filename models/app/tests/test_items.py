@@ -35,18 +35,9 @@ class ItemTestCase(TestCase):
     def test_getItem_Success(self):
         response1 = json.loads(self.client.get(
             'http://localhost:8001/api/v1/items/12/').content.decode("utf-8"))
-        response2 = json.loads(self.client.get(
-            'http://localhost:8001/api/v1/items/13/').content.decode("utf-8"))
 
-        self.assertEqual(
-            response1["result"]["title"], "10 foot ladder")
         self.assertEqual(
             response1["result"]["owner"], 5)
-
-        self.assertEqual(
-            response2["result"]["title"], "car")
-        self.assertEqual(
-            response2["result"]["owner"], 4)
 
     def test_getItem_Fail(self):
         response1 = json.loads(self.client.get(
@@ -57,25 +48,24 @@ class ItemTestCase(TestCase):
         self.assertEqual(response1, test)
 
     def test_createItem_Success(self):
-        post_data1 = {'owner': 5,
-                      'title': "My Dog", 'condition': "E", "description": "Dogs.", "price_per_day": "50.00", "max_borrow_days": 10, "currently_borrowed": True}
-        post_data2 = {'owner': 4,
-                      'title': "My Cat", 'condition': "G", "description": "Cats.", "price_per_day": "25.00", "max_borrow_days": 5, "currently_borrowed": False}
-
+        post_data1 = {'owner': 10,
+                      'title': "My Dog", 'condition': "E", "description": "Dogs.", "price_per_day": "50.00", "max_borrow_days": 15, 'currently_borrowed': True}
         response1 = json.loads(self.client.post(
             'http://models-api:8001/api/v1/items/create/', post_data1, format='json').content.decode('utf-8'))
-        response2 = json.loads(self.client.post(
-            'http://models-api:8001/api/v1/items/create/', post_data2, format='json').content.decode('utf-8'))
 
         self.assertEqual(
-            response1["result"]["title"], "My Dog")
+            response1["result"]["max_borrow_days"], '15')
         self.assertEqual(
-            response1["result"]["owner"], 5)
-
+            response1["result"]["title"], 'My Dog')
         self.assertEqual(
-            response2["result"]["title"], "My Cat")
+            response1["result"]["condition"], 'E')
         self.assertEqual(
-            response2["result"]["owner"], 4)
+            response1["result"]["description"], 'Dogs.')
+        self.assertEqual(
+            response1["result"]["price_per_day"], '50.00')
+        self.assertEqual(response1["result"]["currently_borrowed"], 'True')
+        self.assertEqual(
+            response1["result"]["owner"], 10)
 
     def test_createItem_Fail(self):
         post_data = {
