@@ -11,6 +11,7 @@ import json
 def index(request):
     return HttpResponse("Hello, world. You're at the app index (used for api calls to the database).")
 
+
 def jsonResponse(dic=None):
     if dic == None:
         result = json.dumps({'ok': True})
@@ -18,21 +19,27 @@ def jsonResponse(dic=None):
         result = json.dumps({'result': dic, 'ok': True}, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
 
+
 def jsonErrorResponse(model_name, id):
-    result = json.dumps({'error': '{} with id={} not found'.format(model_name, id), 'ok': False})
+    result = json.dumps(
+        {'error': '{} with id={} not found'.format(model_name, id), 'ok': False})
     return HttpResponse(result, content_type='application/json')
 
+
 def formatErrorResponse(jsonInput):
-    result = json.dumps({'error': 'json input {} was not valid'.format(jsonInput), 'ok': False})
+    result = json.dumps(
+        {'error': 'json input {} was not valid'.format(jsonInput), 'ok': False})
     return HttpResponse(result, content_type='application/json')
+
 
 def get(request, model, id):
     try:
         obj = model.objects.get(pk=id)
-        obj_dict = model_to_dict( obj )
+        obj_dict = model_to_dict(obj)
         return jsonResponse(obj_dict)
-    except model.DoesNotExist: # should never happen because we're always routing from a method
+    except model.DoesNotExist:  # should never happen because we're always routing from a method
         return jsonErrorResponse(type(model()).__name__, id)
+
 
 def update(request, model, id):
     try:
@@ -58,13 +65,14 @@ def update(request, model, id):
                     return formatErrorResponse(form_data)
             setattr(obj, key, value)
         obj.save()
-        obj_dict = model_to_dict( obj )
+        obj_dict = model_to_dict(obj)
         return jsonResponse(obj_dict)
     except ValidationError:
         return formatErrorResponse(form_data)
     except model.DoesNotExist:
         return jsonErrorResponse(type(model()).__name__, id)
-        
+
+
 def delete(request, model, id):
     try:
         obj = model.objects.get(pk=id)
@@ -76,6 +84,7 @@ def delete(request, model, id):
 
 def serialize_borrows(borrows, key):
     return [
+<<<<<<< HEAD
                 {
                     'item': model_to_dict(m.item),
                     key: model_to_dict(getattr(m, key)),
@@ -83,6 +92,16 @@ def serialize_borrows(borrows, key):
                     'borrow_days': m.borrow_days,
                 } for m in borrows
             ]
+=======
+        {
+            'item': model_to_dict(m.item),
+            key: model_to_dict(getattr(m, key)),
+            'borrow_date': m.borrow_date,
+            'borrow_days': m.borrow_days,
+        } for m in borrows
+    ]
+
+>>>>>>> 24856692df8b050accb488f6f1aa075c9571da6b
 
 @csrf_exempt
 def user(request, id):
@@ -90,17 +109,22 @@ def user(request, id):
         try:
             obj = User.objects.get(pk=id)
             obj_dict = {}
-            obj_dict['user'] = model_to_dict( obj )
-            obj_dict['items'] = [model_to_dict(m) for m in list(obj.item_set.all())]
-            obj_dict['borrows'] = serialize_borrows(list(obj.borrowed_items.all()), 'lender')
-            obj_dict['lends'] = serialize_borrows(list(obj.borrowed_items.all()), 'borrower')
-            obj_dict['received_reviews'] = [model_to_dict(m) for m in list(obj.received_reviews.all())]
+            obj_dict['user'] = model_to_dict(obj)
+            obj_dict['items'] = [model_to_dict(m)
+                                 for m in list(obj.item_set.all())]
+            obj_dict['borrows'] = serialize_borrows(
+                list(obj.borrowed_items.all()), 'lender')
+            obj_dict['lends'] = serialize_borrows(
+                list(obj.borrowed_items.all()), 'borrower')
+            obj_dict['received_reviews'] = [model_to_dict(
+                m) for m in list(obj.received_reviews.all())]
             return jsonResponse(obj_dict)
-        except User.DoesNotExist: # should never happen because we're always routing from a method
+        except User.DoesNotExist:  # should never happen because we're always routing from a method
             return jsonErrorResponse('User', id)
-        
+
     elif request.method == "POST":
         return update(request, User, id)
+
 
 def serialize_borrows_item(borrows):
     return [
@@ -128,41 +152,48 @@ def item(request, id):
     elif request.method == "POST":
         return update(request, Item, id)
 
+
 @csrf_exempt
 def review(request, id):
     if request.method == "GET":
         return get(request, Review, id)
-        
+
     elif request.method == "POST":
         return update(request, Review, id)
+
 
 @csrf_exempt
 def borrow(request, id):
     if request.method == "GET":
         return get(request, Borrow, id)
-        
+
     elif request.method == "POST":
         return update(request, Borrow, id)
+
 
 @csrf_exempt
 def delete_user(request, id):
     if request.method == "DELETE":
         return delete(request, User, id)
 
+
 @csrf_exempt
 def delete_item(request, id):
     if request.method == "DELETE":
         return delete(request, Item, id)
+
 
 @csrf_exempt
 def delete_borrow(request, id):
     if request.method == "DELETE":
         return delete(request, Borrow, id)
 
+
 @csrf_exempt
 def delete_review(request, id):
     if request.method == "DELETE":
         return delete(request, Review, id)
+
 
 @csrf_exempt
 def create_user(request):
@@ -177,27 +208,29 @@ def create_user(request):
             if 'phone_number' in form_data:
                 phone_number = form_data['phone_number']
                 obj = User.objects.create(
-                    first_name = first_name,
-                    last_name = last_name,
-                    email = email,
-                    phone_number = phone_number,
-                    overview = overview,
-                    zip_code = zip_code
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    phone_number=phone_number,
+                    overview=overview,
+                    zip_code=zip_code
                 )
             else:
                 obj = User.objects.create(
-                    first_name = first_name,
-                    last_name = last_name,
-                    email = email,
-                    overview = overview,
-                    zip_code = zip_code
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    overview=overview,
+                    zip_code=zip_code
                 )
             obj.save()
-            obj_dict = model_to_dict( obj )
+            obj_dict = model_to_dict(obj)
             return jsonResponse(obj_dict)
         except:
-            result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
+
 
 @csrf_exempt
 def create_item(request):
@@ -211,20 +244,24 @@ def create_item(request):
             description = form_data['description']
             price_per_day = form_data['price_per_day']
             max_borrow_days = form_data['max_borrow_days']
+            currently_borrowed = form_data['currently_borrowed']
             obj = Item.objects.create(
                 owner=owner,
                 title=title,
                 condition=condition,
                 description=description,
                 price_per_day=price_per_day,
-                max_borrow_days=max_borrow_days
+                max_borrow_days=max_borrow_days,
+                currently_borrowed=currently_borrowed
             )
             obj.save()
-            obj_dict = model_to_dict( obj )
+            obj_dict = model_to_dict(obj)
             return jsonResponse(obj_dict)
         except:
-            result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
+
 
 @csrf_exempt
 def create_borrow(request):
@@ -249,10 +286,11 @@ def create_borrow(request):
                 borrow_days=borrow_days
             )
             obj.save()
-            obj_dict = model_to_dict( obj )
+            obj_dict = model_to_dict(obj)
             return jsonResponse(obj_dict)
         except:
-            result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
 
@@ -274,10 +312,11 @@ def create_review(request):
                 score=score
             )
             obj.save()
-            obj_dict = model_to_dict( obj )
+            obj_dict = model_to_dict(obj)
             return jsonResponse(obj_dict)
         except:
-            result = json.dumps({'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
 
