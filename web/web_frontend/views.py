@@ -14,10 +14,9 @@ def user(req, id):
 	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
 	resp = json.loads(resp_json)
 
-	score = sum([r['score'] for r in resp['received_reviews']]) / len(resp['received_reviews'])
+	if resp['ok'] == False:
+		return render(req, 'user.html', {'ok': False})
 
-	user = resp['user']
-	items = resp['items']
-	reviews = resp['received_reviews']
+	resp['result']['ok'] = True
 
-	return render(req, 'user.html', {'user': user, 'items': items, 'score': score, 'reviews': reviews})
+	return render(req, 'user.html', resp['result'])

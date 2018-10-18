@@ -8,6 +8,7 @@
 {% block title %}| Home{% endblock %}
 
 {% block content %}
+{% if ok %}
 <h1 class="uk-heading-primary">
 	{{user.first_name}} {{user.last_name}}
 </h1>
@@ -21,7 +22,7 @@
 </div>
 
 <div class="featured-items uk-container uk-container-medium uk-margin">
-	<h2 class="uk-heading-divider">Items</h2>
+	<h2 class="uk-heading-divider">Items - {{ items|length }}</h2>
 	
 	<ul class="uk-list uk-list-divider">
 		{% for i in items %}
@@ -35,15 +36,22 @@
 </div>
 
 <div class="featured-items uk-container uk-container-medium">
-	<h2 class="uk-heading-divider">Reviews</h2>
+	<h2 class="uk-heading-divider">Reviews - {{ reviews|length }}</h2>
 	
 	<ul class="uk-list uk-list-divider">
 		{% for review in reviews %}
 			<li>
-			  	{{review}}
+				<h4>{{ review.score }}/5</h4>
+			  	<p>{{review.text}}</p>
 			</li>
 		{% endfor %}
 	</ul>
 
 </div>
+{% else %}
+<h1 class="uk-heading-primary">
+	No user found!
+</h1>
+<img src="{% static "img/whoops.png" %}" uk-img/>
+{% endif %}
 {% endblock %}
