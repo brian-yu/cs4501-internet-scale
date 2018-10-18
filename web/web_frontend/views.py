@@ -20,4 +20,4 @@ def user(req, id):
 	items = resp['items']
 	reviews = resp['received_reviews']
 
-	return render(req, 'user.html', {'user': user, 'items': items, 'score': score})
+	return render(req, 'user.html', {'user': user, 'items': items, 'score': score, 'reviews': reviews})

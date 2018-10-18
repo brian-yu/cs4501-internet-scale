@@ -19,17 +19,28 @@
 	<h2 class="uk-heading-divider">Overview</h2>
 	<p>{{user.overview}}</p>
 </div>
-<div class="featured-items uk-container uk-container-medium">
 
-	<h2 class="uk-heading-divider">
-		Items
-	</h2>
+<div class="featured-items uk-container uk-container-medium uk-margin">
+	<h2 class="uk-heading-divider">Items</h2>
 	
 	<ul class="uk-list uk-list-divider">
 		{% for i in items %}
 			<li>
-			  	<span class="uk-heading"><a href="/items/{{i.id}}/">{{ i.title }}</a></span> - <span>${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</span>
+			  	<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
 			  	<p>{{ i.description }}</p>
+			</li>
+		{% endfor %}
+	</ul>
+
+</div>
+
+<div class="featured-items uk-container uk-container-medium">
+	<h2 class="uk-heading-divider">Reviews</h2>
+	
+	<ul class="uk-list uk-list-divider">
+		{% for review in reviews %}
+			<li>
+			  	{{review}}
 			</li>
 		{% endfor %}
 	</ul>
