@@ -3,6 +3,7 @@ from django.http import HttpResponse, Http404
 from .models import User, Review, Borrow, Item
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -19,6 +20,10 @@ def jsonResponse(dic=None):
 
 def jsonErrorResponse(model_name, id):
     result = json.dumps({'error': '{} with id={} not found'.format(model_name, id), 'ok': False})
+    return HttpResponse(result, content_type='application/json')
+
+def formatErrorResponse(jsonInput):
+    result = json.dumps({'error': 'json input {} was not valid'.format(jsonInput), 'ok': False})
     return HttpResponse(result, content_type='application/json')
 
 def get(request, model, id):
@@ -48,6 +53,8 @@ def update(request, model, id):
         obj.save()
         obj_dict = model_to_dict( obj )
         return jsonResponse(obj_dict)
+    except ValidationError:
+        return formatErrorResponse(form_data)
     except model.DoesNotExist:
         return jsonErrorResponse(type(model()).__name__, id)
         
