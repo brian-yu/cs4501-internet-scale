@@ -13,3 +13,6 @@ Our marketplace is a borrowing and lending site where users can post items they 
 ## Testing
 1. cd `models`
 2. run `./manage.py test app.tests`
+
+## User Stories
+User stories can be found [here](https://github.com/brian-yu/cs4501-internet-scale/wiki/User-Stories).
