@@ -21,10 +21,10 @@
 	<p>{{user.overview}}</p>
 </div>
 
-<div class="featured-items uk-container uk-container-medium uk-margin">
+<div class="container uk-container-medium uk-margin">
 	<h2 class="uk-heading-divider">Items - {{ items|length }}</h2>
 	
-	<ul class="uk-list uk-list-divider">
+	<ul class="uk-list uk-list-divider featured-items">
 		{% for i in items %}
 			<li>
 			  	<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
@@ -35,10 +35,10 @@
 
 </div>
 
-<div class="featured-items uk-container uk-container-medium">
+<div class="uk-container uk-container-medium">
 	<h2 class="uk-heading-divider">Reviews - {{ reviews|length }}</h2>
 	
-	<ul class="uk-list uk-list-divider">
+	<ul class="uk-list uk-list-divider featured-items">
 		{% for review in reviews %}
 			<li>
 				<h4>{{ review.score }}/5</h4>

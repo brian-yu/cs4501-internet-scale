@@ -6,8 +6,22 @@ import urllib.request
 import urllib.parse
 import json
 
-def home(req, id):
-	return HttpResponse("<p>Home for exp_api!!</p>")
+def home(req):
+	url = 'http://models-api:8000/api/v1/featured_items/'
+
+	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+	resp = json.loads(resp_json)
+
+	if resp["ok"] == False:
+		result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+		return HttpResponse(result, content_type='application/json')
+
+	resp = resp['result']
+	res = {}
+	res['items'] = resp
+
+	result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
+	return HttpResponse(result, content_type='application/json')
 
 def users(req):
 	return HttpResponse("<p>Users listing for exp_api!!</p>")

@@ -8,6 +8,7 @@
 {% block title %}| Home{% endblock %}
 
 {% block content %}
+{% if ok %}
 <h1 class="hero uk-heading-hero uk-text-center">
 	<span>
 		<!-- <span class="logo"><i class="em-svg em-hankey uk-animation-shake"></i></span> -->
@@ -15,14 +16,25 @@
 	</span>
 </h1>
 
-<div class="featured-items uk-container uk-container-medium">
-	
-	<ul class="uk-list uk-list-divider">
+<div class="uk-container uk-container-medium">
 
-		{% for i in range %}
-		  <li>List item {{ i }}</li>
+	<h2 class="uk-heading-divider uk-text-center">Featured Items</h2>
+	
+	<ul class="uk-list uk-list-divider featured-items">
+		{% for i in items %}
+			<li>
+			  	<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
+			  	<p>{{ i.description }} - <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }} {{ i.owner.last_name }}</a></p>
+			</li>
 		{% endfor %}
 	</ul>
 
 </div>
+
+{% else %}
+<h1 class="uk-heading-primary">
+	There was an error!
+</h1>
+<img src="{% static "img/whoops.png" %}" uk-img/>
+{% endif %}
 {% endblock %}
