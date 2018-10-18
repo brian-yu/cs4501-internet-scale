@@ -84,15 +84,6 @@ def delete(request, model, id):
 
 def serialize_borrows(borrows, key):
     return [
-<<<<<<< HEAD
-                {
-                    'item': model_to_dict(m.item),
-                    key: model_to_dict(getattr(m, key)),
-                    'borrow_date': m.borrow_date,
-                    'borrow_days': m.borrow_days,
-                } for m in borrows
-            ]
-=======
         {
             'item': model_to_dict(m.item),
             key: model_to_dict(getattr(m, key)),
@@ -100,8 +91,6 @@ def serialize_borrows(borrows, key):
             'borrow_days': m.borrow_days,
         } for m in borrows
     ]
-
->>>>>>> 24856692df8b050accb488f6f1aa075c9571da6b
 
 @csrf_exempt
 def user(request, id):
