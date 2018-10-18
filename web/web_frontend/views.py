@@ -1,10 +1,23 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 import urllib.request
 import urllib.parse
 import json
 
-def home(request):
-    return render(request, 'home.html', {'range': range(50)})
+def home(req):
+
+
+	url = 'http://exp-api:8000/api/v1/'
+
+	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+	resp = json.loads(resp_json)
+
+	if resp['ok'] == False:
+		return render(req, 'home.html', {'ok': False})
+
+	resp['result']['ok'] = True
+
+	return render(req, 'home.html', resp['result'])
 
 
 
@@ -14,10 +27,18 @@ def user(req, id):
 	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
 	resp = json.loads(resp_json)
 
-	score = sum([r['score'] for r in resp['received_reviews']]) / len(resp['received_reviews'])
+	if resp['ok'] == False:
+		return render(req, 'user.html', {'ok': False})
 
-	user = resp['user']
-	items = resp['items']
-	reviews = resp['received_reviews']
+	resp['result']['ok'] = True
 
-	return render(req, 'user.html', {'user': user, 'items': items, 'score': score, 'reviews': reviews})
+	return render(req, 'user.html', resp['result'])
+
+
+
+def item(req, id):
+	url = 'http://exp-api:8000/api/v1/items/{}/'.format(id)
+	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+	resp = json.loads(resp_json)
+
+	return render(req, 'item.html', resp)

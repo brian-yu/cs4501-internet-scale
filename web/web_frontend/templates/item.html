@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+{% if ok %}
+<h1>{{item.title}}</h1>
+<h4>Owned by <a href="/users/{{item.owner}}/">{{item.user_name}}</a></h4>
+<p>{{item.description}}</p>
+<p>Condition: {{item.condition}}</p>
+
+{% else %}
+<h1>No item found!</h1>
+{% endif %}
+
+{% endblock %}
