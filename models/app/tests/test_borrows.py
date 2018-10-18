@@ -2,9 +2,6 @@ from django.test import TestCase
 from django.urls import reverse
 from app.models import User, Item, Borrow, Review
 import json
-import urllib.request, urllib.parse
-import time
-from django.db import transaction
 
 class TestBorrows(TestCase):
 

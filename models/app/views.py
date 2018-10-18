@@ -49,6 +49,13 @@ def update(request, model, id):
                     value = Item.objects.get(pk=value)
                 except:
                     return jsonErrorResponse("Item", value)
+            if key == 'score':
+                try:
+                    value = int(value)
+                except ValueError:
+                    return formatErrorResponse(form_data)
+                if not value >= 1 or not value <= 5:
+                    return formatErrorResponse(form_data)
             setattr(obj, key, value)
         obj.save()
         obj_dict = model_to_dict( obj )
