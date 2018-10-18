@@ -60,10 +60,30 @@ def delete(request, model, id):
         return jsonErrorResponse(type(model()).__name__, id)
 
 
+def serialize_borrows(borrows, key):
+    return [
+                {
+                    'item': model_to_dict(m.item),
+                    key: model_to_dict(getattr(m, key)),
+                    'borrow_date': m.borrow_date,
+                    'borrow_days': m.borrow_days,
+                    } for m in borrows
+            ]
+
 @csrf_exempt
 def user(request, id):
     if request.method == "GET":
-        return get(request, User, id)
+        try:
+            obj = User.objects.get(pk=id)
+            obj_dict = {}
+            obj_dict['user'] = model_to_dict( obj )
+            obj_dict['items'] = [model_to_dict(m) for m in list(obj.item_set.all())]
+            obj_dict['borrows'] = serialize_borrows(list(obj.borrowed_items.all()), 'lender')
+            obj_dict['lends'] = serialize_borrows(list(obj.borrowed_items.all()), 'borrower')
+            obj_dict['received_reviews'] = [model_to_dict(m) for m in list(obj.received_reviews.all())]
+            return jsonResponse(obj_dict)
+        except User.DoesNotExist: # should never happen because we're always routing from a method
+            return jsonErrorResponse('User', id)
         
     elif request.method == "POST":
         return update(request, User, id)
