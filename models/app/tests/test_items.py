@@ -109,7 +109,6 @@ class ItemTestCase(TestCase):
             r"""{"error": "Item with id=1000 not found", "ok": false}""")
         self.assertEqual(update, exp)
 
-    #########
     def test_deleteItem_Success(self):
         delete = json.loads(self.client.delete(
             'http://localhost:8000/api/v1/items/13/delete/', "", format='json').content.decode('utf-8'))
