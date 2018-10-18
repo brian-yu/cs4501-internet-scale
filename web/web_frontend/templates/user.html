@@ -5,9 +5,10 @@
 <link href="{% static "css/home.css" %}" rel="stylesheet">
 {% endblock %}
 
-{% block title %}| Home{% endblock %}
+{% block title %} | {{user.first_name}} {{user.last_name}}{% endblock %}
 
 {% block content %}
+{% if ok %}
 <h1 class="uk-heading-primary">
 	{{user.first_name}} {{user.last_name}}
 </h1>
@@ -20,10 +21,10 @@
 	<p>{{user.overview}}</p>
 </div>
 
-<div class="featured-items uk-container uk-container-medium uk-margin">
-	<h2 class="uk-heading-divider">Items</h2>
+<div class="container uk-container-medium uk-margin">
+	<h2 class="uk-heading-divider">Items - {{ items|length }}</h2>
 	
-	<ul class="uk-list uk-list-divider">
+	<ul class="uk-list uk-list-divider featured-items">
 		{% for i in items %}
 			<li>
 			  	<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
@@ -34,16 +35,23 @@
 
 </div>
 
-<div class="featured-items uk-container uk-container-medium">
-	<h2 class="uk-heading-divider">Reviews</h2>
+<div class="uk-container uk-container-medium">
+	<h2 class="uk-heading-divider">Reviews - {{ reviews|length }}</h2>
 	
-	<ul class="uk-list uk-list-divider">
+	<ul class="uk-list uk-list-divider featured-items">
 		{% for review in reviews %}
 			<li>
-			  	{{review}}
+				<h4>{{ review.score }}/5</h4>
+			  	<p>{{review.text}}</p>
 			</li>
 		{% endfor %}
 	</ul>
 
 </div>
+{% else %}
+<h1 class="uk-heading-primary">
+	No user found!
+</h1>
+<img src="{% static "img/whoops.png" %}" uk-img/>
+{% endif %}
 {% endblock %}

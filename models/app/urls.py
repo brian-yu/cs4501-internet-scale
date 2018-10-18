@@ -22,4 +22,7 @@ urlpatterns = [
     path('items/<int:id>/delete/', views.delete_item),
     path('borrows/<int:id>/delete/', views.delete_borrow),
     path('reviews/<int:id>/delete/', views.delete_review),
+
+    # MISC
+    path('featured_items/', views.featured_items)
 ]
