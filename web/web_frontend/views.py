@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 import urllib.request
 import urllib.parse
 import json
@@ -32,3 +33,12 @@ def user(req, id):
 	resp['result']['ok'] = True
 
 	return render(req, 'user.html', resp['result'])
+
+
+
+def item(req, id):
+	url = 'http://exp-api:8000/api/v1/items/{}/'.format(id)
+	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+	resp = json.loads(resp_json)
+
+	return render(req, 'item.html', resp)

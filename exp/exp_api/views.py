@@ -51,3 +51,27 @@ def user_detail(req, id):
 
 	result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
 	return HttpResponse(result, content_type='application/json')
+
+def items(req):
+	return HttpResponse("<p>Items listing for exp_api!!</p>")
+
+def item_detail(req, id):
+	url = 'http://models-api:8000/api/v1/items/{}/'.format(id)
+
+	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+	resp = json.loads(resp_json)
+
+	if resp['ok'] == False:
+		result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+		return HttpResponse(result, content_type='application/json')
+
+	owner = urllib.request.urlopen('http://models-api:8000/api/v1/users/{}/'.format(resp['result']['owner'])).read().decode('utf-8')
+	owner = json.loads(owner)['result']
+	username = owner['user']['first_name'] + " " + owner['user']['last_name']
+	resp['result']['user_name'] = username
+
+	res = {}
+	res['item'] = resp['result']
+	res['ok'] = True
+	result = json.dumps(res, cls=DjangoJSONEncoder)
+	return HttpResponse(result, content_type='application/json')
