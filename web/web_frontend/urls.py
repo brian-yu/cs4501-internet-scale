@@ -12,7 +12,7 @@ urlpatterns = [
     # path('reviews/create/', views.create_review),
 
     # # GET and UPDATE requests
-    # path('users/<int:id>/', views.user),
+    path('users/<int:id>/', views.user),
     # path('items/<int:id>/', views.item),
     # path('borrows/<int:id>/', views.borrow),
     # path('reviews/<int:id>/', views.review),
