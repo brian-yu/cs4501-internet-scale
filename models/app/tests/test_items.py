@@ -30,21 +30,12 @@ class ItemTestCase(TestCase):
     fixtures = ["db.json"]
 
     def setUp(self):
-        # User.objects.create(first_name="Brian", last_name="Yu", email="brian@gmail.com", phone_number="1234567890", overview="Hi, my name is Brian!",
-        #                     zip_code="12345", lender_rating_total="5", lender_rating_count="20", borrow_rating_total="5", borrow_rating_count="10")
-        # User.objects.create(first_name="Brian", last_name="Yu", email="brian@gmail.com", phone_number="1234567890", overview="Hi, my name is Brian!",
-        #                     zip_code="12345", lender_rating_total="5", lender_rating_count="20", borrow_rating_total="5", borrow_rating_count="10")
-        # Item.objects.create(owner="", title="Paper", condition="", description="",
-        #                     price_per_day="", max_borrow_days="", currently_borrowed="")
-        # Item.objects.create(owner="", title="Doritos", condition="", description="",
-        #                     price_per_day="", max_borrow_days="", currently_borrowed="")
-        pass
+        self.client = Client()
 
     def test_getItem_Success(self):
-        c = Client()
-        response1 = json.loads(c.get(
+        response1 = json.loads(self.client.get(
             'http://localhost:8001/api/v1/items/12/').content.decode("utf-8"))
-        response2 = json.loads(c.get(
+        response2 = json.loads(self.client.get(
             'http://localhost:8001/api/v1/items/13/').content.decode("utf-8"))
 
         self.assertEqual(
@@ -58,8 +49,7 @@ class ItemTestCase(TestCase):
             response2["result"]["owner"], 4)
 
     def test_getItem_Fail(self):
-        c = Client()
-        response1 = json.loads(c.get(
+        response1 = json.loads(self.client.get(
             'http://localhost:8001/api/v1/items/1000/').content.decode("utf-8"))
         test = json.loads(
             r"""{"error": "Item with id=1000 not found", "ok": false}""")
@@ -88,35 +78,55 @@ class ItemTestCase(TestCase):
             response2["result"]["owner"], 4)
 
     def test_createItem_Fail(self):
-        client = Client()
-        data = {
-            'first_name': 'This',
-            'last_name': 'Fails'
+        post_data = {
+            'title': 'helllo',
+            'condition': 'E'
         }
         test = json.loads(self.client.post('http://localhost:8000/api/v1/items/create/',
-                                           data, format='json').content.decode('utf-8'))
+                                           post_data, format='json').content.decode('utf-8'))
         self.assertEqual("error" in test, True)
         self.assertEqual(test["ok"], False)
 
-    # def test_updateItem(self):
-    #     item1 = Item.objects.get(title="Paper")
-    #     item2 = Item.objects.get(title="Doritos")
+    def test_updateItem_Success(self):
+        title = {'title': 'Updated The Dog'}
+        update = json.loads(self.client.post(
+            "http://localhost:8001/api/v1/items/12/", title, format="json").content.decode("utf-8"))
+        get = json.loads(self.client.get(
+            'http://localhost:8000/api/v1/items/12/').content.decode('utf-8'))
 
-    #     self.assertEqual(item1.speak(), 'The lion says "roar"')
-    #     self.assertEqual(item2.speak(), 'The cat says "meow"')
+        whatitshouldbe = json.loads(
+            r"""{"ok": true,"result": {"id": 12,"currently_borrowed": false,"title": "Updated The Dog","max_borrow_days": 10,"condition": "E","description": "super tall ladder","owner": 5,"price_per_day": "3.00"}}""")
 
-    # def test_deleteItem(self):
-    #     item1 = Item.objects.get(title="Paper")
-    #     item2 = Item.objects.get(title="Doritos")
+        self.assertEqual(whatitshouldbe, update)
+        self.assertEqual(whatitshouldbe, get)
 
-    #     self.assertEqual(item1.speak(), 'The lion says "roar"')
-    #     self.assertEqual(item2.speak(), 'The cat says "meow"')
+    def test_updateItem_Fail(self):
+        title = {'title': 'Updated The Dog'}
+        update = json.loads(self.client.post(
+            "http://localhost:8000/api/v1/items/1000/", title, format="json").content.decode("utf-8"))
 
-        # user_id not given in url, so error
-        # def fails_invalid(self):
-        #     response = self.client.get(reverse('all_orders_list'))
-        #     self.assertEquals(response.status_code, 404)
+        exp = json.loads(
+            r"""{"error": "Item with id=1000 not found", "ok": false}""")
+        self.assertEqual(update, exp)
 
-        # # tearDown method is called after each test
-        # def tearDown(self):
-        #     pass  # nothing to tear down
+    #########
+    def test_deleteItem_Success(self):
+        delete = json.loads(self.client.delete(
+            'http://localhost:8000/api/v1/items/13/delete/', "", format='json').content.decode('utf-8'))
+
+        whatitshouldbe = json.loads(r"""{"ok": true}""")
+        self.assertEqual(delete, whatitshouldbe)
+
+        toget = json.loads(self.client.get(
+            'http://localhost:8000/api/v1/items/4/').content.decode('utf-8'))
+        whatitshouldbe = json.loads(
+            r"""{"error": "Item with id=4 not found", "ok": false}""")
+        self.assertEqual(toget, whatitshouldbe)
+
+    def test_deleteItem_Fail(self):
+        delete = json.loads(self.client.delete(
+            'http://localhost:8000/api/v1/items/1000/delete/', "", format='json').content.decode('utf-8'))
+
+        whatitshouldbe = json.loads(
+            r"""{"error": "Item with id=1000 not found", "ok": false}""")
+        self.assertEqual(delete, whatitshouldbe)
