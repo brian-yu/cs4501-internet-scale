@@ -11,7 +11,7 @@ class User(models.Model):
         regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(
         validators=[phone_regex], max_length=17, blank=True)
-    overview = models.TextField() #introduction about the user
+    overview = models.TextField()  # introduction about the user
     zip_code = models.CharField(
         max_length=10,
         validators=[RegexValidator(r'^\d{5}(?:[-\s]\d{4})?$')]
@@ -61,7 +61,8 @@ class Borrow(models.Model):
     borrower = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="borrowed_items")
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    borrow_date = models.DateTimeField('date borrowed') #format: 2018-10-01 16:41
+    borrow_date = models.DateTimeField(
+        'date borrowed')  # format: 2018-10-01 16:41
     borrow_days = models.IntegerField(
         validators=[MinValueValidator(1)]
     )
