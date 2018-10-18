@@ -14,6 +14,12 @@ class TestUsers(TestCase):
         recv_dict = json.loads(recv_json)
         self.assertEqual(recv_dict['result']['user']['first_name'], 'Brian')
 
+        # Test that user items are included
+        self.assertEqual('items' in recv_dict['result'], True) 
+
+        # Test that reviews of a user are included
+        self.assertEqual('received_reviews' in recv_dict['result'], True)
+
     def test_get_user_fail(self):
         res = json.loads(self.client.get(
             'http://localhost:8000/api/v1/users/100/'
