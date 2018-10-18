@@ -40,7 +40,7 @@ class ItemTestCase(TestCase):
         #                     price_per_day="", max_borrow_days="", currently_borrowed="")
         pass
 
-    def test_getItem(self):
+    def test_getItem_Success(self):
         c = Client()
         response1 = json.loads(c.get(
             'http://localhost:8001/api/v1/items/12/').content.decode("utf-8"))
@@ -57,29 +57,60 @@ class ItemTestCase(TestCase):
         self.assertEqual(
             response2["result"]["owner"], 4)
 
-    def test_createItem(self):
+    def test_getItem_Fail(self):
+        c = Client()
+        response1 = json.loads(c.get(
+            'http://localhost:8001/api/v1/items/1000/').content.decode("utf-8"))
+        test = json.loads(
+            r"""{"error": "Item with id=1000 not found", "ok": false}""")
+
+        self.assertEqual(response1, test)
+
+    def test_createItem_Success(self):
         post_data1 = {'owner': 5,
                       'title': "My Dog", 'condition': "E", "description": "Dogs.", "price_per_day": "50.00", "max_borrow_days": 10, "currently_borrowed": True}
         post_data2 = {'owner': 4,
                       'title': "My Cat", 'condition': "G", "description": "Cats.", "price_per_day": "25.00", "max_borrow_days": 5, "currently_borrowed": False}
 
-        response1 = self.client.post('http://models-api:8001/api/v1/items/create/', post_data1, format='json')
-        response2 = self.client.post('http://models-api:8001/api/v1/borrows/create/', post_data2, format='json')
+        response1 = json.loads(self.client.post(
+            'http://models-api:8001/api/v1/items/create/', post_data1, format='json').content.decode('utf-8'))
+        response2 = json.loads(self.client.post(
+            'http://models-api:8001/api/v1/items/create/', post_data2, format='json').content.decode('utf-8'))
 
+        self.assertEqual(
+            response1["result"]["title"], "My Dog")
+        self.assertEqual(
+            response1["result"]["owner"], 5)
 
-        # def test_updateItem(self):
-        #     item1 = Item.objects.get(title="Paper")
-        #     item2 = Item.objects.get(title="Doritos")
+        self.assertEqual(
+            response2["result"]["title"], "My Cat")
+        self.assertEqual(
+            response2["result"]["owner"], 4)
 
-        #     self.assertEqual(item1.speak(), 'The lion says "roar"')
-        #     self.assertEqual(item2.speak(), 'The cat says "meow"')
+    def test_createItem_Fail(self):
+        client = Client()
+        data = {
+            'first_name': 'This',
+            'last_name': 'Fails'
+        }
+        test = json.loads(self.client.post('http://localhost:8000/api/v1/items/create/',
+                                           data, format='json').content.decode('utf-8'))
+        self.assertEqual("error" in test, True)
+        self.assertEqual(test["ok"], False)
 
-        # def test_deleteItem(self):
-        #     item1 = Item.objects.get(title="Paper")
-        #     item2 = Item.objects.get(title="Doritos")
+    # def test_updateItem(self):
+    #     item1 = Item.objects.get(title="Paper")
+    #     item2 = Item.objects.get(title="Doritos")
 
-        #     self.assertEqual(item1.speak(), 'The lion says "roar"')
-        #     self.assertEqual(item2.speak(), 'The cat says "meow"')
+    #     self.assertEqual(item1.speak(), 'The lion says "roar"')
+    #     self.assertEqual(item2.speak(), 'The cat says "meow"')
+
+    # def test_deleteItem(self):
+    #     item1 = Item.objects.get(title="Paper")
+    #     item2 = Item.objects.get(title="Doritos")
+
+    #     self.assertEqual(item1.speak(), 'The lion says "roar"')
+    #     self.assertEqual(item2.speak(), 'The cat says "meow"')
 
         # user_id not given in url, so error
         # def fails_invalid(self):
