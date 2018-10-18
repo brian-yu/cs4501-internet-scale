@@ -65,13 +65,10 @@ def item_detail(req, id):
 		result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
 		return HttpResponse(result, content_type='application/json')
 
-	owner = urllib.request.urlopen('http://models-api:8000/api/v1/users/{}/'.format(resp['result']['owner'])).read().decode('utf-8')
-	owner = json.loads(owner)['result']
-	username = owner['user']['first_name'] + " " + owner['user']['last_name']
-	resp['result']['user_name'] = username
-
 	res = {}
-	res['item'] = resp['result']
+	res['item'] = resp['result']['item']
+	res['borrows'] = resp['result']['borrows']
+	res['user_name'] = resp['result']['owner']
 	res['ok'] = True
 	result = json.dumps(res, cls=DjangoJSONEncoder)
 	return HttpResponse(result, content_type='application/json')

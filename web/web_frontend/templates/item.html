@@ -4,13 +4,27 @@
 {% block content %}
 
 {% if ok %}
-<h1>{{item.title}}</h1>
-<h4>Owned by <a href="/users/{{item.owner}}/">{{item.user_name}}</a></h4>
-<p>{{item.description}}</p>
-<p>Condition: {{item.condition}}</p>
+	<div class="uk-section">
+		<h1>{{item.title}}</h1>
+		<hr>
+		<h4>Owned by <a href="/users/{{item.owner}}/">{{user_name}}</a></h4>
+		<p>{{item.description}}</p>
+		<p>Condition: {{item.condition}}</p>
+	</div>
+
+	<div class="uk-section">
+		{% if not borrows %} <!-- do nothing -->
+		{% else %}
+			<h2>Past Borrows</h2>
+
+			{% for b in borrows %}
+				<p>{{b.borrower.first_name}} {{b.borrower.last_name}} borrowed this from {{b.lender.first_name}} {{b.lender.last_name}} on {{b.borrow_date}}</p>
+			{% endfor %}
+		{% endif %}
+	</div>
 
 {% else %}
-<h1>No item found!</h1>
+	<h1>No item found!</h1>
 {% endif %}
 
 {% endblock %}

@@ -81,7 +81,7 @@ def serialize_borrows(borrows, key):
                     key: model_to_dict(getattr(m, key)),
                     'borrow_date': m.borrow_date,
                     'borrow_days': m.borrow_days,
-                    } for m in borrows
+                } for m in borrows
             ]
 
 @csrf_exempt
@@ -102,11 +102,29 @@ def user(request, id):
     elif request.method == "POST":
         return update(request, User, id)
 
+def serialize_borrows_item(borrows):
+    return [
+                {
+                    'lender': model_to_dict(m.lender),
+                    'borrower': model_to_dict(m.borrower),
+                    'borrow_date': m.borrow_date,
+                    'borrow_days': m.borrow_days,
+                } for m in borrows
+            ]
+
 @csrf_exempt
 def item(request, id):
     if request.method == "GET":
-        return get(request, Item, id)
-        
+        try:
+            obj = Item.objects.get(pk=id)
+            obj_dict = {}
+            obj_dict['item'] = model_to_dict( obj )
+            obj_dict['owner'] = obj.owner.first_name + " " + obj.owner.last_name
+            obj_dict['borrows'] = serialize_borrows_item(list(Borrow.objects.filter(item=obj.id).order_by('-borrow_date')[:5]))
+            return jsonResponse(obj_dict)
+        except Item.DoesNotExist: # should never happen because we're always routing from a method
+            return jsonErrorResponse(type(Item()).__name__, id)
+            
     elif request.method == "POST":
         return update(request, Item, id)
 
