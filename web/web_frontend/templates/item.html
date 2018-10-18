@@ -1,21 +1,33 @@
 {% extends "base.html" %}
-
+{% block css %}
+{% load static %}
+<link href="{% static "css/item.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 
 {% if ok %}
 	<div class="uk-section">
-		<h1>{{item.title}}</h1>
-		<hr>
-		<h4>Owned by <a href="/users/{{item.owner}}/">{{user_name}}</a></h4>
-		<p>{{item.description}}</p>
-		<p>Condition: {{item.condition}}</p>
+		<div class="uk-grid">
+
+			<div class='uk-width-1-4'>
+				<img src="{% static "img/Placeholder.png" %}" alt="Image of Item"/>
+				
+			</div>
+			<div class="uk-width-3-4">
+				<h1>{{item.title}}</h1>
+				<hr>
+				<h4>Owned by <a href="/users/{{item.owner}}/">{{user_name}}</a></h4>
+				<p>{{item.description}}</p>
+				<p><b><span>Condition: {{item.condition}}</span> <span>Daily Price: ${{item.price_per_day}}</span> <span>Maximum Loan Duration: {{item.max_borrow_days}} days</span></b></p>
+			</div>
+		</div>
 	</div>
 
 	<div class="uk-section">
 		{% if not borrows %} <!-- do nothing -->
 		{% else %}
-			<h2>Past Borrows</h2>
+			<h3>Past Borrows</h3>
 
 			{% for b in borrows %}
 				<p>{{b.borrower.first_name}} {{b.borrower.last_name}} borrowed this from {{b.lender.first_name}} {{b.lender.last_name}} on {{b.borrow_date}}</p>
@@ -24,7 +36,7 @@
 	</div>
 
 {% else %}
-	<h1>No item found!</h1>
+	<h3>No item found!</h3>
 {% endif %}
 
 {% endblock %}

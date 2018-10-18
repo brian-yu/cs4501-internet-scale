@@ -5,6 +5,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 import urllib.request
 import urllib.parse
 import json
+import datetime
 
 def home(req):
 	url = 'http://models-api:8000/api/v1/featured_items/'
@@ -66,8 +67,22 @@ def item_detail(req, id):
 		return HttpResponse(result, content_type='application/json')
 
 	res = {}
+	condition = resp['result']['item']['condition']
+	if condition == 'E':
+		resp['result']['item']['condition'] = 'Excellent'
+	elif condition == 'G':
+		resp['result']['item']['condition'] = 'Good'
+	elif condition == 'O':
+		resp['result']['item']['condition'] = 'Fair'
+	else:
+		resp['result']['item']['condition'] = 'Poor'
 	res['item'] = resp['result']['item']
+
+	borrows = resp['result']['borrows']
+	for borrow in borrows:
+		borrow['borrow_date'] = datetime.datetime.strftime(datetime.datetime.strptime(borrow['borrow_date'][:10], "%Y-%m-%d"), "%B %d, %Y")
 	res['borrows'] = resp['result']['borrows']
+	
 	res['user_name'] = resp['result']['owner']
 	res['ok'] = True
 	result = json.dumps(res, cls=DjangoJSONEncoder)
