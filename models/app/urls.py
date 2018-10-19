@@ -24,5 +24,6 @@ urlpatterns = [
     path('reviews/<int:id>/delete/', views.delete_review),
 
     # MISC
-    path('featured_items/', views.featured_items)
+    path('featured_items/', views.featured_items),
+    path('all_reviews/', views.all_reviews)
 ]
