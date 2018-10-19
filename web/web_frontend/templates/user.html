@@ -22,7 +22,7 @@
 </div>
 
 <div class="container uk-container-medium uk-margin">
-	<h2 class="uk-heading-divider">Items - {{ items|length }}</h2>
+	<h2 class="uk-heading-divider">Items({{ items|length }})</h2>
 
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for i in items %}
@@ -37,7 +37,7 @@
 </div>
 
 <div class="uk-container uk-container-medium">
-	<h2 class="uk-heading-divider">Reviews - {{ reviews|length }}</h2>
+	<h2 class="uk-heading-divider">Reviews({{ reviews|length }})</h2>
 
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for review in reviews|slice:":5" %}

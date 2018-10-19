@@ -58,12 +58,8 @@ def review(req, id):
     resp = json.loads(resp_json)
 
     if resp['ok'] == False:
-        return render(req, 'user.html', {'ok': False})
+        return render(req, 'review.html', {'ok': False})
 
-    reviews_list = resp['result']['reviews']
-    paginator = Paginator(reviews_list, 5)
-    # page = request.GET.get('page')
-    # reviews = paginator.get_page(page)
     reviews = ""
     resp['result']['ok'] = True
 
@@ -76,5 +72,4 @@ def item(req, id):
     url = 'http://exp-api:8000/api/v1/items/{}/'.format(id)
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
-
     return render(req, 'item.html', resp)
