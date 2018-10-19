@@ -96,19 +96,19 @@ def item_detail(req, id):
     return HttpResponse(result, content_type='application/json')
 
 
-def reviews(req):
-    url = 'http://models-api:8000/api/v1/all_reviews/'
+# def reviews(req):
+#     url = 'http://models-api:8000/api/v1/all_reviews/'
 
-    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-    resp = json.loads(resp_json)
+#     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+#     resp = json.loads(resp_json)
 
-    if resp['ok'] == False:
-        result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
-        return HttpResponse(result, content_type='application/json')
-    # reviewer = json.loads(resp)['result']['reviewer']
-    # text = json.loads(resp)['result']['text']
-    # reviewee = json.loads(resp)['result']['reviewee']
-    # score = json.loads(resp)['result']['score']
+#     if resp['ok'] == False:
+#         result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+#         return HttpResponse(result, content_type='application/json')
+#     # reviewer = json.loads(resp)['result']['reviewer']
+#     # text = json.loads(resp)['result']['text']
+#     # reviewee = json.loads(resp)['result']['reviewee']
+#     # score = json.loads(resp)['result']['score']
 
-    result = json.dumps(resp, cls=DjangoJSONEncoder)
-    return HttpResponse(result, content_type='application/json')
+#     result = json.dumps(resp, cls=DjangoJSONEncoder)
+#     return HttpResponse(result, content_type='application/json')

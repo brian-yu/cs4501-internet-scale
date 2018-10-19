@@ -318,10 +318,10 @@ def featured_items(req):
     return jsonResponse(res)
 
 
-def all_reviews(req):
-    res = []
-    for review in list(Review.objects.all()):
-        d = model_to_dict(review)
-        d['reviewer'] = model_to_dict(User.objects.get(pk=d['reviewer']))
-        res.append(d)
-    return jsonResponse(res)
+# def all_reviews(req):
+#     res = []
+#     for review in list(Review.objects.all()):
+#         d = model_to_dict(review)
+#         d['reviewer'] = model_to_dict(User.objects.get(pk=d['reviewer']))
+#         res.append(d)
+#     return jsonResponse(res)

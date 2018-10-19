@@ -76,11 +76,11 @@ WSGI_APPLICATION = 'app-microservices.wsgi.application'
 
 DATABASES = {
     'default': {
-          'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'cs4501',
-          'USER': 'www',
-          'PASSWORD': '$3cureUS',
-          'HOST': 'db',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cs4501',
+        'USER': 'www',
+        'PASSWORD': '$3cureUS',
+        'HOST': 'db',
     }
 }
 
@@ -122,4 +122,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-APPEND_SLASH=True
+APPEND_SLASH = True
