@@ -78,11 +78,11 @@ def item_detail(req, id):
 		resp['result']['item']['condition'] = 'Poor'
 	res['item'] = resp['result']['item']
 
-	borrows = resp['result']['borrows']
+	borrows = resp['result']['borrows'] # the 5 most recent borrows
 	for borrow in borrows:
 		borrow['borrow_date'] = datetime.datetime.strftime(datetime.datetime.strptime(borrow['borrow_date'][:10], "%Y-%m-%d"), "%B %d, %Y")
 	res['borrows'] = resp['result']['borrows']
-	
+
 	res['user_name'] = resp['result']['owner']
 	res['ok'] = True
 	result = json.dumps(res, cls=DjangoJSONEncoder)

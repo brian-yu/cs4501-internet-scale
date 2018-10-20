@@ -4,6 +4,8 @@
 <link href="{% static "css/item.css" %}" rel="stylesheet">
 {% endblock %}
 
+{% block title %} | {{item.title}}{% endblock %}
+
 {% block content %}
 
 {% if ok %}
