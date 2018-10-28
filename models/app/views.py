@@ -220,11 +220,16 @@ def create_user(request):
             obj.save()
 
             salt = os.urandom(32)
-            authenticator = hmac.new(
-                key=settings.SECRET_KEY.encode('utf-8'),
-                msg=salt+password.encode('utf-8'),
-                digestmod='sha256',
-            ).hexdigest()
+            while True: # generate authenticators until we find one not in the db
+                try:
+                    authenticator = hmac.new(
+                        key=settings.SECRET_KEY.encode('utf-8'),
+                        msg=salt+password.encode('utf-8'),
+                        digestmod='sha256',
+                    ).hexdigest()
+                    Authenticator.objects.get(pk=authenticator)
+                except Authenticator.DoesNotExist: # if the authenticator is not in the db, it's good
+                    break
             
             auth_obj = Authenticator.objects.create(
                 user_id=obj,
