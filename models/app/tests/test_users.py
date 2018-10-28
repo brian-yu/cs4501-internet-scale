@@ -36,11 +36,13 @@ class TestUsers(TestCase):
             'email': 'obama@usa.gov',
             'overview': 'I\'m President, bitch!',
             'zip_code': '22903',
-            'phone_number': '1234567890'
+            'phone_number': '1234567890',
+            'password': 'ilovemichellexoxo'
         }
         res = json.loads(self.client.post('http://localhost:8000/api/v1/users/create/', form_data, format='json').content.decode('utf-8'))
 
         exp = json.loads(r"""{"result": {"first_name": "Barack", "last_name": "Obama", "email": "obama@usa.gov", "zip_code": "22903", "borrower_rating_total": 0, "borrower_rating_count": 0, "lender_rating_count": 0, "phone_number": "1234567890", "id": 13, "overview": "I'm President, bitch!", "lender_rating_total": 0}, "ok": true}""")
+        self.maxDiff = None
         self.assertEqual(res, exp)
 
     def test_create_user_fail(self):

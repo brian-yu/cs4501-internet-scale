@@ -58,32 +58,6 @@ class TestBorrows(TestCase):
         self.assertEquals(response['ok'], True)
 
     def test_create_fail(self):
-        form_data = {
-            'lender': 8,
-            'borrower': 4,
-            'item': 17,
-            'borrow_date': 1000, # invalid date format
-            'borrow_days': 1
-        }
-
-        res = json.loads(self.client.post('http://localhost:8001/api/v1/borrows/create/', form_data, format='json').content.decode('utf-8'))
-
-        self.assertEqual("error" in res, True)
-        self.assertEqual(res["ok"], False)
-
-        form_data = {
-            'lender': 8,
-            'borrower': 4,
-            'item': 17,
-            'borrow_date': '2018-10-16 23:43',
-            'borrow_days': 0 # invalid borrow days
-        }
-
-        res = json.loads(self.client.post('http://localhost:8001/api/v1/borrows/create/', form_data, format='json').content.decode('utf-8'))
-
-        self.assertEqual("error" in res, True)
-        self.assertEqual(res["ok"], False)
-
         form_data = { # not enough data
             'lender': 8,
             'borrower': 4,

@@ -61,8 +61,7 @@ class Borrow(models.Model):
     borrower = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="borrowed_items")
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    borrow_date = models.DateTimeField(
-        'date borrowed')  # format: 2018-10-01 16:41
+    borrow_date = models.DateTimeField(auto_now_add=True)  # format: 2018-10-01 16:41
     borrow_days = models.IntegerField(
         validators=[MinValueValidator(1)]
     )
@@ -84,3 +83,9 @@ class Review(models.Model):
 
     def __str__(self):
         return self.reviewer.__str__() + "'s review of " + self.reviewee.__str__()
+
+class Authenticator(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    authenticator = models.CharField(max_length=64, primary_key=True)
+    date_created = models.DateField(auto_now=True)
+    salt = models.BinaryField(max_length=32) # os.urandom(32) returns a binary encoding

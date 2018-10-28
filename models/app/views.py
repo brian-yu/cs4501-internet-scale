@@ -1,11 +1,14 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
-from .models import User, Review, Borrow, Item
+from .models import User, Review, Borrow, Item, Authenticator
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 import json
+import os
+import hmac
 
 
 def index(request):
@@ -194,6 +197,8 @@ def create_user(request):
             email = form_data['email']
             overview = form_data['overview']
             zip_code = form_data['zip_code']
+            password = form_data['password']
+
             if 'phone_number' in form_data:
                 phone_number = form_data['phone_number']
                 obj = User.objects.create(
@@ -213,6 +218,22 @@ def create_user(request):
                     zip_code=zip_code
                 )
             obj.save()
+
+            salt = os.urandom(32)
+            authenticator = hmac.new(
+                key=settings.SECRET_KEY.encode('utf-8'),
+                msg=salt+password.encode('utf-8'),
+                digestmod='sha256',
+            ).hexdigest()
+            
+            auth_obj = Authenticator.objects.create(
+                user_id=obj,
+                authenticator=authenticator,
+                salt=salt
+            )
+            auth_obj.save()
+            
+            
             obj_dict = model_to_dict(obj)
             return jsonResponse(obj_dict)
         except:
