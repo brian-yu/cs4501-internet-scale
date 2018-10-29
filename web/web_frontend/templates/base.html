@@ -1,12 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<link href="{% static "uikit/css/uikit.min.css" %}" rel="stylesheet">
-	<link href="{% static "css/base.css" %}" rel="stylesheet">
+	<link href="{% static " uikit/css/uikit.min.css" %}" rel="stylesheet">
+	<link href="{% static " css/base.css" %}" rel="stylesheet">
 	<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-	<link rel="shortcut icon" type="image/png" href="{% static "img/poop.png" %}"/>
-	<script src="{% static "uikit/js/uikit-icons.min.js" %}"></script>
+	<link rel="shortcut icon" type="image/png" href="{% static " img/poop.png" %}" />
+	<script src="{% static " uikit/js/uikit-icons.min.js" %}"></script>
 	{% block css %}{% endblock %}
 	<title>ShareSh*t{% block title %}{% endblock %}</title>
 </head>
@@ -14,15 +15,15 @@
 <body>
 	<!-- NAVBAR -->
 	<nav class="uk-navbar-container" uk-navbar>
-	    <div class="uk-navbar-left">
-	    	<a class="uk-navbar-item uk-logo" href="/">
-	    		<div class="uk-animation-toggle uk-animation-shake">
-	    			<i class="em-svg em-hankey uk-animation-shake"></i>
-	    		</div>
+		<div class="uk-navbar-left">
+			<a class="uk-navbar-item uk-logo" href="/">
+				<div class="uk-animation-toggle uk-animation-shake">
+					<i class="em-svg em-hankey uk-animation-shake"></i>
+				</div>
 				&nbsp ShareSh*t
-	    	</a>
-	    </div>
-	<!--     <div class="uk-navbar-right">
+			</a>
+		</div>
+		<!--     <div class="uk-navbar-right">
 	        <ul class="uk-navbar-nav">
 	        	<li>
 		        	<a href="/about">
@@ -40,21 +41,22 @@
 	</div>
 
 	<div class="uk-section uk-section-secondary footer">
-	    <div class="uk-container">
-	        <h3>
-	    		<i class="em-svg em-hankey"></i>
+		<div class="uk-container">
+			<h3>
+				<i class="em-svg em-hankey"></i>
 				&nbsp ShareSh*t
 			</h3>
 			<ul class="uk-list">
-			    <li><a href="/">About</a></li>
-			    <li><a href="/">Careers</a></li>
-			    <li><a href="/">Privacy</a></li>
-			    <li><a href="/">Legal</a></li>
+				<li><a href="/">About</a></li>
+				<li><a href="/">Careers</a></li>
+				<li><a href="/">Privacy</a></li>
+				<li><a href="/">Legal</a></li>
 			</ul>
-	        <div>
-	        	© 2018 ShareSh*t
-	    	</div>
-	    </div>
+			<div>
+				© 2018 ShareSh*t
+			</div>
+		</div>
 	</div>
 </body>
+
 </html>
