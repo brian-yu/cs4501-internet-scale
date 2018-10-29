@@ -6,6 +6,7 @@ class TestUsers(TestCase):
 
     def setUp(self):
         self.client = Client()
+        self.maxDiff = 1000
 
     def test_get_user_success(self):
         recv_json = self.client.get(
@@ -36,7 +37,8 @@ class TestUsers(TestCase):
             'email': 'obama@usa.gov',
             'overview': 'I\'m President, bitch!',
             'zip_code': '22903',
-            'phone_number': '1234567890'
+            'phone_number': '1234567890',
+            'password': 'ilovemichellexoxo69'
         }
         res = json.loads(self.client.post('http://localhost:8000/api/v1/users/create/', form_data, format='json').content.decode('utf-8'))
 

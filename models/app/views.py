@@ -68,6 +68,8 @@ def update(request, model, id):
             setattr(obj, key, value)
         obj.save()
         obj_dict = model_to_dict(obj)
+        obj_dict.pop('password', None)
+        obj_dict.pop('salt', None)
         return jsonResponse(obj_dict)
     except ValidationError:
         return formatErrorResponse(form_data)
@@ -196,7 +198,8 @@ def create_user(request):
             email = form_data['email']
             overview = form_data['overview']
             zip_code = form_data['zip_code']
-            salt = crypt.mksalt(crypt.METHOD_SHA512)
+            # salt = crypt.mksalt(crypt.METHOD_SHA512)
+            password = form_data['password']
             if 'phone_number' in form_data:
                 phone_number = form_data['phone_number']
                 obj = User.objects.create(
@@ -207,8 +210,8 @@ def create_user(request):
                     overview=overview,
                     zip_code=zip_code,
                     password=make_password(
-                        form_data['password'],
-                        salt = salt
+                        password,
+                        # salt = salt
                     ),
                     salt = salt,
                 )
@@ -220,13 +223,15 @@ def create_user(request):
                     overview=overview,
                     zip_code=zip_code,
                     password=make_password(
-                        form_data['password'],
-                        salt = salt
+                        password,
+                        # salt = salt
                     ),
                     salt = salt,
                 )
             obj.save()
             obj_dict = model_to_dict(obj)
+            obj_dict.pop('password')
+            obj_dict.pop('salt')
             return jsonResponse(obj_dict)
         except:
             result = json.dumps(
