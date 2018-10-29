@@ -2,7 +2,7 @@
 
 {% block css %}
 {% load static %}
-<link href="{% static "css/home.css" %}" rel="stylesheet">
+<link href="{% static " css/home.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block title %} | {{user.first_name}} {{user.last_name}}{% endblock %}
@@ -14,7 +14,7 @@
 </h1>
 
 <p>Zipcode: {{user.zip_code}}</p>
-<p>Rating: {{score}}/5</p>
+<p>Rating: {{score|floatformat:"3"}}/5</p>
 
 <div class="uk-container uk-container-medium uk-margin">
 	<h2 class="uk-heading-divider">Overview</h2>
@@ -23,13 +23,13 @@
 
 <div class="container uk-container-medium uk-margin">
 	<h2 class="uk-heading-divider">Items - {{ items|length }}</h2>
-	
+
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for i in items %}
-			<li>
-			  	<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
-			  	<p>{{ i.description }}</p>
-			</li>
+		<li>
+			<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
+			<p>{{ i.description }}</p>
+		</li>
 		{% endfor %}
 	</ul>
 
@@ -37,13 +37,13 @@
 
 <div class="uk-container uk-container-medium">
 	<h2 class="uk-heading-divider">Reviews - {{ reviews|length }}</h2>
-	
+
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for review in reviews %}
-			<li>
-				<h4>{{ review.score }}/5</h4>
-			  	<p>{{review.text}}</p>
-			</li>
+		<li>
+			<h4>{{ review.score }}/5</h4>
+			<p>{{review.text}}</p>
+		</li>
 		{% endfor %}
 	</ul>
 
@@ -52,6 +52,6 @@
 <h1 class="uk-heading-primary">
 	No user found!
 </h1>
-<img src="{% static "img/whoops.png" %}" uk-img/>
+<img src="{% static " img/whoops.png" %}" uk-img />
 {% endif %}
 {% endblock %}
