@@ -15,7 +15,9 @@ urlpatterns = [
     path('users/<int:id>/', views.user),
     path('items/<int:id>/', views.item),
     path('register/', views.register),
-    path('login/', views.login)
+    path('login/', views.login),
+    path('all_reviews/<int:id>/', views.review)
+
 
     # path('borrows/<int:id>/', views.borrow),
     # path('reviews/<int:id>/', views.review),

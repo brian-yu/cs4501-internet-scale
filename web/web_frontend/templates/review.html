@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<!-- <h1>{{review.reviewee}}</h1> -->
+
+<!-- <h1>All Reviews <a href="/users/{{reviews.0.reviewee}}/">{{ reviews.0.reviewee }}</a></h1> -->
+<h1>All Reviews</h1>
+
+{% for review in reviews %}
+<div class="uk-card uk-card-body">
+    <h2>Review by: <a href="/users/{{review.reviewer}}/">{{ review.reviewer }}</a></h2>
+    <h4>Rating: {{ review.score }}/5</h4>
+    <h4>Description: {{review.text}}</p>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}
