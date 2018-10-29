@@ -6,7 +6,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
-from crypt import mksalt
+import crypt
 import json
 
 
@@ -196,6 +196,7 @@ def create_user(request):
             email = form_data['email']
             overview = form_data['overview']
             zip_code = form_data['zip_code']
+            salt = crypt.mksalt(crypt.METHOD_SHA512)
             if 'phone_number' in form_data:
                 phone_number = form_data['phone_number']
                 obj = User.objects.create(
@@ -204,7 +205,12 @@ def create_user(request):
                     email=email,
                     phone_number=phone_number,
                     overview=overview,
-                    zip_code=zip_code
+                    zip_code=zip_code,
+                    password=make_password(
+                        form_data['password'],
+                        salt = salt
+                    ),
+                    salt = salt,
                 )
             else:
                 obj = User.objects.create(
@@ -212,7 +218,12 @@ def create_user(request):
                     last_name=last_name,
                     email=email,
                     overview=overview,
-                    zip_code=zip_code
+                    zip_code=zip_code,
+                    password=make_password(
+                        form_data['password'],
+                        salt = salt
+                    ),
+                    salt = salt,
                 )
             obj.save()
             obj_dict = model_to_dict(obj)
