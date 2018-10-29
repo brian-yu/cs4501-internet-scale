@@ -13,7 +13,6 @@
         "lender_rating_count": 0,
         "borrower_rating_total": 0,
         "borrower_rating_count": 0,
-        "salt": "bar",
         "password": "foo"
     }
 },
@@ -31,7 +30,6 @@
         "lender_rating_count": 0,
         "borrower_rating_total": 0,
         "borrower_rating_count": 0,
-        "salt": "bar",
         "password": "foo"
     }
 },
@@ -49,7 +47,6 @@
         "lender_rating_count": 0,
         "borrower_rating_total": 5,
         "borrower_rating_count": 0,
-        "salt": "bar",
         "password": "foo"
     }
 },
@@ -67,7 +64,6 @@
         "lender_rating_count": 0,
         "borrower_rating_total": 0,
         "borrower_rating_count": 0,
-        "salt": "bar",
         "password": "foo"
     }
 },
@@ -85,7 +81,6 @@
         "lender_rating_count": 0,
         "borrower_rating_total": 0,
         "borrower_rating_count": 0,
-        "salt": "bar",
         "password": "foo"
     }
 },
@@ -103,7 +98,6 @@
         "lender_rating_count": 0,
         "borrower_rating_total": 0,
         "borrower_rating_count": 0,
-        "salt": "bar",
         "password": "foo"
     }
 },
@@ -121,7 +115,6 @@
         "lender_rating_count": 0,
         "borrower_rating_total": 0,
         "borrower_rating_count": 0,
-        "salt": "bar",
         "password": "foo"
     }
 },
@@ -139,7 +132,6 @@
         "lender_rating_count": 0,
         "borrower_rating_total": 0,
         "borrower_rating_count": 0,
-        "salt": "bar",
         "password": "foo"
     }
 },

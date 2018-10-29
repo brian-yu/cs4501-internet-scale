@@ -19,7 +19,6 @@ class User(models.Model):
     lender_rating_count = models.IntegerField(default=0, blank=True)
     borrower_rating_total = models.IntegerField(default=0, blank=True)
     borrower_rating_count = models.IntegerField(default=0, blank=True)
-    salt = models.TextField()
     password = models.TextField()
 
     def __str__(self):
