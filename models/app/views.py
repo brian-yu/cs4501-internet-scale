@@ -6,7 +6,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
-import crypt
 import json
 
 
@@ -68,6 +67,7 @@ def update(request, model, id):
             setattr(obj, key, value)
         obj.save()
         obj_dict = model_to_dict(obj)
+        obj_dict.pop('password', None)
         return jsonResponse(obj_dict)
     except ValidationError:
         return formatErrorResponse(form_data)
@@ -196,7 +196,7 @@ def create_user(request):
             email = form_data['email']
             overview = form_data['overview']
             zip_code = form_data['zip_code']
-            salt = crypt.mksalt(crypt.METHOD_SHA512)
+            password = form_data['password']
             if 'phone_number' in form_data:
                 phone_number = form_data['phone_number']
                 obj = User.objects.create(
@@ -206,11 +206,7 @@ def create_user(request):
                     phone_number=phone_number,
                     overview=overview,
                     zip_code=zip_code,
-                    password=make_password(
-                        form_data['password'],
-                        salt = salt
-                    ),
-                    salt = salt,
+                    password=make_password(password)
                 )
             else:
                 obj = User.objects.create(
@@ -219,14 +215,11 @@ def create_user(request):
                     email=email,
                     overview=overview,
                     zip_code=zip_code,
-                    password=make_password(
-                        form_data['password'],
-                        salt = salt
-                    ),
-                    salt = salt,
+                    password=make_password(password)
                 )
             obj.save()
             obj_dict = model_to_dict(obj)
+            obj_dict.pop('password')
             return jsonResponse(obj_dict)
         except:
             result = json.dumps(
