@@ -1,7 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
-from django.contrib.auth.hashers import make_password, check_password
-
 
 class User(models.Model):
     # 10 fields
@@ -21,6 +19,8 @@ class User(models.Model):
     lender_rating_count = models.IntegerField(default=0, blank=True)
     borrower_rating_total = models.IntegerField(default=0, blank=True)
     borrower_rating_count = models.IntegerField(default=0, blank=True)
+    salt = models.CharField(max_length=19)
+    password = models.TextField()
 
     def __str__(self):
         return self.first_name + " " + self.last_name
