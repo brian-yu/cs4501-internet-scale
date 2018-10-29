@@ -59,7 +59,7 @@ class TestUsers(TestCase):
     def test_update_user_success(self):
         form_data = {'overview': 'i love writing tests'}
         res = json.loads(self.client.post('http://localhost:8000/api/v1/users/4/', form_data, format='json').content.decode('utf-8'))
-        exp = json.loads(r"""{"ok": true, "result": {"last_name": "Yu", "borrower_rating_total": 0, "lender_rating_total": 0, "borrower_rating_count": 0, "email": "bry4xm@virginia.edu", "id": 4, "zip_code": "22903", "overview": "i love writing tests", "lender_rating_count": 0, "phone_number": "", "first_name": "Brian"}}""")
+        exp = json.loads(r"""{"ok": true, "result": {"last_name": "Yu", "borrower_rating_total": 0, "lender_rating_total": 0, "borrower_rating_count": 0, "email": "bry4xm@virginia.edu", "id": 4, "zip_code": "22903", "overview": "i love writing tests", "lender_rating_count": 0, "phone_number": "", "password": "", "first_name": "Brian"}}""")
         self.assertEqual(res, exp)
 
     def test_update_user_fail(self):

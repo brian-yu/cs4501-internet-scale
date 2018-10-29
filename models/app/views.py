@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
+from django.contrib.auth.hashers import check_password, make_password
 from .models import User, Review, Borrow, Item, Authenticator
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
@@ -49,7 +50,7 @@ def update(request, model, id):
         obj = model.objects.get(pk=id)
         form_data = request.POST
         for key, value in form_data.items():
-            if key in {'owner', 'lender', 'reviewer', 'reviewee', 'borrower'}:
+            if key in {'owner', 'lender', 'reviewer', 'reviewee', 'borrower', 'password'}:
                 try:
                     value = User.objects.get(pk=value)
                 except:
@@ -66,6 +67,13 @@ def update(request, model, id):
                     return formatErrorResponse(form_data)
                 if not value >= 1 or not value <= 5:
                     return formatErrorResponse(form_data)
+            if key == 'password': # user is updating password
+                try:
+                    salt = os.urandom(32)
+                    value = make_password(value, salt)
+                    setattr(obj, 'salt', salt)
+                except:
+                    pass
             setattr(obj, key, value)
         obj.save()
         obj_dict = model_to_dict(obj)
@@ -198,6 +206,8 @@ def create_user(request):
             overview = form_data['overview']
             zip_code = form_data['zip_code']
             password = form_data['password']
+            salt = os.urandom(32)
+
 
             if 'phone_number' in form_data:
                 phone_number = form_data['phone_number']
@@ -207,7 +217,9 @@ def create_user(request):
                     email=email,
                     phone_number=phone_number,
                     overview=overview,
-                    zip_code=zip_code
+                    zip_code=zip_code,
+                    password=make_password(password, salt=salt)[0:64],
+                    salt=salt
                 )
             else:
                 obj = User.objects.create(
@@ -215,36 +227,37 @@ def create_user(request):
                     last_name=last_name,
                     email=email,
                     overview=overview,
-                    zip_code=zip_code
+                    zip_code=zip_code,
+                    password=make_password(password, salt=salt)[0:64],
+                    salt=salt
                 )
             obj.save()
-
-            salt = os.urandom(32)
-            while True: # generate authenticators until we find one not in the db
-                try:
-                    authenticator = hmac.new(
-                        key=settings.SECRET_KEY.encode('utf-8'),
-                        msg=salt+password.encode('utf-8'),
-                        digestmod='sha256',
-                    ).hexdigest()
-                    Authenticator.objects.get(pk=authenticator)
-                except Authenticator.DoesNotExist: # if the authenticator is not in the db, it's good
-                    break
-            
-            auth_obj = Authenticator.objects.create(
-                user_id=obj,
-                authenticator=authenticator,
-                salt=salt
-            )
-            auth_obj.save()
-            
             
             obj_dict = model_to_dict(obj)
+            obj_dict.pop(password)
+            obj_dict.pop(salt)
             return jsonResponse(obj_dict)
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
+
+def create_authenticator(request):
+    while True: # generate authenticators until we find one not in the db
+        try:
+            authenticator = hmac.new(
+                key=settings.SECRET_KEY.encode('utf-8'),
+                msg=os.urandom(32),
+                digestmod='sha256',
+            ).hexdigest()
+            Authenticator.objects.get(pk=authenticator)
+        except Authenticator.DoesNotExist: # if the authenticator is not in the db, it's good
+            break
+    auth_obj = Authenticator.objects.create(
+        user_id=obj,
+        authenticator=authenticator,
+    )
+    auth_obj.save()
 
 
 @csrf_exempt

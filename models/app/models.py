@@ -7,6 +7,8 @@ class User(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
+    password = models.CharField(max_length=64)
+    salt = models.BinaryField(max_length=32) # os.urandom(32) returns a binary encoding
     phone_regex = RegexValidator(
         regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(
@@ -88,4 +90,3 @@ class Authenticator(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     authenticator = models.CharField(max_length=64, primary_key=True)
     date_created = models.DateField(auto_now=True)
-    salt = models.BinaryField(max_length=32) # os.urandom(32) returns a binary encoding
