@@ -64,9 +64,9 @@ def register(req):
 			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 			resp = json.loads(resp_json)
 			if not resp['ok']:
-				result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
-			return HttpResponse(result, content_type='application/json')
+				resp = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request, did not get passed to models. Here is the data we received: {}'.format(form_data), 'ok': False})
+			return HttpResponse(resp, content_type='application/json')
 		except:
 			result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
@@ -83,12 +83,12 @@ def create_item(req):
 			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
 			resp = json.loads(resp_json)
 			if not resp['ok']:
-				result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
-			return HttpResponse(result, content_type='application/json')
+				resp = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
+			return HttpResponse(resp, content_type='application/json')
 		except:
 			result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
 			return HttpResponse(result, content_type='application/json')
 
 def items(req):
