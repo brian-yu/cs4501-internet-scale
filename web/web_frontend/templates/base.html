@@ -3,11 +3,11 @@
 <html lang="en">
 
 <head>
-	<link href="{% static " uikit/css/uikit.min.css" %}" rel="stylesheet">
-	<link href="{% static " css/base.css" %}" rel="stylesheet">
+	<link href="{% static "uikit/css/uikit.min.css" %}" rel="stylesheet">
+	<link href="{% static "css/base.css" %}" rel="stylesheet">
 	<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-	<link rel="shortcut icon" type="image/png" href="{% static " img/poop.png" %}" />
-	<script src="{% static " uikit/js/uikit-icons.min.js" %}"></script>
+	<link rel="shortcut icon" type="image/png" href="{% static "img/poop.png" %}" />
+	<script src="{% static "uikit/js/uikit-icons.min.js" %}"></script>
 	{% block css %}{% endblock %}
 	<title>ShareSh*t{% block title %}{% endblock %}</title>
 </head>
@@ -40,6 +40,8 @@
 		{% block content %}{% endblock %}
 	</div>
 
+
+	<!-- the footer -->
 	<div class="uk-section uk-section-secondary footer">
 		<div class="uk-container">
 			<h3>
