@@ -7,53 +7,60 @@ import urllib.parse
 import json
 import datetime
 
+
 def home(req):
-	url = 'http://models-api:8000/api/v1/featured_items/'
+    url = 'http://models-api:8000/api/v1/featured_items/'
 
-	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-	resp = json.loads(resp_json)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
 
-	if resp["ok"] == False:
-		result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
-		return HttpResponse(result, content_type='application/json')
+    if resp["ok"] == False:
+        result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+        return HttpResponse(result, content_type='application/json')
 
-	resp = resp['result']
-	res = {}
-	res['items'] = resp
+    resp = resp['result']
+    res = {}
+    res['items'] = resp
 
-	result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
-	return HttpResponse(result, content_type='application/json')
+    result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
+    return HttpResponse(result, content_type='application/json')
+
 
 def users(req):
-	return HttpResponse("<p>Users listing for exp_api!!</p>")
+    return HttpResponse("<p>Users listing for exp_api!!</p>")
+
 
 def user_detail(req, id):
-	url = 'http://models-api:8000/api/v1/users/{}/'.format(id)
+    url = 'http://models-api:8000/api/v1/users/{}/'.format(id)
 
-	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-	resp = json.loads(resp_json)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
 
-	if resp["ok"] == False:
-		result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
-		return HttpResponse(result, content_type='application/json')
+    if resp["ok"] == False:
+        result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+        return HttpResponse(result, content_type='application/json')
 
-	resp = resp['result']
+    resp = resp['result']
 
-	res = {}
+    res = {}
 
-	if len(resp['received_reviews']) == 0:
-		res['score'] = "-"
-	else:
-		res['score'] = sum([r['score'] for r in resp['received_reviews']]) / len(resp['received_reviews'])
+    if len(resp['received_reviews']) == 0:
+        res['score'] = "-"
+    else:
+        res['score'] = sum(
+            [r['score'] for r in resp['received_reviews']]) / len(resp['received_reviews'])
 
-	res['user'] = resp['user']
-	res['items'] = resp['items']
-	res['reviews'] = resp['received_reviews']
+    res['user'] = resp['user']
+    res['items'] = resp['items']
+    res['reviews'] = resp['received_reviews']
 
-	result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
-	return HttpResponse(result, content_type='application/json')
+    result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
+    return HttpResponse(result, content_type='application/json')
 
+
+@csrf_exempt
 def register(req):
+<<<<<<< HEAD
 	if req.method == "POST":
 		try:
 			post_data = request.POST
@@ -70,8 +77,10 @@ def register(req):
 		except:
 			result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
-			return HttpResponse(result, content_type='application/json')
+            return HttpResponse(result, content_type='application/json')
 
+
+@csrf_exempt
 def create_item(req):
 	if req.method == "POST":
 		try:
@@ -92,36 +101,38 @@ def create_item(req):
 			return HttpResponse(result, content_type='application/json')
 
 def items(req):
-	return HttpResponse("<p>Items listing for exp_api!!</p>")
+    return HttpResponse("<p>Items listing for exp_api!!</p>")
+
 
 def item_detail(req, id):
-	url = 'http://models-api:8000/api/v1/items/{}/'.format(id)
+    url = 'http://models-api:8000/api/v1/items/{}/'.format(id)
 
-	resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-	resp = json.loads(resp_json)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
 
-	if resp['ok'] == False:
-		result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
-		return HttpResponse(result, content_type='application/json')
+    if resp['ok'] == False:
+        result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+        return HttpResponse(result, content_type='application/json')
 
-	res = {}
-	condition = resp['result']['item']['condition']
-	if condition == 'E':
-		resp['result']['item']['condition'] = 'Excellent'
-	elif condition == 'G':
-		resp['result']['item']['condition'] = 'Good'
-	elif condition == 'O':
-		resp['result']['item']['condition'] = 'Fair'
-	else:
-		resp['result']['item']['condition'] = 'Poor'
-	res['item'] = resp['result']['item']
+    res = {}
+    condition = resp['result']['item']['condition']
+    if condition == 'E':
+        resp['result']['item']['condition'] = 'Excellent'
+    elif condition == 'G':
+        resp['result']['item']['condition'] = 'Good'
+    elif condition == 'O':
+        resp['result']['item']['condition'] = 'Fair'
+    else:
+        resp['result']['item']['condition'] = 'Poor'
+    res['item'] = resp['result']['item']
 
-	borrows = resp['result']['borrows'] # the 5 most recent borrows
-	for borrow in borrows:
-		borrow['borrow_date'] = datetime.datetime.strftime(datetime.datetime.strptime(borrow['borrow_date'][:10], "%Y-%m-%d"), "%B %d, %Y")
-	res['borrows'] = resp['result']['borrows']
+    borrows = resp['result']['borrows']  # the 5 most recent borrows
+    for borrow in borrows:
+        borrow['borrow_date'] = datetime.datetime.strftime(
+            datetime.datetime.strptime(borrow['borrow_date'][:10], "%Y-%m-%d"), "%B %d, %Y")
+    res['borrows'] = resp['result']['borrows']
 
-	res['user_name'] = resp['result']['owner']
-	res['ok'] = True
-	result = json.dumps(res, cls=DjangoJSONEncoder)
-	return HttpResponse(result, content_type='application/json')
+    res['user_name'] = resp['result']['owner']
+    res['ok'] = True
+    result = json.dumps(res, cls=DjangoJSONEncoder)
+    return HttpResponse(result, content_type='application/json')
