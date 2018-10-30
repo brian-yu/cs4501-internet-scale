@@ -65,7 +65,7 @@ def review(req, id):
 def register(req):
     if req.method == "POST":
         form = UserCreationForm(req.POST)
-        if form.is_valid():
+        if form.is_valid(): # this isn't right, we have to pass info to the exp and models
             form.save()
             messages.success(req, 'Account created successfully')
             return redirect("login/")
@@ -78,3 +78,6 @@ def register(req):
 
 def login(req):
     return render(req, "login.html")
+
+def post_item(req):
+    return render(req, "post_item.html")

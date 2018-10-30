@@ -1,12 +1,7 @@
 {% extends "base.html" %}
 
-{% block css %}
-{% load static %}
-<link href="{% static "css/home.css" %}" rel="stylesheet">
-{% endblock %}
-
 {% block content %}
-{% if ok %}
+
 <div class="container">
     <h1>Login</h1>
     <p>You can log in here!</p>
@@ -17,10 +12,5 @@
         <button type="submit" name="button">Login</button>
     </form>
 </div>
-{% else %}
-<h1 class="uk-heading-primary">
-    There was an error!
-</h1>
-<img src="{% static "img/whoops.png" %}" uk-img />
-{% endif %}
+
 {% endblock %}

@@ -16,7 +16,8 @@ urlpatterns = [
     path('items/<int:id>/', views.item),
     path('register/', views.register),
     path('login/', views.login),
-    path('all_reviews/<int:id>/', views.review)
+    path('all_reviews/<int:id>/', views.review),
+    path('post_item/', views.post_item)
 
 
     # path('borrows/<int:id>/', views.borrow),

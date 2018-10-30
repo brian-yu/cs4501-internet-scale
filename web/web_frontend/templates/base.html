@@ -14,31 +14,44 @@
 
 <body>
 	<!-- NAVBAR -->
-	<nav class="uk-navbar-container" uk-navbar>
+	<nav class="uk-navbar-container uk-navbar">
 		<div class="uk-navbar-left">
-			<a class="uk-navbar-item uk-logo" href="/">
-				<div class="uk-animation-toggle uk-animation-shake">
-					<i class="em-svg em-hankey uk-animation-shake"></i>
-				</div>
-				&nbsp ShareSh*t
-			</a>
-		</div>
-		<!--     <div class="uk-navbar-right">
-	        <ul class="uk-navbar-nav">
+			<ul class="uk-navbar-nav">
+				<a class="uk-navbar-item uk-logo" href="/">
+					<div class="uk-animation-toggle uk-animation-shake">
+						<i class="em-svg em-hankey uk-animation-shake"></i>
+					</div>
+					&nbsp ShareSh*t
+				</a>
 	        	<li>
-		        	<a href="/about">
-		        		About
-		        	</a>
+	        		<a href="#">Sh*t in your area</a>
+	        	</li>
+	        	<li>
+	        		<a href="#">All Items</a>
 	        	</li>
 	        </ul>
-	    </div> -->
+	    </div>
+	    <div class="uk-navbar-center">
+	    	<ul class="uk-navbar-nav">
+	    		<li>
+	    			<button class="uk-button uk-button-default" style="background-color: brown;"><a href="/post_item" style="color: white; font-size: 120%;">Post your shit here!</a></button>
+	    		</li>
+			</ul>
+		</div>
+		<div class="uk-navbar-right">
+			<ul class="uk-navbar-nav">
+				<li><a href="/login">Login</a></li>
+				<li><a href="/register">Register</a></li>
+			</ul>
+		</div>
+		<!--      -->
 	</nav>
 
 
 	<!-- the main page -->
 	<div class="content uk-container uk-margin">
 		{% block content %}{% endblock %}
-		<div class="push"></div>
+		<div class="push"></div> <!-- used for fixed footer -->
 	</div>
 
 
