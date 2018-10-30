@@ -84,3 +84,8 @@ class Review(models.Model):
 
     def __str__(self):
         return self.reviewer.__str__() + "'s review of " + self.reviewee.__str__()
+
+class Authenticator(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    authenticator = models.CharField(max_length=64, primary_key=True)
+    date_created = models.DateField(auto_now=True)
