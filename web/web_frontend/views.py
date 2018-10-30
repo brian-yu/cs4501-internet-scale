@@ -8,7 +8,7 @@ import urllib.request
 import urllib.parse
 import json
 
-from web_frontend.forms import RegisterForm
+from web_frontend.forms import RegisterForm, CreateItemForm
 
 def home(req):
 
@@ -82,4 +82,10 @@ def login(req):
     return render(req, "login.html")
 
 def post_item(req):
-    return render(req, "post_item.html")
+    if req.method == "POST":
+        form = CreateItemForm(req.POST)
+
+    else:
+        form = CreateItemForm()
+        args = {'form': form}
+        return render(req, "post_item.html", args)
