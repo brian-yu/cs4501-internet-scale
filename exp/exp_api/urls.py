@@ -10,7 +10,7 @@ urlpatterns = [
     path('items/<int:id>/', views.item_detail),
 
     # CREATE requests
-    path('users/create/', views.create_user),
+    path('users/create/', views.register),
     path('items/create/', views.create_item),
     # path('borrows/create/', views.create_borrow),
     # path('reviews/create/', views.create_review),

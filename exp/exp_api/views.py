@@ -66,11 +66,11 @@ def register(req):
 			if not resp['ok']:
 				result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
-            return HttpResponse(result, content_type='application/json')
+			return HttpResponse(result, content_type='application/json')
 		except:
 			result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
-            return HttpResponse(result, content_type='application/json')
+			return HttpResponse(result, content_type='application/json')
 
 def create_item(req):
 	if req.method == "POST":
@@ -85,11 +85,11 @@ def create_item(req):
 			if not resp['ok']:
 				result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
-            return HttpResponse(result, content_type='application/json')
+			return HttpResponse(result, content_type='application/json')
 		except:
 			result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
-            return HttpResponse(result, content_type='application/json')
+			return HttpResponse(result, content_type='application/json')
 
 def items(req):
 	return HttpResponse("<p>Items listing for exp_api!!</p>")
