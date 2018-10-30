@@ -63,7 +63,7 @@ def review(req, id):
     return render(req, 'review.html', resp['result'])
 
 
-def register(req):
+def create_user(req):
     if req.method == "POST":
         form = RegisterForm(req.POST)
         # if form.is_valid(): # this isn't right, we have to pass info to the exp and models
@@ -71,8 +71,28 @@ def register(req):
         #     form.save()
         #     messages.success(req, 'Account created successfully')
         #     return redirect("login/")
+        if not form.is_valid():
+            form = RegisterForm()
+            args = {'form': form}
+            return render(req, "register.html", args)
+        try:
+            post_data = form.cleaned_data
+            url = 'http://exp-api:8000/api/v1/users/create/'
+            post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
 
-    else:
+            req = urllib.request.Request(url, data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            if not resp['ok']:
+                result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+        except:
+            result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+        
+    else: # showing the form data
         form = RegisterForm()
         args = {'form': form}
         return render(req, "register.html", args)
@@ -82,4 +102,35 @@ def login(req):
     return render(req, "login.html")
 
 def post_item(req):
-    return render(req, "post_item.html")
+    if req.method == "POST":
+        form = CreateItemForm(req.POST)
+        # if form.is_valid(): # this isn't right, we have to pass info to the exp and models
+            #SEND TO EXP_API
+        #     form.save()
+        #     messages.success(req, 'Account created successfully')
+        #     return redirect("login/")
+        if not form.is_valid():
+            form = CreateItemForm()
+            args = {'form': form}
+            return render(req, "post_item.html", args)
+        try:
+            post_data = form.cleaned_data
+            url = 'http://exp-api:8000/api/v1/items/create/'
+            post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+
+            req = urllib.request.Request(url, data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            if not resp['ok']:
+                result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+        except:
+            result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+        
+    else: # showing the form data
+        form = CreateItemForm()
+        args = {'form': form}
+        return render(req, "post_item.html")

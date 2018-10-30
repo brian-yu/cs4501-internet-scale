@@ -9,9 +9,9 @@ urlpatterns = [
     path('items/', views.items),
     path('items/<int:id>/', views.item_detail),
 
-    # # CREATE requests
-    # path('users/create/', views.create_user),
-    # path('items/create/', views.create_item),
+    # CREATE requests
+    path('users/create/', views.create_user),
+    path('items/create/', views.create_item),
     # path('borrows/create/', views.create_borrow),
     # path('reviews/create/', views.create_review),
 

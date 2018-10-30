@@ -53,6 +53,44 @@ def user_detail(req, id):
 	result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
 	return HttpResponse(result, content_type='application/json')
 
+def register(req):
+	if req.method == "POST":
+		try:
+			post_data = request.POST
+			url = 'http://models-api:8000/api/v1/users/create/'
+			post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+
+			req = urllib.request.Request(url, data=post_encoded, method='POST')
+			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+			resp = json.loads(resp_json)
+			if not resp['ok']:
+				result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+		except:
+			result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+
+def create_item(req):
+	if req.method == "POST":
+		try:
+			post_data = request.POST
+			url = 'http://models-api:8000/api/v1/items/create/'
+			post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+
+			req = urllib.request.Request(url, data=post_encoded, method='POST')
+			resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+			resp = json.loads(resp_json)
+			if not resp['ok']:
+				result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+		except:
+			result = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+            return HttpResponse(result, content_type='application/json')
+
 def items(req):
 	return HttpResponse("<p>Items listing for exp_api!!</p>")
 
