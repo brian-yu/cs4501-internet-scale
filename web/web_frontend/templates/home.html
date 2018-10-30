@@ -17,17 +17,18 @@
 <div class="uk-container uk-container-medium">
 
 	<h2 class="uk-heading-divider uk-text-center">Featured Items</h2>
-	
-	<div class="uk-text-center uk-grid">
-		{% for i in items %}
-		  	<div class="uk-width-1-3">
-		  		<div class="uk-card uk-card-default uk-card-body">
-			  		<h3 style="text-decoration: underline;"><a href="/items/{{i.id}}/">{{ i.title }}</a></h3>
-			  		<p style="font-size: 90%"><b>${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</b></p>
-			  		<p>{{ i.description }} - <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }} {{ i.owner.last_name }}</a></p>
-		  		</div>
-		  	</div>
-		{% endfor %}
+	<div class="uk-container">
+		<div class="uk-text-center uk-grid uk-grid-small">
+			{% for i in items %}
+			  	<div class="uk-width-1-3">
+			  		<div class="uk-card uk-card-default uk-card-body">
+				  		<h3 style="text-decoration: underline;"><a href="/items/{{i.id}}/">{{ i.title }}</a></h3>
+				  		<p style="font-size: 88%"><b>${{ i.price_per_day }}/day, {{ i.max_borrow_days }} days max</b></p>
+				  		<p>{{ i.description }} - <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }} {{ i.owner.last_name }}</a></p>
+			  		</div>
+			  	</div>
+			{% endfor %}
+		</div>
 	</div>
 </div>
 
