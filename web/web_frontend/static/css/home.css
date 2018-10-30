@@ -1,3 +1,9 @@
 .logo {
 	font-size: .8em;
 }
+.item_title{
+	text-decoration: underline;
+}
+.item_metadata{
+	font-size: 88%;
+}

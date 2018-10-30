@@ -1,7 +1,14 @@
 html, body{
 	height: 100%;
 }
-
+.post_item{
+	background-color: rgb(205, 97, 73);
+	text-decoration: underline;
+}
+.post_item_link{
+	color: white;
+	font-size: 120%;
+}
 .content {
 	min-height: 100%;
 	height: auto !important;
