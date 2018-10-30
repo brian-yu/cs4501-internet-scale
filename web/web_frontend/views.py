@@ -6,6 +6,7 @@ from django.urls import reverse
 import urllib.request
 import urllib.parse
 import json
+
 from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm
 
 
@@ -63,6 +64,7 @@ def review(req, id):
 
 
 def register(req):
+
     if req.method == "POST":
         form = RegisterForm(req.POST)
         # if form.is_valid(): # this isn't right, we have to pass info to the exp and models
@@ -77,8 +79,8 @@ def register(req):
         post_data = form.cleaned_data
         url = 'http://exp-api:8000/api/v1/users/create/'
         post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
-        req = urllib.request.Request(url, data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        req2 = urllib.request.Request(url, data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
         try:
 
             resp = json.loads(resp_json)
@@ -86,12 +88,12 @@ def register(req):
             if not resp['ok']:
                 resp = json.dumps(
                     {'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(post_data), 'ok': False})
+            resp = json.dumps(resp)
 
-            # return HttpResponse(json.dumps(resp), content_type='application/json')
-            form2 = LoginForm()
-            args = {'form': form2}
-            # return render(req, "login.html", args)
-            return HttpResponseRedirect(reverse('login', args=(args)))
+            form = LoginForm()
+            args = {'form': form}
+            # return HttpResponse(resp, content_type='application/json')
+            return render(req, "login.html", args)
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request because of exception. Here is the data we received: {}'.format(post_data), 'ok': False})
