@@ -61,7 +61,7 @@ def review(req, id):
     return render(req, 'review.html', resp['result'])
 
 
-def create_user(req):
+def register(req):
     if req.method == "POST":
         form = RegisterForm(req.POST)
         # if form.is_valid(): # this isn't right, we have to pass info to the exp and models
