@@ -1,14 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django import forms
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 import urllib.request
 import urllib.parse
 import json
 
-from web_frontend.forms import RegisterForm, CreateItemForm
+from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm
 
 def home(req):
 
@@ -79,7 +77,13 @@ def register(req):
 
 
 def login(req):
-    return render(req, "login.html")
+    if req.method == "POST":
+        form = LoginForm(req.POST)
+
+    else:
+        form = LoginForm()
+        args = {'form': form}
+        return render(req, "login.html", args)
 
 def post_item(req):
     if req.method == "POST":

@@ -9,6 +9,11 @@ class RegisterForm(forms.Form):
     zip_code = forms.CharField(label='Zipcode', max_length=10, widget=forms.TextInput)
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
+class LoginForm(forms.Form):
+	email = forms.EmailField(label='Email', max_length=100)
+	password = forms.CharField(label='Password', widget=forms.PasswordInput)
+	remember_me = forms.ChoiceField(label='Remember me', widget=forms.CheckboxInput)
+
 class CreateItemForm(forms.Form):
     CONDITION_CHOICES = (
         ('E', 'Excellent'),
