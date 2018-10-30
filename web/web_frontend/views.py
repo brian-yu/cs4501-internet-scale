@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.urls import reverse
 import urllib.request
 import urllib.parse
 import json
-
 from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm
 
 
@@ -85,8 +85,13 @@ def register(req):
 
             if not resp['ok']:
                 resp = json.dumps(
-                {'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(post_data), 'ok': False})
-            return HttpResponse(resp, content_type='application/json')
+                    {'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(post_data), 'ok': False})
+
+            # return HttpResponse(json.dumps(resp), content_type='application/json')
+            form2 = LoginForm()
+            args = {'form': form2}
+            # return render(req, "login.html", args)
+            return HttpResponseRedirect(reverse('login', args=(args)))
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request because of exception. Here is the data we received: {}'.format(post_data), 'ok': False})
@@ -101,7 +106,6 @@ def register(req):
 def login(req):
     if req.method == "POST":
         form = LoginForm(req.POST)
-
     else:
         form = LoginForm()
         args = {'form': form}
@@ -122,7 +126,7 @@ def post_item(req):
         resp_json = urllib.request.urlopen(req)
         resp_json = resp_json.read().decode('utf-8')
         try:
-            
+
             resp = json.loads(resp_json)
             if not resp['ok']:
                 return render(req, "post_item.html", args)
