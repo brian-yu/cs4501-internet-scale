@@ -8,6 +8,7 @@ import json
 
 from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm
 
+
 def home(req):
 
     url = 'http://exp-api:8000/api/v1/'
@@ -65,7 +66,7 @@ def register(req):
     if req.method == "POST":
         form = RegisterForm(req.POST)
         # if form.is_valid(): # this isn't right, we have to pass info to the exp and models
-            #SEND TO EXP_API
+        # SEND TO EXP_API
         #     form.save()
         #     messages.success(req, 'Account created successfully')
         #     return redirect("login/")
@@ -78,19 +79,24 @@ def register(req):
             url = 'http://exp-api:8000/api/v1/users/create/'
             post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
 
-            req = urllib.request.Request(url, data=post_encoded, method='POST')
-            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            return HttpResponse({'post_encoded': post_encoded, 'post_data': post_data, 'form': form}, content_type='application/json')
+
+            req = urllib.request.urlopen(url, data=post_encoded, method='POST')
+            resp_json = urllib.request.Request(req).read().decode('utf-8')
             resp = json.loads(resp_json)
+
             if not resp['ok']:
                 result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
-            return HttpResponse(result, content_type='application/json')
+                    {'error': '1Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
+                return HttpResponse(result, content_type='application/json')
+            else:
+                return render(req, "login.html", post_data)
         except:
             result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
+                {'error': '2Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
-        
-    else: # showing the form data
+
+    else:  # showing the form data
         form = RegisterForm()
         args = {'form': form}
         return render(req, "register.html", args)
@@ -104,6 +110,7 @@ def login(req):
         form = LoginForm()
         args = {'form': form}
         return render(req, "login.html", args)
+
 
 def post_item(req):
     if req.method == "POST":
@@ -122,13 +129,13 @@ def post_item(req):
             resp = json.loads(resp_json)
             if not resp['ok']:
                 result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+                    {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
-        
+
     else:
         form = CreateItemForm()
         args = {'form': form}

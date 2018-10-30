@@ -206,7 +206,11 @@ def create_user(request):
                     phone_number=phone_number,
                     overview=overview,
                     zip_code=zip_code,
-                    password=make_password(password)
+                    password=make_password(password),
+                    lender_rating_total=0,
+                    lender_rating_count=0,
+                    borrower_rating_total=0,
+                    borrower_rating_count=0
                 )
             else:
                 obj = User.objects.create(
@@ -215,7 +219,11 @@ def create_user(request):
                     email=email,
                     overview=overview,
                     zip_code=zip_code,
-                    password=make_password(password)
+                    password=make_password(password),
+                    lender_rating_total=0,
+                    lender_rating_count=0,
+                    borrower_rating_total=0,
+                    borrower_rating_count=0
                 )
             obj.save()
             obj_dict = model_to_dict(obj)
