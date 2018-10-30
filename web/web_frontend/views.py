@@ -46,6 +46,22 @@ def item(req, id):
     return render(req, 'item.html', resp)
 
 
+def review(req, id):
+
+    url = 'http://exp-api:8000/api/v1/users/{}/'.format(id)
+
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
+    if resp['ok'] == False:
+        return render(req, 'review.html', {'ok': False})
+
+    reviews = ""
+    resp['result']['ok'] = True
+
+    return render(req, 'review.html', resp['result'])
+
+
 def register(req):
     if req.method == "POST":
         form = UserCreationForm(req.POST)
