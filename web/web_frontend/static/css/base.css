@@ -1,13 +1,18 @@
-.content {
-	position: relative;
-	min-height: 100%;
+*{
+	margin: 0;
 }
 
-footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 100px;
-    width: 100%;
-    overflow: hidden;
+html, body{
+	height: 100%;
+}
+
+.content {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -50px; /* same as footer height */
+}
+
+footer, .push {
+    height: 50px;
 }

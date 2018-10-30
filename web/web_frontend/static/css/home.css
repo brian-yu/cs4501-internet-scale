@@ -1,6 +1,6 @@
 .featured-items {
-	max-height: 500px;
-	overflow: scroll;
+	max-height: 800px;
+	overflow: auto;
 }
 
 .logo {
