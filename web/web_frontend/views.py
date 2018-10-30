@@ -8,6 +8,7 @@ import urllib.request
 import urllib.parse
 import json
 
+from web_frontend.forms import RegisterForm
 
 def home(req):
 
@@ -64,14 +65,15 @@ def review(req, id):
 
 def register(req):
     if req.method == "POST":
-        form = UserCreationForm(req.POST)
-        if form.is_valid(): # this isn't right, we have to pass info to the exp and models
-            form.save()
-            messages.success(req, 'Account created successfully')
-            return redirect("login/")
+        form = RegisterForm(req.POST)
+        # if form.is_valid(): # this isn't right, we have to pass info to the exp and models
+            #SEND TO EXP_API
+        #     form.save()
+        #     messages.success(req, 'Account created successfully')
+        #     return redirect("login/")
 
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
         args = {'form': form}
         return render(req, "register.html", args)
 

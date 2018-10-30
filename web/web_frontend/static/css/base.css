@@ -4,6 +4,7 @@ html, body{
 .post_item{
 	background-color: rgb(205, 97, 73);
 	text-decoration: underline;
+	border-radius: 500px; 
 }
 .post_item_link{
 	color: white;
