@@ -1,14 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django import forms
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 import urllib.request
 import urllib.parse
 import json
 
-from web_frontend.forms import RegisterForm
+from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm
 
 def home(req):
 
@@ -99,16 +97,17 @@ def create_user(req):
 
 
 def login(req):
-    return render(req, "login.html")
+    if req.method == "POST":
+        form = LoginForm(req.POST)
+
+    else:
+        form = LoginForm()
+        args = {'form': form}
+        return render(req, "login.html", args)
 
 def post_item(req):
     if req.method == "POST":
         form = CreateItemForm(req.POST)
-        # if form.is_valid(): # this isn't right, we have to pass info to the exp and models
-            #SEND TO EXP_API
-        #     form.save()
-        #     messages.success(req, 'Account created successfully')
-        #     return redirect("login/")
         if not form.is_valid():
             form = CreateItemForm()
             args = {'form': form}
@@ -130,7 +129,7 @@ def post_item(req):
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
         
-    else: # showing the form data
+    else:
         form = CreateItemForm()
         args = {'form': form}
-        return render(req, "post_item.html")
+        return render(req, "post_item.html", args)
