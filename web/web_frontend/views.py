@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib import messages
 from django.urls import reverse
 import urllib.request
 import urllib.parse
@@ -92,8 +93,10 @@ def register(req):
 
             form = LoginForm()
             args = {'form': form}
-            # return HttpResponse(resp, content_type='application/json')
+            messages.success(req, 'Account successfully created!')
+
             return render(req, "login.html", args)
+
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request because of exception. Here is the data we received: {}'.format(post_data), 'ok': False})

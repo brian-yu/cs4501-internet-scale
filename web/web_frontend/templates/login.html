@@ -2,7 +2,7 @@
 
 {% block css %}
 {% load static %}
-<link href="{% static " css/home.css" %}" rel="stylesheet">
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -10,6 +10,13 @@
 <div class="container">
     <form method="post">
         {% csrf_token %}
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </ul>
+        {% endif %}
         <table>
             {{ form.as_table }}
             <tr>

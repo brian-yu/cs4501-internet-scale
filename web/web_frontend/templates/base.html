@@ -3,38 +3,41 @@
 <html lang="en">
 
 <head>
-	<link href="{% static "uikit/css/uikit.min.css" %}" rel="stylesheet">
-	<link href="{% static "css/base.css" %}" rel="stylesheet">
+	<link href="{% static 'uikit/css/uikit.min.css' %}" rel="stylesheet">
+	<link href="{% static 'css/base.css' %}" rel="stylesheet">
 	<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-	<link rel="shortcut icon" type="image/png" href="{% static "img/poop.png" %}" />
+	<link rel="shortcut icon" type="image/png" href="{% static 'img/poop.png' %}" />
 	{% block css %}{% endblock %}
 	<title>ShareSh*t{% block title %}{% endblock %}</title>
 </head>
 
 <body>
 	<!-- NAVBAR -->
-	<nav class="uk-navbar-container uk-navbar">
+
+	<nav class="uk-navbar-container uk-navbar uk-navbar">
 		<div class="uk-navbar-left">
+			<a class="uk-navbar-item uk-logo" href="/">
+				<div class="uk-animation-toggle uk-animation-shake">
+					<i class="em-svg em-hankey uk-animation-shake"></i>
+				</div>
+				ShareSh*t
+			</a>
 			<ul class="uk-navbar-nav">
-				<a class="uk-navbar-item uk-logo" href="/">
-					<div class="uk-animation-toggle uk-animation-shake">
-						<i class="em-svg em-hankey uk-animation-shake"></i>
-					</div>
-					&nbsp ShareSh*t
-				</a>
-	        	<li>
-	        		<a href="#">Sh*t in your area</a>
-	        	</li>
-	        	<li>
-	        		<a href="#">All Items</a>
-	        	</li>
-	        </ul>
-	    </div>
-	    <div class="uk-navbar-center">
-	    	<ul class="uk-navbar-nav">
-	    		<li>
-	    			<button class="uk-button uk-button-default post_item"><a href="/post_item" class="post_item_link">Post your sh*t here!</a></button>
-	    		</li>
+
+				<li>
+					<a href="#">Sh*t in your area</a>
+				</li>
+				<li>
+					<a href="#">All Items</a>
+				</li>
+			</ul>
+		</div>
+		<div class="uk-navbar-center">
+			<ul class="uk-navbar-nav">
+				<li>
+					<button class="uk-button uk-button-default post_item"><a href="/post_item" class="post_item_link">Post your sh*t
+							here!</a></button>
+				</li>
 			</ul>
 		</div>
 		<div class="uk-navbar-right">
@@ -45,6 +48,15 @@
 		</div>
 		<!--      -->
 	</nav>
+
+	<!-- the Slideshow-->
+	<!-- <h2 class="hero uk-heading-hero uk-text-center">
+		<span>
+			<span class="logo"><i class="em-svg em-hankey uk-animation-shake"></i></span>
+			<span class="heading">ShareSh*t</span>
+		</span>
+	</h2> -->
+
 
 
 	<!-- the main page -->
@@ -74,9 +86,9 @@
 	</div>
 
 	{% block js %}
-	<script type="text/javascript" src="{% static "js/vanilla-tilt.min.js" %}"></script>
-	<script src="{% static "uikit/js/uikit.min.js" %}"></script>
-	<script src="{% static "uikit/js/uikit-icons.min.js" %}"></script>
+	<script type="text/javascript" src="{% static 'js/vanilla-tilt.min.js' %}"></script>
+	<script src="{% static 'uikit/js/uikit.min.js' %}"></script>
+	<script src="{% static 'uikit/js/uikit-icons.min.js' %}"></script>
 	{% endblock %}
 
 </body>
