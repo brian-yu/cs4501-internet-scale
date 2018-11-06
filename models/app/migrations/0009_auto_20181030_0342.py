@@ -18,10 +18,6 @@ class Migration(migrations.Migration):
                 ('date_created', models.DateField(auto_now=True)),
             ],
         ),
-        migrations.RemoveField(
-            model_name='user',
-            name='salt',
-        ),
         migrations.AddField(
             model_name='authenticator',
             name='user_id',
