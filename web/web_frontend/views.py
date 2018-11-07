@@ -162,7 +162,6 @@ def post_item(req):
             return render(req, "post_item.html", args)
         post_data = form.cleaned_data
         url = 'http://exp-api:8000/api/v1/items/create/'
-<<<<<<< HEAD
         post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
         req2 = urllib.request.Request(url, data=post_encoded, method='POST')
         resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
@@ -177,17 +176,6 @@ def post_item(req):
             args = {'form': form}
             messages.success(req, 'Post successfully made!')
             return render(req, 'post_item.html', args)
-=======
-        post_encoded = urllib.parse.urlencode(form_data).encode('utf-8')
-        resp = urllib.request.Request(url, data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(resp)
-        resp_json = resp_json.read().decode('utf-8')
-        try:
-            resp_dict = json.loads(resp_json)
-            if not resp['ok']:
-                return render(req, "post_item.html", args)
-            return HttpResponse(resp_dict['error'], content_type='application/json')
->>>>>>> faa78ae3862cd52e9cd7fa1220bf2334a302f717
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request of web_frontend. Here is the data we received: {}'.format(post_data), 'ok': False})
