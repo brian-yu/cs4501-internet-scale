@@ -343,3 +343,22 @@ def featured_items(req):
         d['owner'] = model_to_dict(User.objects.get(pk=d['owner']))
         res.append(d)
     return jsonResponse(res)
+
+@csrf_exempt
+def check_login(req):
+    if req.method == "POST":
+        form_data = req.POST
+
+        #try:
+        email = form_data['email']
+        password = form_data['password']
+        users = User.objects.filter(email=email)
+        if len(users) == 1:
+            if check_password(password, users[0].password):
+                auth = Authenticator.objects.get(user_id=users[0]).authenticator
+                return jsonResponse({'authenticator': auth})
+            else:
+                return formatErrorResponse(form_data)
+        else:
+            return formatErrorResponse(form_data)
+
