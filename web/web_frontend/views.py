@@ -130,7 +130,7 @@ def login(req):
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from
-    authenticator = resp['authenticator']
+    authenticator = resp['result']['authenticator']
 
     response = redirect(n)
     response.set_cookie("authenticator", authenticator)
