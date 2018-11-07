@@ -95,14 +95,16 @@ def register(req):
             args = {'form': form}
             messages.success(req, 'Account successfully created!')
 
-            return render(req, "login.html", args)
+            response = render(req, "login.html", args)
+            response.set_cookie(key='authenticator', value=resp['result']['authenticator'])
+            return response
 
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request because of exception. Here is the data we received: {}'.format(post_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
-    else:  # showing the form data
+    else:  # showing the form data with GET
         form = RegisterForm()
         args = {'form': form}
         return render(req, "register.html", args)
