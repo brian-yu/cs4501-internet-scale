@@ -12,6 +12,9 @@ urlpatterns = [
     # CREATE requests
     path('users/create/', views.register),
     path('items/create/', views.create_item),
+
+    path('login/', views.login),
+
     # path('borrows/create/', views.create_borrow),
     # path('reviews/create/', views.create_review),
 

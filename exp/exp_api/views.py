@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.views.decorators.csrf import csrf_exempt
 
@@ -58,6 +58,17 @@ def user_detail(req, id):
     result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
 
+@csrf_exempt
+def login(req):
+    if req.method != "POST":
+        return JsonResponse({'ok': False, 'error': 'Invalid method'})
+    post_data = req.POST
+    url = 'http://models-api:8000/api/v1/login/'
+    post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+    req = urllib.request.Request(url, data=post_encoded, method='POST')
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    return JsonResponse(resp)
 
 @csrf_exempt
 def register(req):
