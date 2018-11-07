@@ -134,7 +134,7 @@ def login(req):
 
     # Check if the experience layer said they gave us incorrect information
     if not resp or not resp['ok']:
-        return render(req, "login.html", {'form': LoginForm()})
+        return render(req, "login.html", {'form': LoginForm(), 'error': resp['error']})
       # Couldn't log them in, send them back to login page with error
       # return render('login.html', ...)
 
