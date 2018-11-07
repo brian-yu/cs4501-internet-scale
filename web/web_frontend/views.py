@@ -103,17 +103,7 @@ def register(req):
 
 
 def login(req):
-    if req.method == "POST":
-        form = LoginForm(req.POST)
-
-        if not form.is_valid():
-            form = LoginForm()
-            args = {'form': form}
-            return render(req, "login.html", args)
-        post_data = form.cleaned_data
-        return HttpResponse(form["email"], content_type='application/json')
-
-    else:
+    if req.method == "GET":
         form = LoginForm()
         n = req.GET.get('next') or reverse(home)
         args = {'form': form, 'next': n}
