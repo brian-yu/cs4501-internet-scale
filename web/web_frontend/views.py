@@ -139,6 +139,7 @@ def login(req):
 
 
 def post_item(req):
+
     if req.method == "POST":
         form = CreateItemForm(req.POST)
         if not form.is_valid():
@@ -160,7 +161,10 @@ def post_item(req):
             form = CreateItemForm()
             args = {'form': form}
             messages.success(req, 'Post successfully made!')
-            return render(req, 'post_item.html', args)
+            # return render(req, 'post_item.html', args)
+
+            result = req.COOKIES.get('authenticator')
+            return HttpResponse(result, content_type='application/json')
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request of web_frontend. Here is the data we received: {}'.format(post_data), 'ok': False})
