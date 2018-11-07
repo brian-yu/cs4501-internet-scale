@@ -95,12 +95,12 @@ def create_item(req):
             resp = json.loads(resp_json)
             if not resp['ok']:
                 resp = json.dumps(
-                    {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
+                    {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(resp, content_type='application/json')
             return HttpResponse(json.dumps({'ok': True, 'result': resp}))
         except:
             result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
+                {'error': 'Missing field or malformed data in CREATE request for experience service. Here is the data we received: {}'.format(post_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
 

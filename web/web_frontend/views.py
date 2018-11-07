@@ -101,19 +101,43 @@ def register(req):
                 {'error': 'Missing field or malformed data in CREATE request because of exception. Here is the data we received: {}'.format(post_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
-    else:  # showing the form data with GET
+    else:  # showing the form data
         form = RegisterForm()
         args = {'form': form}
         return render(req, "register.html", args)
 
 
 def login(req):
-    if req.method == "POST":
-        form = LoginForm(req.POST)
-    else:
+    if req.method == 'GET':
         form = LoginForm()
-        args = {'form': form}
-        return render(req, "login.html", args)
+        n = req.GET.get('next') or reverse(home)
+        args = {'form': form, 'next': n}
+        return render(req, "login.html", {'form': form, 'next': n})
+
+    form = LoginForm(req.POST)
+    if not form.is_valid():
+        return render(req, "login.html", {'form': form})
+
+    username = form.cleaned_data['username']
+    password = form.cleaned_data['password']
+    n = form.cleaned_data.get('next') or reverse('home')
+
+    # Send validated information to our experience layer FIX THIS
+    # resp = login_exp_api(username, password)
+
+    # Check if the experience layer said they gave us incorrect information
+    # if not resp or not resp['ok']:
+      # Couldn't log them in, send them back to login page with error
+      # return render('login.html', ...)
+
+    """ If we made it here, we can log them in. """
+    # Set their login cookie and redirect to back to wherever they came from
+    # authenticator = resp['resp']['authenticator']
+
+    response = HttpResponseRedirect(n)
+    # response.set_cookie("auth", authenticator)
+
+    return response
 
 
 def post_item(req):
@@ -121,20 +145,19 @@ def post_item(req):
         form_data = req.POST
         form = CreateItemForm(form_data)
         if not form.is_valid():
-            form = CreateItemForm()
+            # form = CreateItemForm()
             args = {'form': form}
             return render(req, "post_item.html", args)
         url = 'http://exp-api:8000/api/v1/items/create/'
         post_encoded = urllib.parse.urlencode(form_data).encode('utf-8')
-        req = urllib.request.Request(url, data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(req)
+        resp = urllib.request.Request(url, data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(resp)
         resp_json = resp_json.read().decode('utf-8')
         try:
-
-            resp = json.loads(resp_json)
+            resp_dict = json.loads(resp_json)
             if not resp['ok']:
                 return render(req, "post_item.html", args)
-            return HttpResponse(resp, content_type='application/json')
+            return HttpResponse(resp_dict['error'], content_type='application/json')
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request of web_frontend. Here is the data we received: {}'.format(form_data), 'ok': False})
