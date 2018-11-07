@@ -21,8 +21,8 @@ class LoginForm(forms.Form):
 
 
 class CreateItemForm(forms.Form):
-    owner = forms.IntegerField(
-        label="Temp User Primary Key", widget=forms.NumberInput)
+    # owner = forms.IntegerField(
+    #     label="Temp User Primary Key", widget=forms.NumberInput)
     CONDITION_CHOICES = (
         ('E', 'Excellent'),
         ('G', 'Good'),
