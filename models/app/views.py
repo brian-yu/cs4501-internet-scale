@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
-from .models import User, Review, Borrow, Item
+from .models import User, Review, Borrow, Item, Authenticator
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
 import json
+import os
+import hmac
+from django.conf import settings
 
 
 def index(request):
@@ -226,6 +229,16 @@ def create_user(request):
                     borrower_rating_count=0
                 )
             obj.save()
+
+            authenticator = hmac.new(
+                key = settings.SECRET_KEY.encode('utf-8'),
+                msg = os.urandom(32),
+                digestmod = 'sha256',
+            ).hexdigest()
+            my_auth = Authenticator.objects.create(
+                user_id=obj,
+                authenticator=authenticator,
+            )
             obj_dict = model_to_dict(obj)
             obj_dict.pop('password')
             return jsonResponse(obj_dict)
@@ -240,14 +253,14 @@ def create_item(request):
     if request.method == "POST":
         form_data = request.POST
         try:
-            owner_id = form_data['owner']
+            owner_id = form_data['owner'] # NEED AUTHENTICATOR STUFF
             owner = User.objects.get(id=owner_id)
             title = form_data['title']
             condition = form_data['condition']
             description = form_data['description']
             price_per_day = form_data['price_per_day']
             max_borrow_days = form_data['max_borrow_days']
-            currently_borrowed = form_data['currently_borrowed']
+            currently_borrowed = form_data['currently_borrowed'] if 'currently_borrowed' in form_data else False
             obj = Item.objects.create(
                 owner=owner,
                 title=title,
@@ -330,3 +343,22 @@ def featured_items(req):
         d['owner'] = model_to_dict(User.objects.get(pk=d['owner']))
         res.append(d)
     return jsonResponse(res)
+
+@csrf_exempt
+def check_login(req):
+    if req.method == "POST":
+        form_data = req.POST
+
+        #try:
+        email = form_data['email']
+        password = form_data['password']
+        users = User.objects.filter(email=email)
+        if len(users) == 1:
+            if check_password(password, users[0].password):
+                auth = Authenticator.objects.get(user_id=users[0]).authenticator
+                return jsonResponse({'authenticator': auth})
+            else:
+                return formatErrorResponse(form_data)
+        else:
+            return formatErrorResponse(form_data)
+

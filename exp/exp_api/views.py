@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.views.decorators.csrf import csrf_exempt
 
@@ -58,6 +58,17 @@ def user_detail(req, id):
     result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
 
+@csrf_exempt
+def login(req):
+    if req.method != "POST":
+        return JsonResponse({'ok': False, 'error': 'Invalid method'})
+    post_data = req.POST
+    url = 'http://models-api:8000/api/v1/login/'
+    post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+    req = urllib.request.Request(url, data=post_encoded, method='POST')
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    return JsonResponse(resp)
 
 @csrf_exempt
 def register(req):
@@ -75,7 +86,7 @@ def register(req):
                 resp = json.dumps(
                     {'error': 'Missing field or malformed data in CREATE request, did not get passed to models. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(resp, content_type='application/json')
-            return HttpResponse(json.dumps({'ok': True, 'result': resp}))
+            return HttpResponse(json.dumps(resp))
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
@@ -95,12 +106,12 @@ def create_item(req):
             resp = json.loads(resp_json)
             if not resp['ok']:
                 resp = json.dumps(
-                    {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
+                    {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(resp, content_type='application/json')
             return HttpResponse(json.dumps({'ok': True, 'result': resp}))
         except:
             result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(post_data), 'ok': False})
+                {'error': 'Missing field or malformed data in CREATE request for experience service. Here is the data we received: {}'.format(post_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
 
