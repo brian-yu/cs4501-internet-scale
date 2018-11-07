@@ -84,23 +84,18 @@ def register(req):
         resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
         resp = json.loads(resp_json)
         try:
-
-            
-
             if not resp['ok']:
                 result = json.dumps(
                     {'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(result, content_type='application/json')
-            resp = json.dumps(resp)
 
             form = LoginForm()
             args = {'form': form}
             messages.success(req, 'Account successfully created!')
 
             response = render(req, "login.html", args)
-            response.set_cookie(key='authenticator', value=resp['result']['authenticator'])
+            # response.set_cookie(key='authenticator', value=resp['result']['authenticator'])
             return response
-
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request because of exception. Here is the data we received: {}'.format(post_data), 'ok': False})
