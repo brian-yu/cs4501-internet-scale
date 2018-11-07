@@ -8,24 +8,14 @@
 {% block content %}
 <h1>Login</h1>
 <div class="container">
-    <form method="post">
+    {% if next %}
+    <form action="/login/?next={{next}}" method="post" >
+    {%else%}
+    <form action="/login/" method="post" >
+    {% endif %}
         {% csrf_token %}
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <div class="alert alert-success" role="alert">
-                {{message}}
-            </div>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        <table>
-            {{ form.as_table }}
-            <tr>
-                <td></td>
-                <td><input type="submit" name="submit" value="Login" /></td>
-            </tr>
-        </table>
+        {{ form }}
+        <input type="submit" value="Submit">
     </form>
 </div>
 
