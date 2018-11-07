@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from .models import User, Review, Borrow, Item, Authenticator
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
@@ -358,7 +358,9 @@ def check_login(req):
                 auth = Authenticator.objects.get(user_id=users[0]).authenticator
                 return jsonResponse({'authenticator': auth})
             else:
-                return formatErrorResponse(form_data)
+                # password doesn't match
+                return JsonResponse({'error': 'Username or password is invalid', 'ok': False})
         else:
-            return formatErrorResponse(form_data)
+            # email doesn't match
+            return JsonResponse({'error': 'Username or password is invalid', 'ok': False})
 
