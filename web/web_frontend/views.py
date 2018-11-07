@@ -113,9 +113,9 @@ def register(req):
 
 
 def login(req):
-    if request.method == 'GET':
+    if req.method == 'GET':
         form = LoginForm()
-        n = request.GET.get('next') or reverse('home')
+        n = req.GET.get('next') or reverse(home)
         args = {'form': form, 'next': n}
         return render(req, "login.html", {'form': form, 'next': n})
 
@@ -140,7 +140,7 @@ def login(req):
     # authenticator = resp['resp']['authenticator']
 
     response = HttpResponseRedirect(n)
-    response.set_cookie("auth", authenticator)
+    # response.set_cookie("auth", authenticator)
 
     return response
 
