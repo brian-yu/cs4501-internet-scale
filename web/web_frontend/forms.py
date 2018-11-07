@@ -12,7 +12,6 @@ class RegisterForm(forms.Form):
 class LoginForm(forms.Form):
 	email = forms.EmailField(label='Email', max_length=100)
 	password = forms.CharField(label='Password', widget=forms.PasswordInput)
-	remember_me = forms.ChoiceField(label='Remember me', widget=forms.CheckboxInput, required=False)
 
 class CreateItemForm(forms.Form):
     CONDITION_CHOICES = (

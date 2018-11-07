@@ -118,24 +118,32 @@ def login(req):
     if not form.is_valid():
         return render(req, "login.html", {'form': form})
 
-    username = form.cleaned_data['username']
+    email = form.cleaned_data['email']
     password = form.cleaned_data['password']
-    n = form.cleaned_data.get('next') or reverse('home')
+    n = form.cleaned_data.get('next') or reverse(home)
 
     # Send validated information to our experience layer FIX THIS
     # resp = login_exp_api(username, password)
 
+    data = {'email': email, 'password': password}
+    url = 'http://exp-api:8000/api/v1/login/'
+    post_encoded = urllib.parse.urlencode(data).encode('utf-8')
+    exp_req = urllib.request.Request(url, data=post_encoded, method='POST')
+    resp_json = urllib.request.urlopen(exp_req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
     # Check if the experience layer said they gave us incorrect information
-    # if not resp or not resp['ok']:
+    if not resp or not resp['ok']:
+        return render(req, "login.html", {'form': LoginForm()})
       # Couldn't log them in, send them back to login page with error
       # return render('login.html', ...)
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from
-    # authenticator = resp['resp']['authenticator']
+    authenticator = resp['resp']['authenticator'] if 'authenticator' in resp else "HEHEHEH"
 
     response = HttpResponseRedirect(n)
-    # response.set_cookie("auth", authenticator)
+    response.set_cookie("auth", authenticator)
 
     return response
 
