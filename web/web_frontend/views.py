@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -125,11 +125,7 @@ def login(req):
 
     email = form.cleaned_data['email']
     password = form.cleaned_data['password']
-    # n = form.cleaned_data.get('next') or reverse(home)
-    n = reverse(home)
-
-    # Send validated information to our experience layer FIX THIS
-    # resp = login_exp_api(username, password)
+    n = form.cleaned_data.get('next') or reverse(home)
 
     data = {'email': email, 'password': password}
     url = 'http://exp-api:8000/api/v1/login/'
@@ -141,15 +137,13 @@ def login(req):
     # Check if the experience layer said they gave us incorrect information
     if not resp or not resp['ok']:
         return render(req, "login.html", {'form': LoginForm(), 'error': resp['error']})
-      # Couldn't log them in, send them back to login page with error
-      # return render('login.html', ...)
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from
-    authenticator = resp['resp']['authenticator'] if 'authenticator' in resp else "HEHEHEH"
+    authenticator = resp['resp']['authenticator']
 
-    response = HttpResponseRedirect(n)
-    response.set_cookie("auth", authenticator)
+    response = redirect(n)
+    response.set_cookie("authenticator", authenticator)
 
     return response
 
