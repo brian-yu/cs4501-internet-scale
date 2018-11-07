@@ -82,13 +82,15 @@ def register(req):
         post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
         req2 = urllib.request.Request(url, data=post_encoded, method='POST')
         resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
+        resp = json.loads(resp_json)
         try:
 
-            resp = json.loads(resp_json)
+            
 
             if not resp['ok']:
-                resp = json.dumps(
+                result = json.dumps(
                     {'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(post_data), 'ok': False})
+                return HttpResponse(result, content_type='application/json')
             resp = json.dumps(resp)
 
             form = LoginForm()
