@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
-from .models import User, Review, Borrow, Item
+from .models import User, Review, Borrow, Item, Authenticator
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
 import json
+import os
+import hmac
+import settings
 
 
 def index(request):
@@ -226,8 +229,19 @@ def create_user(request):
                     borrower_rating_count=0
                 )
             obj.save()
+
+            authenticator = hmac.new(
+                key = settings.SECRET_KEY.encode('utf-8'),
+                msg = os.urandom(32),
+                digestmod = 'sha256',
+            ).hexdigest()
+            my_auth = Authenticator.objects.create(
+                user_id=obj,
+                authenticator=authenticator,
+            )
             obj_dict = model_to_dict(obj)
             obj_dict.pop('password')
+            obj_dict['authenticator'] = my_auth.authenticator
             return jsonResponse(obj_dict)
         except:
             result = json.dumps(
