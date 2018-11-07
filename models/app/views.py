@@ -241,7 +241,6 @@ def create_user(request):
             )
             obj_dict = model_to_dict(obj)
             obj_dict.pop('password')
-            obj_dict['authenticator'] = my_auth.authenticator
             return jsonResponse(obj_dict)
         except:
             result = json.dumps(
