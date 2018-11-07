@@ -125,7 +125,8 @@ def login(req):
 
     email = form.cleaned_data['email']
     password = form.cleaned_data['password']
-    n = form.cleaned_data.get('next') or reverse(home)
+    # n = form.cleaned_data.get('next') or reverse(home)
+    n = reverse(home)
 
     # Send validated information to our experience layer FIX THIS
     # resp = login_exp_api(username, password)
