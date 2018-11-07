@@ -139,6 +139,9 @@ def login(req):
 
 
 def post_item(req):
+    auth = req.COOKIES.get('authenticator')
+    if not auth: # if user is not logged in (auth is None), redirect to login page
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
 
     if req.method == "POST":
         form = CreateItemForm(req.POST)
@@ -147,7 +150,7 @@ def post_item(req):
             args = {'form': form}
             return render(req, "post_item.html", args)
         post_data = form.cleaned_data
-        post_data['authenticator'] = req.COOKIES.get('authenticator')
+        post_data['authenticator'] = auth
         url = 'http://exp-api:8000/api/v1/items/create/'
         post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
         req2 = urllib.request.Request(url, data=post_encoded, method='POST')
@@ -156,12 +159,12 @@ def post_item(req):
         try:
             resp = json.loads(resp_json)
             if not resp['ok']:
-                resp = json.dumps({'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(
+                result = json.dumps({'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(
                     post_data), 'ok': False})
-            resp = json.dumps(resp)
+                return HttpResponse(result, content_type='application/json')
             form = CreateItemForm()
             args = {'form': form}
-            messages.success(req, 'Post successfully made!')
+            messages.success(req, 'Post successfully made!') # may want to redirect to the created item page
             return render(req, 'post_item.html', args)
         except:
             result = json.dumps(
