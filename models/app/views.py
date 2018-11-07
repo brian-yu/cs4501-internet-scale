@@ -240,14 +240,14 @@ def create_item(request):
     if request.method == "POST":
         form_data = request.POST
         try:
-            owner_id = form_data['owner']
+            owner_id = form_data['owner'] # NEED AUTHENTICATOR STUFF
             owner = User.objects.get(id=owner_id)
             title = form_data['title']
             condition = form_data['condition']
             description = form_data['description']
             price_per_day = form_data['price_per_day']
             max_borrow_days = form_data['max_borrow_days']
-            currently_borrowed = form_data['currently_borrowed']
+            currently_borrowed = form_data['currently_borrowed'] if 'currently_borrowed' in form_data else False
             obj = Item.objects.create(
                 owner=owner,
                 title=title,
