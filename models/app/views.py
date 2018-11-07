@@ -9,7 +9,7 @@ from django.contrib.auth.hashers import make_password, check_password
 import json
 import os
 import hmac
-import settings
+from django.conf import settings
 
 
 def index(request):
