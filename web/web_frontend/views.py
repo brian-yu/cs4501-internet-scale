@@ -68,11 +68,6 @@ def register(req):
 
     if req.method == "POST":
         form = RegisterForm(req.POST)
-        # if form.is_valid(): # this isn't right, we have to pass info to the exp and models
-        # SEND TO EXP_API
-        #     form.save()
-        #     messages.success(req, 'Account created successfully')
-        #     return redirect("login/")
         if not form.is_valid():
             form = RegisterForm()
             args = {'form': form}
@@ -111,6 +106,14 @@ def register(req):
 def login(req):
     if req.method == "POST":
         form = LoginForm(req.POST)
+
+        if not form.is_valid():
+            form = LoginForm()
+            args = {'form': form}
+            return render(req, "login.html", args)
+        post_data = form.cleaned_data
+        return HttpResponse(form["email"], content_type='application/json')
+
     else:
         form = LoginForm()
         args = {'form': form}
@@ -119,26 +122,30 @@ def login(req):
 
 def post_item(req):
     if req.method == "POST":
-        form_data = req.POST
-        form = CreateItemForm(form_data)
+        form = CreateItemForm(req.POST)
         if not form.is_valid():
             form = CreateItemForm()
             args = {'form': form}
             return render(req, "post_item.html", args)
+        post_data = form.cleaned_data
         url = 'http://exp-api:8000/api/v1/items/create/'
-        post_encoded = urllib.parse.urlencode(form_data).encode('utf-8')
-        req = urllib.request.Request(url, data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(req)
-        resp_json = resp_json.read().decode('utf-8')
-        try:
+        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        req2 = urllib.request.Request(url, data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
 
+        try:
             resp = json.loads(resp_json)
             if not resp['ok']:
-                return render(req, "post_item.html", args)
-            return HttpResponse(resp, content_type='application/json')
+                resp = json.dumps({'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(
+                    post_data), 'ok': False})
+            resp = json.dumps(resp)
+            form = CreateItemForm()
+            args = {'form': form}
+            messages.success(req, 'Post successfully made!')
+            return render(req, 'post_item.html', args)
         except:
             result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request of web_frontend. Here is the data we received: {}'.format(form_data), 'ok': False})
+                {'error': 'Missing field or malformed data in CREATE request of web_frontend. Here is the data we received: {}'.format(post_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
     else:
