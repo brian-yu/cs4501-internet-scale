@@ -253,8 +253,16 @@ def create_item(request):
     if request.method == "POST":
         form_data = request.POST
         try:
-            owner_id = form_data['owner'] # NEED AUTHENTICATOR STUFF
-            owner = User.objects.get(id=owner_id)
+            if 'owner' in form_data:
+                owner_id = form_data['owner'] # NEED AUTHENTICATOR STUFF
+                owner = User.objects.get(id=owner_id)
+            else:
+                authenticator = form_data['authenticator']
+                try:
+                    auth_obj = Authenticator.objects.get(authenticator=authenticator)
+                    owner = auth_obj.user_id
+                except:
+                    return JsonResponse({'error': 'invalid authenticator', 'ok': False})
             title = form_data['title']
             condition = form_data['condition']
             description = form_data['description']
