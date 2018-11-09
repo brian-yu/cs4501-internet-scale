@@ -200,6 +200,8 @@ def create_user(request):
             overview = form_data['overview']
             zip_code = form_data['zip_code']
             password = form_data['password']
+            if len(User.objects.filter(email=email)) > 0:
+                return JsonResponse({'ok': False, 'error': "Email address already exists"})
             if 'phone_number' in form_data:
                 phone_number = form_data['phone_number']
                 obj = User.objects.create(

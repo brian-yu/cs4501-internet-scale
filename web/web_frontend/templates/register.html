@@ -2,13 +2,17 @@
 
 {% block css %}
 {% load static %}
-<link href="{% static 'css/home.css' %}" rel="stylesheet">
+<link href="{% static 'css/register.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <h1>Register Now!</h1>
 <div class="container">
     <form method="post">
+        {% if error %}
+            <p id="error">{{ error }}</p>
+        {% endif %}
+
         {% csrf_token %}
         <table>
             {{ form.as_table }}

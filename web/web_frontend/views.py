@@ -80,16 +80,16 @@ def register(req):
         resp = json.loads(resp_json)
         try:
             if not resp['ok']:
+                if resp['error'] == "Email address already exists":
+                    args = {'form': RegisterForm(), 'error': 'Email address already exists!'}
+                    return render(req, "register.html", args)
                 result = json.dumps(
                     {'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(result, content_type='application/json')
-
             form = LoginForm()
             args = {'form': form}
             messages.success(req, 'Account successfully created!')
-
             response = render(req, "login.html", args)
-            # response.set_cookie(key='authenticator', value=resp['result']['authenticator'])
             return response
         except:
             result = json.dumps(
