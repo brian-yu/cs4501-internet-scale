@@ -159,6 +159,8 @@ def post_item(req):
         try:
             resp = json.loads(resp_json)
             if not resp['ok']:
+                if resp['error'] == 'Invalid maximum borrow days':
+                    return render(req, 'post_item.html', {'form': CreateItemForm(), 'error': 'Invalid maximum borrow days'})
                 result = json.dumps({'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(
                     post_data), 'ok': False})
                 return HttpResponse(result, content_type='application/json')

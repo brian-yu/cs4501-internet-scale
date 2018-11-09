@@ -21,8 +21,6 @@ class LoginForm(forms.Form):
 
 
 class CreateItemForm(forms.Form):
-    # owner = forms.IntegerField(
-    #     label="Temp User Primary Key", widget=forms.NumberInput)
     CONDITION_CHOICES = (
         ('E', 'Excellent'),
         ('G', 'Good'),
@@ -30,10 +28,10 @@ class CreateItemForm(forms.Form):
         ('B', 'Bad')
     )
     title = forms.CharField(label='Title', widget=forms.TextInput)
-    price_per_day = forms.CharField(
-        label='Price per day', widget=forms.TextInput)
+    price_per_day = forms.DecimalField(
+        label='Price per day', widget=forms.TextInput, min_value=0, decimal_places=2)
     condition = forms.ChoiceField(label='Condition', choices=CONDITION_CHOICES)
-    max_borrow_days = forms.CharField(
+    max_borrow_days = forms.IntegerField(
         label="Max borrow days", widget=forms.NumberInput)
     description = forms.CharField(label='Description', widget=forms.Textarea)
     # currently_borrowed = forms.BooleanField(

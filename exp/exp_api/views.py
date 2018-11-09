@@ -105,6 +105,8 @@ def create_item(req):
             resp_json = urllib.request.urlopen(req).read().decode('utf-8')
             resp = json.loads(resp_json)
             if not resp['ok']:
+                if resp['error'] == 'Invalid maximum borrow days':
+                    return JsonResponse({'ok': False, 'error': 'Invalid maximum borrow days'})
                 resp = json.dumps(
                     {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(resp, content_type='application/json')

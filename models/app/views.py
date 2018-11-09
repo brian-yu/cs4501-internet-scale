@@ -255,21 +255,23 @@ def create_item(request):
     if request.method == "POST":
         form_data = request.POST
         try:
-            if 'owner' in form_data:
-                owner_id = form_data['owner'] # NEED AUTHENTICATOR STUFF
+            if 'owner' in form_data: # backwards compatibility for Postman testing
+                owner_id = form_data['owner']
                 owner = User.objects.get(id=owner_id)
             else:
                 authenticator = form_data['authenticator']
-                try:
+                try: #checking if the authenticator is valid
                     auth_obj = Authenticator.objects.get(authenticator=authenticator)
                     owner = auth_obj.user_id
-                except:
+                except: # Authenticator.DoesNotExist exception
                     return JsonResponse({'error': 'invalid authenticator', 'ok': False})
             title = form_data['title']
             condition = form_data['condition']
             description = form_data['description']
             price_per_day = form_data['price_per_day']
-            max_borrow_days = form_data['max_borrow_days']
+            max_borrow_days = int(form_data['max_borrow_days'])
+            if max_borrow_days < 1:
+                return JsonResponse({'ok': False, 'error': 'Invalid maximum borrow days'})
             currently_borrowed = form_data['currently_borrowed'] if 'currently_borrowed' in form_data else False
             obj = Item.objects.create(
                 owner=owner,
