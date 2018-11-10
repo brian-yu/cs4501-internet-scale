@@ -16,6 +16,7 @@ urlpatterns = [
     path('items/<int:id>/', views.item),
     path('register/', views.register),
     path('login/', views.login, name="login"),
+    path('logout/', views.logout),
     path('all_reviews/<int:id>/', views.review),
     path('post_item/', views.post_item, name="create_listing")
 

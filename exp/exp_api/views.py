@@ -27,8 +27,8 @@ def home(req):
     return HttpResponse(result, content_type='application/json')
 
 
-def users(req):
-    return HttpResponse("<p>Users listing for exp_api!!</p>")
+def users(req): # make this all users in the same zipcode
+    return HttpResponse("<p>Hello there! Users listing for exp_api!!</p>")
 
 
 def user_detail(req, id):
@@ -110,7 +110,7 @@ def create_item(req):
                 resp = json.dumps(
                     {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(resp, content_type='application/json')
-            return HttpResponse(json.dumps({'ok': True, 'result': resp}))
+            return JsonResponse(resp)
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request for experience service. Here is the data we received: {}'.format(post_data), 'ok': False})

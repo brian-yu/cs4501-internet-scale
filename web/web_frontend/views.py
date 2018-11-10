@@ -11,6 +11,12 @@ import json
 from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm
 
 
+def final_render(req, template, args): # for changing the login button to logout button
+    auth = req.COOKIES.get('authenticator')
+    if auth:
+       args['logged_in'] = True 
+    return render(req, template, args)
+
 def home(req):
 
     url = 'http://exp-api:8000/api/v1/'
@@ -23,7 +29,7 @@ def home(req):
 
     resp['result']['ok'] = True
 
-    return render(req, 'home.html', resp['result'])
+    return final_render(req, 'home.html', resp['result'])
 
 
 def user(req, id):
@@ -37,7 +43,7 @@ def user(req, id):
 
     resp['result']['ok'] = True
 
-    return render(req, 'user.html', resp['result'])
+    return final_render(req, 'user.html', resp['result'])
 
 
 def item(req, id):
@@ -45,7 +51,7 @@ def item(req, id):
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
 
-    return render(req, 'item.html', resp)
+    return final_render(req, 'item.html', resp)
 
 
 def review(req, id):
@@ -61,7 +67,7 @@ def review(req, id):
     reviews = ""
     resp['result']['ok'] = True
 
-    return render(req, 'review.html', resp['result'])
+    return final_render(req, 'review.html', resp['result'])
 
 
 def register(req):
@@ -82,14 +88,14 @@ def register(req):
             if not resp['ok']:
                 if resp['error'] == "Email address already exists":
                     args = {'form': RegisterForm(), 'error': 'Email address already exists!'}
-                    return render(req, "register.html", args)
+                    return final_render(req, "register.html", args)
                 result = json.dumps(
                     {'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(result, content_type='application/json')
             form = LoginForm()
             args = {'form': form}
             messages.success(req, 'Account successfully created!')
-            response = render(req, "login.html", args)
+            response = final_render(req, "login.html", args)
             return response
         except:
             result = json.dumps(
@@ -99,19 +105,18 @@ def register(req):
     else:  # showing the form data
         form = RegisterForm()
         args = {'form': form}
-        return render(req, "register.html", args)
+        return final_render(req, "register.html", args)
 
 
 def login(req):
     if req.method == "GET":
         form = LoginForm()
         n = req.GET.get('next') or reverse(home)
-        args = {'form': form, 'next': n}
-        return render(req, "login.html", {'form': form, 'next': n})
+        return final_render(req, "login.html", {'form': form, 'next': n})
 
     form = LoginForm(req.POST)
     if not form.is_valid():
-        return render(req, "login.html", {'form': form})
+        return final_render(req, "login.html", {'form': form})
 
     email = form.cleaned_data['email']
     password = form.cleaned_data['password']
@@ -126,7 +131,7 @@ def login(req):
 
     # Check if the experience layer said they gave us incorrect information
     if not resp or not resp['ok']:
-        return render(req, "login.html", {'form': LoginForm(), 'error': resp['error']})
+        return final_render(req, "login.html", {'form': LoginForm(), 'error': resp['error']})
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from
@@ -137,6 +142,10 @@ def login(req):
 
     return response
 
+def logout(req):
+    response = HttpResponseRedirect(reverse('index'))
+    response.delete_cookie('authenticator')
+    return response
 
 def post_item(req):
     auth = req.COOKIES.get('authenticator')
@@ -148,7 +157,7 @@ def post_item(req):
         if not form.is_valid():
             # form = CreateItemForm()
             args = {'form': form}
-            return render(req, "post_item.html", args)
+            return final_render(req, "post_item.html", args)
         post_data = form.cleaned_data
         post_data['authenticator'] = auth
         url = 'http://exp-api:8000/api/v1/items/create/'
@@ -160,14 +169,19 @@ def post_item(req):
             resp = json.loads(resp_json)
             if not resp['ok']:
                 if resp['error'] == 'Invalid maximum borrow days':
-                    return render(req, 'post_item.html', {'form': CreateItemForm(), 'error': 'Invalid maximum borrow days'})
+                    return final_render(req, 'post_item.html', {'form': CreateItemForm(), 'error': 'Invalid maximum borrow days'})
                 result = json.dumps({'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(
                     post_data), 'ok': False})
                 return HttpResponse(result, content_type='application/json')
-            form = CreateItemForm()
-            args = {'form': form}
+            #form = CreateItemForm()
+            #args = {'form': form}
             messages.success(req, 'Post successfully made!') # may want to redirect to the created item page
-            return render(req, 'post_item.html', args)
+            new_item = resp['result']['id']
+            #return render(req, 'post_item.html', args)
+            url = 'http://exp-api:8000/api/v1/items/{}/'.format(new_item)
+            resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            return render(req, 'item.html', resp)
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request of web_frontend. Here is the data we received: {}'.format(post_data), 'ok': False})
@@ -176,4 +190,4 @@ def post_item(req):
     else:
         form = CreateItemForm()
         args = {'form': form}
-        return render(req, "post_item.html", args)
+        return final_render(req, "post_item.html", args)
