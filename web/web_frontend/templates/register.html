@@ -6,8 +6,9 @@
 {% endblock %}
 
 {% block content %}
-<h1>Register Now!</h1>
-<div class="container">
+
+<h1 align="center">Register Now!</h1>
+<div id="center_register">
     <form method="post">
         {% if error %}
             <p id="error">{{ error }}</p>
@@ -18,7 +19,7 @@
             {{ form.as_table }}
             <tr>
                 <td></td>
-                <td><button class="uk-button uk-button-default demo" type="submit" name="submit" value="Register"
+                <td><button class="uk-button uk-button-default poop" type="submit" name="submit" value="Register"
                         onclick="UIkit.notification({message: '<span uk-icon=\'icon: check\'></span> Account Registered'})">
                         Register</button></td>
             </tr>

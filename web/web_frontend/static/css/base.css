@@ -1,13 +1,14 @@
 html, body{
 	height: 100%;
 }
-.post_item{
+.post_item_button{
 	background-color: rgb(205, 97, 73);
-	text-decoration: underline;
-	border-radius: 500px; 
+	border-radius: 500px;
+	height: 42px;
 }
-.post_item_link{
+.button_text{
 	color: white;
+	text-decoration: underline;
 	font-size: 120%;
 }
 .content {
