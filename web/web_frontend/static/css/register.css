@@ -4,17 +4,27 @@
 h1{
     padding: 40px;
 }
-#center_login{
-    margin: 0 auto;
-    width: 190px; 
+.center{
+    display: flex;
 }
-#center_register{
-    padding: 0px 0px 0px 180px;
-    margin: 0 auto;
-    width: 825px;
+.login{
+    width: 200px;
+    margin: auto;
+}
+.register{
+    width: 400px;
+    margin: auto;
+}
+
+.center_button{
+    display: flex;
+    justify-content: center;
+}
+.center_button_register{
+    margin: auto;
+    display: block;
 }
 .poop{
     background-color: rgb(205, 97, 73);
-    margin: 7px 0px 0px 25px;
     width: 150px;
 }

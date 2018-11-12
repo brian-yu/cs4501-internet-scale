@@ -9,22 +9,26 @@
 {% block content %}
 
 <h1 align="center">Login</h1>
-<div id="center_login">
-    {% if error %}
-        <p id="error">{{ error }}</p>
-    {% endif %}
-    
-    {% if next %}
-    <form action="/login/?next={{next}}" method="post">
-    {% else %}
-    <form action="/login/" method="post">
-    {% endif %}
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="uk-button uk-button-default poop" type="submit" name="submit" value="Login">
-            Login
-        </button> 
-    </form>
+<div class="center">
+    <div class="login"> <!--child for flexbox css-->
+        {% if error %}
+            <p id="error">{{ error }}</p>
+        {% endif %}
+        
+        {% if next %}
+        <form action="/login/?next={{next}}" method="post">
+        {% else %}
+        <form action="/login/" method="post">
+        {% endif %}
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="center_button">
+                <button class="uk-button uk-button-default poop" type="submit" name="submit" value="Login">
+                    Login
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 
