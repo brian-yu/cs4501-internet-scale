@@ -3,7 +3,7 @@ html, body{
 }
 .post_item_button{
 	background-color: rgb(205, 97, 73);
-	/*border-radius: 500px;*/
+	border-radius: 500px;
 	height: 42px;
 }
 .button_text{
