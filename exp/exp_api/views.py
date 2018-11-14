@@ -178,4 +178,3 @@ def search(req, query):
     es = Elasticsearch(['es'])
     res = es.search(index='items_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
     return JsonResponse({'ok': True, 'result': res['hits']['hits']})
-    # return JsonResponse({'ok': True, 'result': []})
