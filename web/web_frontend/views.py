@@ -189,7 +189,10 @@ def post_item(req):
 
 
 def search(req):
-    if req.method == "GET":
-        # return JsonResponse(req.POST)
-        query = req.GET.get('query')
-        return auth_render(req, 'search.html', {'ok': True, 'query': query, 'items': []})
+    query = req.GET.get('query')
+    url = 'http://exp-api:8000/api/v1/search/{}/'.format(query)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    ok = resp['ok']
+    result = resp['result']
+    return auth_render(req, 'search.html', {'ok': ok, 'query': query, 'items': result})
