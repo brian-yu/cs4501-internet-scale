@@ -37,12 +37,12 @@
 		</div>
 		<div class="uk-navbar-center">
 			<div class="uk-navbar-item">
-	            <form class="uk-search uk-search-navbar" action="/search/" method="get">
-	            	<!-- {% csrf_token %} -->
-	                <span uk-search-icon></span>
-	                <input class="uk-search-input" name="query" type="search" placeholder="Search...">
-	            </form>
-	        </div>
+				<form class="uk-search uk-search-navbar" action="/search/" method="get">
+					<!-- {% csrf_token %} -->
+					<span uk-search-icon></span>
+					<input class="uk-search-input" name="query" type="search" placeholder="Search...">
+				</form>
+			</div>
 		</div>
 		{% if logged_in %}
 		<div class="uk-navbar-right">
