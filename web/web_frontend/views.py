@@ -155,7 +155,6 @@ def post_item(req):
     if req.method == "POST":
         form = CreateItemForm(req.POST)
         if not form.is_valid():
-            # form = CreateItemForm()
             args = {'form': form}
             return final_render(req, "post_item.html", args)
         post_data = form.cleaned_data
@@ -173,11 +172,7 @@ def post_item(req):
                 result = json.dumps({'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(
                     post_data), 'ok': False})
                 return HttpResponse(result, content_type='application/json')
-            #form = CreateItemForm()
-            #args = {'form': form}
-            messages.success(req, 'Post successfully made!') # may want to redirect to the created item page
             new_item = resp['result']['id']
-            #return render(req, 'post_item.html', args)
             url = 'http://exp-api:8000/api/v1/items/{}/'.format(new_item)
             resp_json = urllib.request.urlopen(url).read().decode('utf-8')
             resp = json.loads(resp_json)
