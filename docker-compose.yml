@@ -16,6 +16,7 @@ exp:
   links:
     - models:models-api
     - kafka:kafka
+    - es:es
   ports:
     - "8002:8000"
   volumes:
@@ -53,4 +54,7 @@ batch:
   links:
     - kafka:kafka
     - es:es
-  command: "python esScript.py" #<run a python script that pulls messages from Kafka and indexs that in ES>
+  volumes:
+    - ./:/app
+  entrypoint: ./startES.sh
+  #command: "python esScript.py" #<run a python script that pulls messages from Kafka and indexs that in ES>

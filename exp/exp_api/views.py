@@ -8,7 +8,7 @@ import urllib.parse
 import json
 import datetime
 from kafka import KafkaProducer
-
+from elasticsearch import Elasticsearch
 
 def home(req):
     url = 'http://models-api:8000/api/v1/featured_items/'
@@ -158,5 +158,7 @@ def item_detail(req, id):
 
 
 def search(req, query):
-    result = []
-    return JsonResponse({'ok': True, 'result': result})
+    es = Elasticsearch(['es'])
+    res = es.search(index='items_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
+    return JsonResponse({'ok': True, 'result': res['hits']['hits']})
+    # return JsonResponse({'ok': True, 'result': []})
