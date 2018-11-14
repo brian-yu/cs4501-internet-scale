@@ -1,0 +1,1 @@
+# script that continually runs in the batch container and pulls new listings from kafka
