@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib import messages
@@ -186,3 +186,10 @@ def post_item(req):
         form = CreateItemForm()
         args = {'form': form}
         return final_render(req, "post_item.html", args)
+
+
+def search(req):
+    if req.method == "GET":
+        # return JsonResponse(req.POST)
+        query = req.GET.get('query')
+        return render(req, 'search.html', {'ok': True, 'query': query, 'items': []})
