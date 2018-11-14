@@ -104,14 +104,16 @@ def user(request, id):
             obj = User.objects.get(pk=id)
             obj_dict = {}
             obj_dict['user'] = model_to_dict(obj)
-            obj_dict['items'] = [model_to_dict(m)
-                                 for m in list(obj.item_set.all())]
-            obj_dict['borrows'] = serialize_borrows(
-                list(obj.borrowed_items.all()), 'lender')
-            obj_dict['lends'] = serialize_borrows(
-                list(obj.borrowed_items.all()), 'borrower')
-            obj_dict['received_reviews'] = [model_to_dict(
-                m) for m in list(obj.received_reviews.all())]
+
+            obj_dict['items'] = [model_to_dict(m)for m in list(obj.item_set.all())]
+
+            obj_dict['borrows'] = serialize_borrows(list(obj.borrowed_items.all()), 'lender')
+
+            obj_dict['lends'] = serialize_borrows(list(obj.borrowed_items.all()), 'borrower')
+
+            obj_dict['received_reviews'] = serialize_reviews(list(obj.received_reviews.all()))
+            # [model_to_dict(m) for m in list(obj.received_reviews.all())]
+
             return jsonResponse(obj_dict)
         except User.DoesNotExist:  # should never happen because we're always routing from a method
             return jsonErrorResponse('User', id)
@@ -119,6 +121,15 @@ def user(request, id):
     elif request.method == "POST":
         return update(request, User, id)
 
+def serialize_reviews(reviews):
+    return [
+        {
+            'reviewer': model_to_dict(m.reviewer),
+            'reviewee': model_to_dict(m.reviewee),
+            'text': m.text,
+            'score': m.score,
+        } for m in reviews
+    ]
 
 def serialize_borrows_item(borrows):
     return [
@@ -329,6 +340,7 @@ def create_review(request):
         try:
             reviewer_id = form_data['reviewer']
             reviewer = User.objects.get(id=reviewer_id)
+            # reviewer_name = reviewer.first_name
             reviewee_id = form_data['reviewee']
             reviewee = User.objects.get(id=reviewee_id)
             text = form_data['text']

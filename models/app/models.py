@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 
+
 class User(models.Model):
     # 10 fields
     first_name = models.CharField(max_length=100)
@@ -75,6 +76,7 @@ class Review(models.Model):
     # 4 fields
     reviewer = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="written_reviews")
+    # reviewer_name = models.CharField(max_length=100, default="")
     reviewee = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="received_reviews")
     text = models.TextField()
@@ -84,6 +86,7 @@ class Review(models.Model):
 
     def __str__(self):
         return self.reviewer.__str__() + "'s review of " + self.reviewee.__str__()
+
 
 class Authenticator(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

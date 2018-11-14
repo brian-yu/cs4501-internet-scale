@@ -41,6 +41,7 @@
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for review in reviews %}
 		<li>
+			<h4> <a href="/users/{{review.reviewer.id}}/">{{review.reviewer.first_name}} {{review.reviewer.last_name}}</a></h4>
 			<h4>{{ review.score }}/5</h4>
 			<p>{{review.text}}</p>
 		</li>
