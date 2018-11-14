@@ -9,7 +9,6 @@ import json
 import datetime
 from kafka import KafkaProducer
 
-
 def home(req):
     url = 'http://models-api:8000/api/v1/featured_items/'
 
