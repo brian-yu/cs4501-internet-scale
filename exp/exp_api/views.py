@@ -27,6 +27,23 @@ def home(req):
     result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
 
+def all_items(req):
+    url = 'http://models-api:8000/api/v1/all_items/'
+
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
+    if resp["ok"] == False:
+        result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+        return HttpResponse(result, content_type='application/json')
+
+    resp = resp['result']
+    res = {}
+    res['items'] = resp
+
+    result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
+    return HttpResponse(result, content_type='application/json')
+
 
 def users(req): # make this all users in the same zipcode
     return HttpResponse("<p>Hello there! Users listing for exp_api!!</p>")

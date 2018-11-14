@@ -2,38 +2,59 @@
 
 {% block css %}
 {% load static %}
-<link href="{% static " css/home.css" %}" rel="stylesheet">
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+<link href="{% static 'css/item.css' %}" rel="stylesheet">
+
 {% endblock %}
 
 {% block title %} | {{user.first_name}} {{user.last_name}}{% endblock %}
 
 {% block content %}
 {% if ok %}
-<h1 class="uk-heading-primary">
-	{{user.first_name}} {{user.last_name}}
-</h1>
 
-<p>Zipcode: {{user.zip_code}}</p>
-<p>Rating: {{score}}/5</p>
+<div class="uk-section">
+	<div class="uk-grid">
+
+		<div class='uk-width-1-4'>
+			<img src="{% static 'img/Placeholder.png' %}" alt="Image of Item" />
+
+		</div>
+		<div class="uk-width-3-4">
+			<h1 class="uk-heading-primary">
+				{{user.first_name}} {{user.last_name}}
+			</h1>
+			</br>
+			<h5><b>Zipcode: {{user.zip_code}}</b></h5>
+			<h5><b>Rating: {{score}}/5</b></h5>
+		</div>
+	</div>
+</div>
+
 
 <div class="uk-container uk-container-medium uk-margin">
 	<h2 class="uk-heading-divider">Overview</h2>
-	<p>{{user.overview}}</p>
+	<h4>{{user.overview}}</p>
 </div>
 
-<div class="container uk-container-medium uk-margin">
+</br>
+</br>
+
+<div class="uk-container uk-container-medium uk-margin">
 	<h2 class="uk-heading-divider">Items - {{ items|length }}</h2>
 
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for i in items %}
 		<li>
-			<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
-			<p>{{ i.description }}</p>
+			<h5><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
+				<p>{{ i.description }}</p>
 		</li>
 		{% endfor %}
 	</ul>
 
 </div>
+
+</br>
+</br>
 
 <div class="uk-container uk-container-medium">
 	<h2 class="uk-heading-divider">Reviews - {{ reviews|length }}</h2>
@@ -54,6 +75,6 @@
 <h1 class="uk-heading-primary">
 	No user found!
 </h1>
-<img src="{% static " img/whoops.png" %}" uk-img />
+<img src="{% static 'img/whoops.png' %}" uk-img />
 {% endif %}
 {% endblock %}

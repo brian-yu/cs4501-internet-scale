@@ -9,7 +9,7 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(label='Email', max_length=100)
     phone_number = forms.CharField(
         label='Phone (optional)', max_length=17, required=False)
-    overview = forms.CharField(label='Overview', widget=forms.Textarea)
+    overview = forms.CharField(label='Overview', widget=forms.Textarea, required=False)
     zip_code = forms.CharField(
         label='Zipcode', max_length=10, widget=forms.TextInput)
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -33,6 +33,6 @@ class CreateItemForm(forms.Form):
     condition = forms.ChoiceField(label='Condition', choices=CONDITION_CHOICES)
     max_borrow_days = forms.IntegerField(
         label="Max borrow days", widget=forms.NumberInput)
-    description = forms.CharField(label='Description', widget=forms.Textarea)
+    description = forms.CharField(label='Description', widget=forms.Textarea, required=False)
     # currently_borrowed = forms.BooleanField(
     #     label="Currently Borrowed", widget=forms.NullBooleanSelect)
