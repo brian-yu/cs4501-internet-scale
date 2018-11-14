@@ -15,6 +15,7 @@ exp:
   container_name: exp
   links:
     - models:models-api
+    - kafka:kafka
   ports:
     - "8002:8000"
   volumes:

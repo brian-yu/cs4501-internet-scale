@@ -7,6 +7,7 @@ import urllib.request
 import urllib.parse
 import json
 import datetime
+from kafka import KafkaProducer
 
 
 def home(req):
@@ -100,7 +101,6 @@ def create_item(req):
         try:
             url = 'http://models-api:8000/api/v1/items/create/'
             post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
-
             req = urllib.request.Request(url, data=post_encoded, method='POST')
             resp_json = urllib.request.urlopen(req).read().decode('utf-8')
             resp = json.loads(resp_json)
@@ -110,6 +110,8 @@ def create_item(req):
                 resp = json.dumps(
                     {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(resp, content_type='application/json')
+            producer = KafkaProducer(bootstrap_servers='kafka:9092')
+            producer.send('new-items-topic', json.dumps(resp['result']).encode('utf-8'))
             return JsonResponse(resp)
         except:
             result = json.dumps(
