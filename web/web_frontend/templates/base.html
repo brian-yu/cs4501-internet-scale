@@ -36,19 +36,24 @@
 			</ul>
 		</div>
 		<div class="uk-navbar-center">
-			<ul class="uk-navbar-nav">
-				<li>
-					<span>
-						<a href="/post_item" class="uk-button uk-button-default post_item_button">
-							<span class="button_text">Post your sh*t here!</span>
-						</a>
-					</span>
-				</li>
-			</ul>
+			<div class="uk-navbar-item">
+	            <form class="uk-search uk-search-navbar" action="/search/" method="get">
+	            	<!-- {% csrf_token %} -->
+	                <span uk-search-icon></span>
+	                <input class="uk-search-input" name="query" type="search" placeholder="Search...">
+	            </form>
+	        </div>
 		</div>
 		{% if logged_in %}
 		<div class="uk-navbar-right">
 			<ul class="uk-navbar-nav">
+				<li>
+					<a href="/post_item">
+						<button class="uk-button uk-button-default uk-button-small post_item_button">
+							<span class="button_text">Post your sh*t here!</span>
+						</button>
+					</a>
+				</li>
 				<li><a href="/logout">Logout</a></li>
 			</ul>
 		</div>
@@ -62,16 +67,6 @@
 		{% endif %}
 		<!--      -->
 	</nav>
-
-	<!-- the Slideshow-->
-	<!-- <h2 class="hero uk-heading-hero uk-text-center">
-		<span>
-			<span class="logo"><i class="em-svg em-hankey uk-animation-shake"></i></span>
-			<span class="heading">ShareSh*t</span>
-		</span>
-	</h2> -->
-
-
 
 	<!-- the main page -->
 	<div class="content uk-container uk-margin">

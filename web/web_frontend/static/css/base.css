@@ -21,3 +21,10 @@ html, body{
 footer, .push {
     height: 50px;
 }
+
+.uk-search {
+	border-radius: 10px;
+	border-width: 2px;
+	border-color: rgb(153,153,153);
+	border-style: solid;
+}
