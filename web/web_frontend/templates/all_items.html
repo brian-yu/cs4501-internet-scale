@@ -3,29 +3,117 @@
 {% block css %}
 {% load static %}
 <link href="{% static 'css/home.css' %}" rel="stylesheet">
+<link href="{% static 'css/item.css' %}" rel="stylesheet">
+
 {% endblock %}
 
 {% block content %}
 {% if ok %}
+
+<!-- slideshow  -->
+<!-- <div uk-slideshow="animation: push">
+
+	<div class="uk-position-relative uk-visible-toggle uk-light" uk-slideshow="animation: pull; autoplay: true; ">
+
+		<ul class="uk-slideshow-items">
+			<li>
+				<div class="uk-position-cover uk-animation-kenburns uk-animation-reverse uk-transform-origin-center-left">
+					<img src="https://i.imgur.com/cxs90lr.jpg" alt="" uk-cover>
+				</div>
+				<div class="uk-position-center uk-position-small uk-text-center uk-light">
+
+					<h1>Maxed Spec MacBook Pro</h2>
+						<p class="uk-margin-remove">Condition: Excellent</p>
+						<p class="uk-margin-remove">Lender: Tim Cook</p>
+
+
+				</div>
+
+			</li>
+
+			<li>
+				<div class="uk-position-cover uk-animation-kenburns uk-animation-reverse uk-transform-origin-top-right">
+					<img src="https://i.imgur.com/D0dJGos.jpg" alt="" uk-cover>
+				</div>
+				<div class="uk-position-bottom uk-position-medium uk-text-center uk-light">
+					<h1>2 year old Toyota SUV</h2>
+						<p class="uk-margin-remove">Condition: Good</p>
+						<p class="uk-margin-remove">Lender: Tim Cook</p>
+				</div>
+			</li>
+
+			<li>
+				<div class="uk-position-cover uk-animation-kenburns uk-animation-reverse uk-transform-origin-top-right">
+					<img src="https://i.imgur.com/GRZnXvd.jpg" alt="" uk-cover>
+				</div>
+				<div class="uk-position-bottom uk-position-medium uk-text-center uk-light">
+					<h1>1 month old Monster Beats Pro Headphones</h2>
+						<p class="uk-margin-remove">Condition: Good</p>
+						<p class="uk-margin-remove">Lender: Tim Cook</p>
+				</div>
+			</li>
+		</ul>
+
+		<a class="uk-slidenav-large uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous
+		 uk-slideshow-item="previous"></a>
+		<a class="uk-slidenav-large uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next
+		 uk-slideshow-item="next"></a>
+
+	</div>
+</div> -->
+
 <!-- the main page -->
 <div class="uk-container uk-container-medium">
     <br>
-    <h2 class="uk-heading-divider uk-text-center">All Items</h2>
+    <h2 class="uk-heading-divider uk-text-center">Featured Items</h2>
     <div class="uk-container">
         <div class="item-grid uk-text-center uk-grid-match uk-grid-medium uk-child-width-1-3" uk-grid>
             {% for i in items %}
+
             <div class="uk-card uk-card-default uk-card-body" data-tilt data-tilt-max="30">
-                <h3 class="item_title">
-                    <a href="/items/{{i.id}}/">{{ i.title }}</a>
-                </h3>
-                <p class="item_metadata">
-                    <b>${{ i.price_per_day }}/day, {{ i.max_borrow_days }} days max</b>
-                </p>
-                <p>
-                    {{ i.description }} - <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }} </a>
-                    <a href="/users/{{i.owner.id}}/">{{ i.owner.last_name }} </a>
-                </p>
+                <div class="uk-section">
+                    <div class="uk-grid">
+                        <div class='uk-width-2-5'>
+                            <img src="{% static 'img/Placeholder.png' %}" alt="Image of Item" />
+
+                        </div>
+                        <div class="uk-width-3-5">
+                            <!-- <h1 class="uk-heading-primary">
+								{{user.first_name}} {{user.last_name}}
+							</h1>
+							</br>
+							<h5><b>Zipcode: {{user.zip_code}}</b></h5>
+							<h5><b>Rating: {{score}}/5</b></h5> -->
+                            <h3>
+                                <a href="/items/{{i.id}}/">{{ i.title }}</a>
+                            </h3>
+                            <p class="item_metadata">
+                                <b>${{ i.price_per_day }}/day, {{ i.max_borrow_days }} days max</b>
+                            </p>
+                            <p>
+                                {{ i.description }}
+                            </p>
+                            <p>Owner: <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }}
+                                    {{i.owner.last_name}}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
+            <!-- <div class="uk-card uk-card-default uk-card-body" data-tilt data-tilt-max="30">
+				<h3 class="">
+					<a href="/items/{{i.id}}/">{{ i.title }}</a>
+				</h3>
+				<p class="item_metadata">
+					<b>${{ i.price_per_day }}/day, {{ i.max_borrow_days }} days max</b>
+				</p>
+				<p>
+					{{ i.description }}
+				</p>
+				<p>Owned by <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }} {{ i.owner.last_name }}</a></p>
+			</div> -->
             {% endfor %}
         </div>
     </div>
