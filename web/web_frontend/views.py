@@ -194,5 +194,5 @@ def search(req):
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
     ok = resp['ok']
-    result = resp['result']
+    result = [i['_source'] for i in resp['result']]
     return auth_render(req, 'search.html', {'ok': ok, 'query': query, 'items': result})
