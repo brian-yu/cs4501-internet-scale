@@ -90,9 +90,11 @@
 							<p class="item_metadata">
 								<b>${{ i.price_per_day }}/day, {{ i.max_borrow_days }} days max</b>
 							</p>
-							<p>
-								{{ i.description }}
-							</p>
+							<div style="overflow:auto; height:50px;">
+								<p>
+									{{ i.description }}
+								</p>
+							</div>
 							<p>Owner: <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }} {{ i.owner.last_name }}</a></p>
 						</div>
 					</div>

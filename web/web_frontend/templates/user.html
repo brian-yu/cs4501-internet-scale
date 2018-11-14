@@ -30,18 +30,14 @@
 	</div>
 </div>
 
-
+<h2 class="uk-heading-divider">Overview</h2>
 <div class="uk-container uk-container-medium uk-margin">
-	<h2 class="uk-heading-divider">Overview</h2>
 	<h4>{{user.overview}}</p>
 </div>
 
-</br>
-</br>
 
-<div class="uk-container uk-container-medium uk-margin">
-	<h2 class="uk-heading-divider">Items - {{ items|length }}</h2>
-
+<h2 class="uk-heading-divider">Items - {{ items|length }}</h2>
+<div class="uk-container uk-container-medium uk-margin" style="overflow:auto; height:300px;">
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for i in items %}
 		<li>
@@ -56,19 +52,18 @@
 </br>
 </br>
 
-<div class="uk-container uk-container-medium">
-	<h2 class="uk-heading-divider">Reviews - {{ reviews|length }}</h2>
-
+<h2 class="uk-heading-divider"><a href="/all_reviews/{{user.id}}">Reviews</a> - {{ reviews|length }}</h2>
+<div class="uk-container uk-container-medium" style="overflow:auto; height:300px;">
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for review in reviews %}
 		<li>
-			<h4> <a href="/users/{{review.reviewer.id}}/">{{review.reviewer.first_name}} {{review.reviewer.last_name}}</a></h4>
-			<h4>{{ review.score }}/5</h4>
+			<h4><a href="/users/{{review.reviewer.id}}/">{{review.reviewer.first_name}}
+					{{review.reviewer.last_name}}</a></h4>
+			<h4>Score: {{ review.score }}/5</h4>
 			<p>{{review.text}}</p>
 		</li>
 		{% endfor %}
 	</ul>
-	<h4><a href="/all_reviews/{{user.id}}">All Reviews</a></h4>
 
 </div>
 {% else %}

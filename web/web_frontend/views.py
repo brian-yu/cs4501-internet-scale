@@ -94,7 +94,7 @@ def register(req):
                 return HttpResponse(result, content_type='application/json')
             form = LoginForm()
             args = {'form': form}
-            messages.success(req, 'Account successfully created!')
+            # messages.success(req, 'Account successfully created!')
             response = auth_render(req, "login.html", args)
             return response
         except:
