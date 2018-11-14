@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block css %}
+{% load static %}
+<link href="{% static "css/item.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %} | {{item.title}}{% endblock %}
+
+{% block content %}
+
+{% if ok %}
+<div>
+    <h4>Showing results for '{{query}}'</h4>
+    <ul class="uk-list uk-list-large uk-list-divider">
+        {% for i in items %}
+			<li>
+			  	<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
+			  	<p>{{ i.description }} - <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }} {{ i.owner.last_name }}</a></p>
+			</li>
+		{% empty %}
+    		<li>No results found.</li>
+		{% endfor %}
+    </ul>
+</div>
+
+{% else %}
+	<h3>Whoops!</h3>
+{% endif %}
+
+{% endblock %}

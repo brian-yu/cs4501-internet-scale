@@ -154,3 +154,8 @@ def item_detail(req, id):
     res['ok'] = True
     result = json.dumps(res, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
+
+
+def search(req, query):
+    result = []
+    return JsonResponse({'ok': True, 'result': result})

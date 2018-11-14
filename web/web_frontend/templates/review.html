@@ -10,7 +10,8 @@
 
 {% for review in reviews %}
 <div class="uk-card uk-card-body">
-    <h2>Review by: <a href="/users/{{review.reviewer}}/">{{ review.reviewer }}</a></h2>
+    <h2>Review by: <a href="/users/{{review.reviewer.id}}/">{{review.reviewer.first_name}}
+            {{review.reviewer.last_name}}</a></h2>
     <h4>Rating: {{ review.score }}/5</h4>
     <h4>Description: {{review.text}}</p>
 
