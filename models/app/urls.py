@@ -25,5 +25,6 @@ urlpatterns = [
 
     # MISC
     path('featured_items/', views.featured_items),
+    path('all_items/', views.all_items),
     path('login/', views.check_login)
 ]

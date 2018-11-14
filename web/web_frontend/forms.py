@@ -33,6 +33,6 @@ class CreateItemForm(forms.Form):
     condition = forms.ChoiceField(label='Condition', choices=CONDITION_CHOICES)
     max_borrow_days = forms.IntegerField(
         label="Max borrow days", widget=forms.NumberInput)
-    description = forms.CharField(label='Description', widget=forms.Textarea)
+    description = forms.CharField(label='Description', widget=forms.Textarea, required=False)
     # currently_borrowed = forms.BooleanField(
     #     label="Currently Borrowed", widget=forms.NullBooleanSelect)

@@ -20,7 +20,7 @@ urlpatterns = [
     path('all_reviews/<int:id>/', views.review),
     path('post_item/', views.post_item, name="create_listing"),
     path('search/', views.search),
-
+    path('all_items/', views.all_items),
 
     # path('borrows/<int:id>/', views.borrow),
     # path('reviews/<int:id>/', views.review),

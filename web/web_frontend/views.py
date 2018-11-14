@@ -176,6 +176,8 @@ def post_item(req):
             url = 'http://exp-api:8000/api/v1/items/{}/'.format(new_item)
             resp_json = urllib.request.urlopen(url).read().decode('utf-8')
             resp = json.loads(resp_json)
+
+        
             return render(req, 'item.html', resp)
         except:
             result = json.dumps(
@@ -187,6 +189,18 @@ def post_item(req):
         args = {'form': form}
         return auth_render(req, "post_item.html", args)
 
+def all_items(req):
+    url = 'http://exp-api:8000/api/v1/all_items'
+
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
+    if resp['ok'] == False:
+        return render(req, 'home.html', {'ok': False})
+
+    resp['result']['ok'] = True
+
+    return auth_render(req, 'all_items.html', resp['result'])
 
 def search(req):
     query = req.GET.get('query')

@@ -368,6 +368,14 @@ def featured_items(req):
         res.append(d)
     return jsonResponse(res)
 
+def all_items(req):
+    res = []
+    for item in list(Item.objects.all().order_by('-id')):
+        d = model_to_dict(item)
+        d['owner'] = model_to_dict(User.objects.get(pk=d['owner']))
+        res.append(d)
+    return jsonResponse(res)
+
 @csrf_exempt
 def check_login(req):
     if req.method == "POST":
