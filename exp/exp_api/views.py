@@ -10,6 +10,7 @@ import datetime
 from kafka import KafkaProducer
 from elasticsearch import Elasticsearch
 
+
 def home(req):
     url = 'http://models-api:8000/api/v1/featured_items/'
 
@@ -26,6 +27,7 @@ def home(req):
 
     result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
+
 
 def all_items(req):
     url = 'http://models-api:8000/api/v1/all_items/'
@@ -45,7 +47,7 @@ def all_items(req):
     return HttpResponse(result, content_type='application/json')
 
 
-def users(req): # make this all users in the same zipcode
+def users(req):  # make this all users in the same zipcode
     return HttpResponse("<p>Hello there! Users listing for exp_api!!</p>")
 
 
@@ -76,6 +78,7 @@ def user_detail(req, id):
     result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
 
+
 @csrf_exempt
 def login(req):
     if req.method != "POST":
@@ -87,6 +90,7 @@ def login(req):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return JsonResponse(resp)
+
 
 @csrf_exempt
 def register(req):
@@ -128,7 +132,8 @@ def create_item(req):
                     {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
                 return HttpResponse(resp, content_type='application/json')
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            producer.send('new-items-topic', json.dumps(resp['result']).encode('utf-8'))
+            producer.send('new-items-topic',
+                          json.dumps(resp['result']).encode('utf-8'))
             return JsonResponse(resp)
         except:
             result = json.dumps(
@@ -174,8 +179,12 @@ def item_detail(req, id):
     return HttpResponse(result, content_type='application/json')
 
 
-def search(req, query):
+def search(req):
+    query = req.GET.get('query')
     es = Elasticsearch(['es'])
-    res = es.search(index='items_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
+    query = query.replace("+", " ")
+
+    res = es.search(index='items_index', body={
+                    'query': {'query_string': {'query': query}}, 'size': 10})
     return JsonResponse({'ok': True, 'result': res['hits']['hits']})
     # return JsonResponse({'ok': True, 'result': []})

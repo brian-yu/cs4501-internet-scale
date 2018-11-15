@@ -16,7 +16,7 @@ urlpatterns = [
     path('items/create/', views.create_item),
 
     path('login/', views.login),
-    path('search/<str:query>/', views.search),
+    path('search/', views.search),
 
     # path('borrows/create/', views.create_borrow),
     # path('reviews/create/', views.create_review),
