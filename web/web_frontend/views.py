@@ -25,7 +25,7 @@ def home(req):
     resp = json.loads(resp_json)
 
     if resp['ok'] == False:
-        return render(req, 'home.html', {'ok': False})
+        return auth_render(req, 'home.html', {'ok': False})
 
     resp['result']['ok'] = True
 
@@ -39,7 +39,7 @@ def user(req, id):
     resp = json.loads(resp_json)
 
     if resp['ok'] == False:
-        return render(req, 'user.html', {'ok': False})
+        return auth_render(req, 'user.html', {'ok': False})
 
     resp['result']['ok'] = True
 
@@ -62,7 +62,7 @@ def review(req, id):
     resp = json.loads(resp_json)
 
     if resp['ok'] == False:
-        return render(req, 'review.html', {'ok': False})
+        return auth_render(req, 'review.html', {'ok': False})
 
     reviews = ""
     resp['result']['ok'] = True
@@ -77,7 +77,7 @@ def register(req):
         if not form.is_valid():
             form = RegisterForm()
             args = {'form': form}
-            return render(req, "register.html", args)
+            return auth_render(req, "register.html", args)
         post_data = form.cleaned_data
         url = 'http://exp-api:8000/api/v1/users/create/'
         post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
@@ -167,7 +167,7 @@ def post_item(req):
         try:
             resp = json.loads(resp_json)
             if not resp['ok']:
-                if resp['error'] == 'Invalid maximum borrow days':
+                if resp['error'] == 'Invalid maximum borrow days': # user input 0 or a negative number
                     return auth_render(req, 'post_item.html', {'form': CreateItemForm(), 'error': 'Invalid maximum borrow days'})
                 result = json.dumps({'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(
                     post_data), 'ok': False})
@@ -176,9 +176,7 @@ def post_item(req):
             url = 'http://exp-api:8000/api/v1/items/{}/'.format(new_item)
             resp_json = urllib.request.urlopen(url).read().decode('utf-8')
             resp = json.loads(resp_json)
-
-        
-            return render(req, 'item.html', resp)
+            return auth_render(req, 'item.html', resp)
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request of web_frontend. Here is the data we received: {}'.format(post_data), 'ok': False})
@@ -196,7 +194,7 @@ def all_items(req):
     resp = json.loads(resp_json)
 
     if resp['ok'] == False:
-        return render(req, 'home.html', {'ok': False})
+        return auth_render(req, 'home.html', {'ok': False})
 
     resp['result']['ok'] = True
 

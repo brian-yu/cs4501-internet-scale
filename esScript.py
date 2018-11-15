@@ -21,6 +21,7 @@ while True:
             new_item = json.loads((message.value).decode('utf-8'))
             es.index(index='items_index', doc_type='item', id=new_item['id'], body=new_item)
             es.indices.refresh(index="items_index")
+            time.sleep(1)
     except:
         print('uhhhh')
         continue
