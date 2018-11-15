@@ -11,11 +11,12 @@ import json
 from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm
 
 
-def auth_render(req, template, args): # for changing the login button to logout button
+def auth_render(req, template, args):  # for changing the login button to logout button
     auth = req.COOKIES.get('authenticator')
     if auth:
-       args['logged_in'] = True 
+        args['logged_in'] = True
     return render(req, template, args)
+
 
 def home(req):
 
@@ -87,7 +88,8 @@ def register(req):
         try:
             if not resp['ok']:
                 if resp['error'] == "Email address already exists":
-                    args = {'form': RegisterForm(), 'error': 'Email address already exists!'}
+                    args = {'form': RegisterForm(
+                    ), 'error': 'Email address already exists!'}
                     return auth_render(req, "register.html", args)
                 result = json.dumps(
                     {'error': 'CREATE request did not pass through to exp and models layer. Here is the data we received: {}'.format(post_data), 'ok': False})
@@ -142,14 +144,17 @@ def login(req):
 
     return response
 
+
 def logout(req):
     response = HttpResponseRedirect(reverse('index'))
     response.delete_cookie('authenticator')
     return response
 
+
 def post_item(req):
     auth = req.COOKIES.get('authenticator')
-    if not auth: # if user is not logged in (auth is None), redirect to login page
+    # if user is not logged in (auth is None), redirect to login page
+    if not auth:
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
 
     if req.method == "POST":
@@ -177,7 +182,6 @@ def post_item(req):
             resp_json = urllib.request.urlopen(url).read().decode('utf-8')
             resp = json.loads(resp_json)
 
-        
             return render(req, 'item.html', resp)
         except:
             result = json.dumps(
@@ -188,6 +192,7 @@ def post_item(req):
         form = CreateItemForm()
         args = {'form': form}
         return auth_render(req, "post_item.html", args)
+
 
 def all_items(req):
     url = 'http://exp-api:8000/api/v1/all_items'
@@ -202,9 +207,12 @@ def all_items(req):
 
     return auth_render(req, 'all_items.html', resp['result'])
 
+
 def search(req):
     query = req.GET.get('query')
+    query = query.replace(" ", "+")
     url = 'http://exp-api:8000/api/v1/search/{}/'.format(query)
+
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
     ok = resp['ok']
