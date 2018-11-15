@@ -11,11 +11,12 @@
 {% if ok %}
 <div>
     <h4>Showing results for '{{query}}'</h4>
+    <hr>
     <ul class="uk-list uk-list-large uk-list-divider">
         {% for i in items %}
 			<li>
 			  	<h4><a href="/items/{{i.id}}/">{{ i.title }}</a> - ${{ i.price_per_day }} per day, {{ i.max_borrow_days }} days max</h4>
-			  	<p>{{ i.description }} - <a href="/users/{{i.owner.id}}/">{{ i.owner.first_name }} {{ i.owner.last_name }}</a></p>
+			  	<p>{{ i.description }}</p>
 			</li>
 		{% empty %}
     		<li>No results found.</li>
