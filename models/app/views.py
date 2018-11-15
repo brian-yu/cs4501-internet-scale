@@ -208,7 +208,6 @@ def create_user(request):
             first_name = form_data['first_name']
             last_name = form_data['last_name']
             email = form_data['email']
-            overview = form_data['overview']
             zip_code = form_data['zip_code']
             password = form_data['password']
             if len(User.objects.filter(email=email)) > 0:
@@ -220,7 +219,6 @@ def create_user(request):
                     last_name=last_name,
                     email=email,
                     phone_number=phone_number,
-                    overview=overview,
                     zip_code=zip_code,
                     password=make_password(password),
                     lender_rating_total=0,
@@ -233,7 +231,6 @@ def create_user(request):
                     first_name=first_name,
                     last_name=last_name,
                     email=email,
-                    overview=overview,
                     zip_code=zip_code,
                     password=make_password(password),
                     lender_rating_total=0,

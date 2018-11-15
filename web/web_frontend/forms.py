@@ -9,7 +9,6 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(label='Email', max_length=100)
     phone_number = forms.CharField(
         label='Phone (optional)', max_length=17, required=False)
-    overview = forms.CharField(label='Overview', widget=forms.Textarea, required=False)
     zip_code = forms.CharField(
         label='Zipcode', max_length=10, widget=forms.TextInput)
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
