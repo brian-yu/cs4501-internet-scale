@@ -210,11 +210,12 @@ def all_items(req):
 
 def search(req):
     query = req.GET.get('query')
-    query = query.replace(" ", "+")
-    url = 'http://exp-api:8000/api/v1/search/{}/'.format(query)
-
+    encoded_query = urllib.parse.urlencode({'query': query})
+    url = 'http://exp-api:8000/api/v1/search/?{}'.format(encoded_query)
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
     ok = resp['ok']
-    result = [i['_source'] for i in resp['result']]
+    result = []
+    if 'result' in resp:
+        result = [i['_source'] for i in resp['result']]
     return auth_render(req, 'search.html', {'ok': ok, 'query': query, 'items': result})

@@ -179,7 +179,8 @@ def item_detail(req, id):
     return HttpResponse(result, content_type='application/json')
 
 
-def search(req, query):
+def search(req):
+    query = req.GET.get('query')
     es = Elasticsearch(['es'])
     query = query.replace("+", " ")
 
