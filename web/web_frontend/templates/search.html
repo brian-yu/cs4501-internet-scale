@@ -10,7 +10,7 @@
 
 {% if ok %}
 <div>
-    <h4>Showing results for "{{query}}"</h4>
+    <h4>Showing {{ items | length }} results for "{{query}}"</h4>
     <hr>
     <ul class="uk-list uk-list-large uk-list-divider">
         {% for i in items %}
