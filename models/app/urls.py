@@ -13,6 +13,7 @@ urlpatterns = [
 
     # GET and UPDATE requests
     path('users/<int:id>/', views.user),
+    path('users/getid/<str:auth>/', views.auth_to_user),
     path('items/<int:id>/', views.item),
     path('borrows/<int:id>/', views.borrow),
     path('reviews/<int:id>/', views.review),

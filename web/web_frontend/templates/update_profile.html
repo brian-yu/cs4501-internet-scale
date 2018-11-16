@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block css %}
+{% load static %}
+<link href="{% static 'css/register.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<h1 align="center">Update Profile</h1>
+<div class="center">
+    <div class="register">
+        <form method="post">
+            {% if error %}
+                <p id="error">{{ error }}</p>
+            {% endif %}
+
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="uk-button uk-button-default poop" type="submit" name="submit" value="Update Profile">
+                        Update Profile
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

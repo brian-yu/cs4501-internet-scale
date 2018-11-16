@@ -52,31 +52,53 @@ def users(req):  # make this all users in the same zipcode
 
 
 def user_detail(req, id):
-    url = 'http://models-api:8000/api/v1/users/{}/'.format(id)
+    if req.method == "GET":
+        url = 'http://models-api:8000/api/v1/users/{}/'.format(id)
+        resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+        resp = json.loads(resp_json)
 
+        if resp["ok"] == False:
+            result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+            return HttpResponse(result, content_type='application/json')
+
+        resp = resp['result']
+        res = {}
+        if len(resp['received_reviews']) == 0:
+            res['score'] = "-"
+        else:
+            res['score'] = sum(
+                [r['score'] for r in resp['received_reviews']]) / len(resp['received_reviews'])
+
+        res['user'] = resp['user']
+        res['items'] = resp['items']
+        res['reviews'] = resp['received_reviews']
+
+        result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
+        return HttpResponse(result, content_type='application/json')
+    else:
+        post_data = req.POST
+        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        url = 'http://models-api:8000/api/v1/users/{}/'.format(id)
+        req = urllib.request.Request(url, data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        if not resp['ok']:
+            if resp['error'] == 'Invalid maximum borrow days':
+                return JsonResponse({'ok': False, 'error': 'Invalid maximum borrow days'})
+            resp = json.dumps(
+                {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
+            return HttpResponse(resp, content_type='application/json')
+        return JsonResponse(resp)
+
+
+def getid(req, auth):
+    url = 'http://models-api:8000/api/v1/users/getid/{}/'.format(auth)
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
-
-    if resp["ok"] == False:
-        result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
-        return HttpResponse(result, content_type='application/json')
-
-    resp = resp['result']
-
-    res = {}
-
-    if len(resp['received_reviews']) == 0:
-        res['score'] = "-"
+    if resp['ok']:
+        return JsonResponse(resp)
     else:
-        res['score'] = sum(
-            [r['score'] for r in resp['received_reviews']]) / len(resp['received_reviews'])
-
-    res['user'] = resp['user']
-    res['items'] = resp['items']
-    res['reviews'] = resp['received_reviews']
-
-    result = json.dumps({'ok': True, 'result': res}, cls=DjangoJSONEncoder)
-    return HttpResponse(result, content_type='application/json')
+        return JsonResponse({'ok': False, 'error': 'Invalid authenticator!'})
 
 
 @csrf_exempt

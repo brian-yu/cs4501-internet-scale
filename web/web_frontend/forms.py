@@ -14,6 +14,20 @@ class RegisterForm(forms.Form):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
 
+class UpdateProfileForm(forms.Form):
+    first_name = forms.CharField(
+        label='First name', max_length=100, widget=forms.TextInput, required=False)
+    last_name = forms.CharField(
+        label='Last name', max_length=100, widget=forms.TextInput, required=False)
+    email = forms.EmailField(label='Email', max_length=100, required=False)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput, required=False)
+    phone_number = forms.CharField(
+        label='Phone', max_length=17, required=False)
+    zip_code = forms.CharField(
+        label='Zipcode', max_length=10, widget=forms.TextInput, required=False)
+    overview = forms.CharField(widget=forms.Textarea, required=False)  # introduction about the user
+
+
 class LoginForm(forms.Form):
     email = forms.EmailField(label='Email', max_length=100)
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -35,3 +49,8 @@ class CreateItemForm(forms.Form):
     description = forms.CharField(label='Description', widget=forms.Textarea, required=False)
     # currently_borrowed = forms.BooleanField(
     #     label="Currently Borrowed", widget=forms.NullBooleanSelect)
+
+class PostReviewForm(forms.Form):
+    pass
+
+

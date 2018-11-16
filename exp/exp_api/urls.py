@@ -8,6 +8,7 @@ urlpatterns = [
 
     path('users/', views.users),
     path('users/<int:id>/', views.user_detail),
+    path('users/getid/<str:auth>/', views.getid),
     path('items/', views.items),
     path('items/<int:id>/', views.item_detail),
 

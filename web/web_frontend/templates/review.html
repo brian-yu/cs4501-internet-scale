@@ -1,22 +1,26 @@
 {% extends "base.html" %}
 
-
 {% block content %}
 
-<!-- <h1>{{review.reviewee}}</h1> -->
+{% if ok %}
 
-<!-- <h1>All Reviews <a href="/users/{{reviews.0.reviewee}}/">{{ reviews.0.reviewee }}</a></h1> -->
-<h1>All Reviews</h1>
+{% if reviews %}
+<h1>All Reviews for {{ reviews.0.reviewee.first_name }}</h1>
+{% else %}
+<h1>No Reviews!</h1>
+{% endif %}
 
 {% for review in reviews %}
 <div class="uk-card uk-card-body">
     <h2>Review by: <a href="/users/{{review.reviewer.id}}/">{{review.reviewer.first_name}}
             {{review.reviewer.last_name}}</a></h2>
     <h4>Rating: {{ review.score }}/5</h4>
-    <h4>Description: {{review.text}}</p>
-
+    <p>Description: {{review.text}}</p>
 </div>
-
 {% endfor %}
+
+{% else %}
+<h1>Something went wrong!</h1>
+{% endif %}
 
 {% endblock %}

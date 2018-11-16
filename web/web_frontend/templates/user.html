@@ -23,6 +23,11 @@
 			<h1 class="uk-heading-primary">
 				{{user.first_name}} {{user.last_name}}
 			</h1>
+			{% if myself %}
+			<a href="/update_profile/">Update your profile</a>
+			{% else %}
+			<a href="/post_review/{{user.id}}">Post a review for {{ user.first_name }}</a>
+			{% endif %}
 			</br>
 			<h5><b>Zipcode: {{user.zip_code}}</b></h5>
 			<h5><b>Rating: {{score}}/5</b></h5>
@@ -52,7 +57,11 @@
 </br>
 </br>
 
+{% if reviews|length %}
 <h2 class="uk-heading-divider"><a href="/all_reviews/{{user.id}}">Reviews</a> - {{ reviews|length }}</h2>
+{% else %}
+<h2 class="uk-heading-divider">Reviews - {{ reviews|length }}</h2>
+{% endif %}
 <div class="uk-container uk-container-medium" style="overflow:auto; height:300px;">
 	<ul class="uk-list uk-list-divider featured-items">
 		{% for review in reviews %}
@@ -64,7 +73,6 @@
 		</li>
 		{% endfor %}
 	</ul>
-
 </div>
 {% else %}
 <h1 class="uk-heading-primary">

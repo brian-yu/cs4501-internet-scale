@@ -48,7 +48,7 @@
 		<div class="uk-navbar-right">
 			<ul class="uk-navbar-nav">
 				<li>
-					<a href="#">My Profile</a>
+					<a href="/profile">My Profile</a>
 				</li>
 				<li>
 					<a href="/post_item">
@@ -63,6 +63,13 @@
 		{% else %}
 		<div class="uk-navbar-right">
 			<ul class="uk-navbar-nav">
+				<li>
+					<a href="/post_item">
+						<button class="uk-button uk-button-default uk-button-small post_item_button">
+							<span class="button_text">Post your sh*t here!</span>
+						</button>
+					</a>
+				</li>
 				<li><a href="/login">Login</a></li>
 				<li><a href="/register">Register</a></li>
 			</ul>
