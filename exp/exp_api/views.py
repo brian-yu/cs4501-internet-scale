@@ -204,9 +204,7 @@ def item_detail(req, id):
 def search(req):
     query = req.GET.get('query')
     es = Elasticsearch(['es'])
-    query = query.replace("!", "").replace("^", "").replace("*", "").replace("(", "").replace(")", "")
 
     res = es.search(index='items_index', body={
-                    'query': {'query_string': {'query': query}}, 'size': 10})
+                    'query': {'simple_query_string': {'query': query}}, 'size': 10})
     return JsonResponse({'ok': True, 'result': res['hits']['hits']})
-    # return JsonResponse({'ok': True, 'result': []})
