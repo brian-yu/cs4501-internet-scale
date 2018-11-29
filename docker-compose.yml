@@ -76,4 +76,3 @@ selenium-test:
   volumes:
     - ./app/selenium:/app
   command: bash -c "pip install selenium==<some version number> && python selenium.py"
-  
