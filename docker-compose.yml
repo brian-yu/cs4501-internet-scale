@@ -58,3 +58,22 @@ batch:
     - ./:/app
   entrypoint: ./startES.sh
   #command: "python esScript.py" #<run a python script that pulls messages from Kafka and indexs that in ES>
+
+selenium-chrome:
+  image: selenium/standalone-chrome
+  container_name: selenium-chrome
+  links:
+    - web:web
+  ports:
+    - "4444:4444"
+
+selenium-test:
+  image: tp33/django
+  container_name: selenium-test
+  links:
+    - selenium-chrome:selenium-chrome
+    - web:web
+  volumes:
+    - ./app/selenium:/app
+  command: bash -c "pip install selenium==<some version number> && python selenium.py"
+  
