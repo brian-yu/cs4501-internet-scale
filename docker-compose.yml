@@ -58,3 +58,8 @@ batch:
     - ./:/app
   entrypoint: ./startES.sh
   #command: "python esScript.py" #<run a python script that pulls messages from Kafka and indexs that in ES>
+
+# haproxy:
+#   image: haproxy:1.7
+#   container_name: haproxy
+#   
