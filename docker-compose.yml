@@ -34,6 +34,17 @@ web:
     - ./web:/app
   command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
+web2:
+  image: tp33/django
+  container_name: web2
+  links:
+    - exp:exp-api
+  ports:
+    - "8003:8000"
+  volumes:
+    - ./web:/app
+  command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
+
 kafka:
   image: spotify/kafka
   container_name: kafka
@@ -59,7 +70,13 @@ batch:
   entrypoint: ./startES.sh
   #command: "python esScript.py" #<run a python script that pulls messages from Kafka and indexs that in ES>
 
-# haproxy:
-#   image: haproxy:1.7
-#   container_name: haproxy
-#   
+haproxy:
+  image: haproxy:1.8
+  container_name: haproxy
+  links:
+    - web:web-api
+    - web2:web-api2
+  ports:
+    - "8080:80"
+  volumes:
+    - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
