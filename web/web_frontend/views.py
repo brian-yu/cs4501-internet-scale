@@ -8,7 +8,7 @@ import urllib.request
 import urllib.parse
 import json
 
-from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm
+from web_frontend.forms import RegisterForm, CreateItemForm, LoginForm, UpdateProfileForm
 
 
 def auth_render(req, template, args):  # for changing the login button to logout button
@@ -35,7 +35,6 @@ def home(req):
 
 def user(req, id):
     url = 'http://exp-api:8000/api/v1/users/{}/'.format(id)
-
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
 
@@ -43,8 +42,61 @@ def user(req, id):
         return auth_render(req, 'user.html', {'ok': False})
 
     resp['result']['ok'] = True
-
     return auth_render(req, 'user.html', resp['result'])
+
+
+def profile(req):
+    auth = req.COOKIES.get('authenticator')
+    # if user is not logged in (auth is None), redirect to login page
+    if not auth:
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("profile"))
+    
+    url = 'http://exp-api:8000/api/v1/users/getid/{}/'.format(auth)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
+    if resp['ok'] == False:
+        return auth_render(req, 'user.html', {'ok': False})
+    url = 'http://exp-api:8000/api/v1/users/{}/'.format(resp['user_id'])
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
+    if resp['ok'] == False:
+        return auth_render(req, 'user.html', {'ok': False})
+    resp['result']['ok'] = True
+    resp['result']['myself'] = True
+    return auth_render(req, 'user.html', resp['result'])
+    
+
+def update_profile(req):
+    if req.method == "POST":
+        auth = req.COOKIES.get('authenticator')
+        if not auth:
+            return HttpResponseRedirect(reverse("login") + "?next=" + reverse("update_profile"))
+        url = 'http://exp-api:8000/api/v1/users/getid/{}/'.format(auth)
+        resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        if resp['ok']:
+            id = resp['user_id']
+        else:
+            return HttpResponseRedirect(reverse("login") + "?next=" + reverse("update_profile"))
+        form = UpdateProfileForm(req.POST)
+        if not form.is_valid():
+            return auth_render(req, "update_profile.html", {'form': form})
+        post_data = form.cleaned_data
+        post_data['authenticator'] = auth
+        url = 'http://exp-api:8000/api/v1/users/{}/'.format(id)
+        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        req2 = urllib.request.Request(url, data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        if resp['ok']:
+            return HttpResponse('success!')
+        return HttpResponse('failed')
+    else:
+        form = UpdateProfileForm()
+        args = {'form': form}
+        return auth_render(req, "update_profile.html", args)
 
 
 def item(req, id):
@@ -56,23 +108,20 @@ def item(req, id):
 
 
 def review(req, id):
-
     url = 'http://exp-api:8000/api/v1/users/{}/'.format(id)
-
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
-
     if resp['ok'] == False:
         return auth_render(req, 'review.html', {'ok': False})
-
-    reviews = ""
     resp['result']['ok'] = True
-
     return auth_render(req, 'review.html', resp['result'])
 
 
-def register(req):
+def post_review(req, id):
+    return HttpResponse('hello')
 
+
+def register(req):
     if req.method == "POST":
         form = RegisterForm(req.POST)
         if not form.is_valid():
@@ -116,13 +165,14 @@ def login(req):
         n = req.GET.get('next') or reverse(home)
         return auth_render(req, "login.html", {'form': form, 'next': n})
 
+    redirect_to = req.GET.get('next')
     form = LoginForm(req.POST)
     if not form.is_valid():
-        return auth_render(req, "login.html", {'form': form})
+        return auth_render(req, "login.html", {'form': form, 'next': redirect_to})
 
     email = form.cleaned_data['email']
     password = form.cleaned_data['password']
-    n = form.cleaned_data.get('next') or reverse(home)
+    n = redirect_to or reverse(home)
 
     data = {'email': email, 'password': password}
     url = 'http://exp-api:8000/api/v1/login/'
@@ -133,7 +183,7 @@ def login(req):
 
     # Check if the experience layer said they gave us incorrect information
     if not resp or not resp['ok']:
-        return auth_render(req, "login.html", {'form': LoginForm(), 'error': resp['error']})
+        return auth_render(req, "login.html", {'form': LoginForm(), 'error': resp['error'], 'next': redirect_to})
 
     """ If we made it here, we can log them in. """
     # Set their login cookie and redirect to back to wherever they came from
@@ -181,7 +231,7 @@ def post_item(req):
             url = 'http://exp-api:8000/api/v1/items/{}/'.format(new_item)
             resp_json = urllib.request.urlopen(url).read().decode('utf-8')
             resp = json.loads(resp_json)
-            return auth_render(req, 'item.html', resp)
+            return redirect('/items/{}/'.format(resp['item']['id']))
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request of web_frontend. Here is the data we received: {}'.format(post_data), 'ok': False})

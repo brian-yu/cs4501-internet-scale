@@ -80,3 +80,21 @@ haproxy:
     - "8080:80"
   volumes:
     - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+selenium-chrome:
+  image: selenium/standalone-chrome
+  container_name: selenium-chrome
+  links:
+    - web:web
+  ports:
+    - "4444:4444"
+
+selenium-test:
+  image: tp33/django
+  container_name: selenium-test
+  links:
+    - selenium-chrome:selenium-chrome
+    - web:web
+  volumes:
+    - ./app/selenium:/app
+  command: bash -c "pip install selenium==<some version number> && python selenium.py"
