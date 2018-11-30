@@ -10,14 +10,14 @@ before_install:
   #   while ! mysqladmin ping -h db --silent; do
   #     sleep 1
   #   done
-  - docker run -it --naem mysql-cmdline  --link mysql:db mysql:5.7.23 while ! mysqladmin ping -h db --silent; do sleep 1 done
+  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.23 bash -c "while ! mysqladmin ping -p'$3cureUS' -h db --silent; do sleep 1; done"
   - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.23 mysql -uroot -p'$3cureUS' -h db "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';"
   - docker-compose up
-  - |
-    until [ $(docker inspect models --format '{{.State.Running}}') == "true" ]
-    do
-      sleep 10
-    done
+  # - |
+  #   until [ $(docker inspect models --format '{{.State.Running}}') == "true" ]
+  #   do
+  #     sleep 10
+  #   done
   - docker ps
 
 install:
