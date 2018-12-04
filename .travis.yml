@@ -3,6 +3,7 @@ language: bash
 services: docker
 
 before_install:
+  - ls
   - mkdir -p ~/cs4501/db
   - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql mysql:5.7.23
   - echo "Waiting for DB to start up..."
