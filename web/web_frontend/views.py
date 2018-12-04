@@ -90,13 +90,9 @@ def update_profile(req):
     auth = req.COOKIES.get('authenticator')
     if not auth:
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("update_profile"))
-    url = 'http://exp-api:8000/api/v1/users/getid/{}/'.format(auth)
-    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-    resp = json.loads(resp_json)
-    if resp['ok']:
-        id = resp['user_id']
-    else:
-        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("update_profile"))
+    id = id_from_auth(req)
+    if id == None:
+        return HttpResponseRedirect(reverse("register") + "?next=" + reverse("update_profile"))
     if req.method == "POST":
         form = UpdateProfileForm(req.POST)
         if not form.is_valid():

@@ -14,7 +14,7 @@ urlpatterns = [
     # # GET and UPDATE requests
     path('users/<int:data>/', views.user),
     path('items/<int:id>/', views.item),
-    path('register/', views.register),
+    path('register/', views.register, name="register"),
     path('profile/', views.profile, name="profile"),
     path('update_profile/', views.update_profile, name='update_profile'),
     path('login/', views.login, name="login"),
