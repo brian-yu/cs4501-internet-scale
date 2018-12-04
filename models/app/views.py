@@ -67,6 +67,8 @@ def update(request, model, id):
                     return formatErrorResponse(form_data)
                 if not value >= 1 or not value <= 5:
                     return formatErrorResponse(form_data)
+            if key == 'password':
+                value = make_password(value)
             setattr(obj, key, value)
         obj.save()
         obj_dict = model_to_dict(obj)
