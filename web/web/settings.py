@@ -25,7 +25,7 @@ SECRET_KEY = '2+-s^e*f#8_fwxa(8xo9i&plhbzo)ppb=@)e(z*dv85yk61n#e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'models-api', 'www.sjpark.me']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'models-api', 'www.sjpark.me', '0.0.0.0']
 
 
 # Application definition
