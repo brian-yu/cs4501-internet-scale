@@ -68,3 +68,10 @@ searchbar.send_keys(Keys.ENTER)
 
 item = driver.find_element(By.XPATH, '//a[text()="brians biceps"]')
 item.click()
+
+# all items, my profile, logout
+driver.get('http://localhost:8080/all_items')
+driver.get("http://localhost:8080/profile")
+
+logout = driver.find_element(By.XPATH, '//a[text()="Logout"]')
+logout.click()
