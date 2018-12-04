@@ -1,5 +1,6 @@
 # ShareSh*t
 ![build](https://travis-ci.com/brian-yu/cs4501-internet-scale.svg?token=9sB3tguZURM3a9FtuDAk&branch=master)
+
 Our marketplace is a borrowing and lending site where users can post items they want to loan out for a small daily charge. People in the same area will be able to see all of the items around them and contact the owner to borrow them. Like Craigslist, Share will promote reuse of everyone's uncommonly used gadgets - like ladders, crockpots, wheelbarrows, and more - and also build a bond in the community.
 
 ## Getting up and running
