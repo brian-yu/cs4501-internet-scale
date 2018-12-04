@@ -50,7 +50,7 @@ def all_items(req):
 def users(req):  # make this all users in the same zipcode
     return HttpResponse("<p>Hello there! Users listing for exp_api!!</p>")
 
-
+@csrf_exempt
 def user_detail(req, id):
     if req.method == "GET":
         url = 'http://models-api:8000/api/v1/users/{}/'.format(id)
@@ -77,10 +77,14 @@ def user_detail(req, id):
         return HttpResponse(result, content_type='application/json')
     else:
         post_data = req.POST
-        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        good_data = {}
+        for key, val in post_data.items():
+            if val is not None and val != "":
+                good_data[key] = val
+        post_encoded = urllib.parse.urlencode(good_data).encode('utf-8')
         url = 'http://models-api:8000/api/v1/users/{}/'.format(id)
         req = urllib.request.Request(url, data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
         if not resp['ok']:
             if resp['error'] == 'Invalid maximum borrow days':

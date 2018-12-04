@@ -34,7 +34,7 @@ web:
     - ./web:/app
   command: "mod_wsgi-express start-server --reload-on-changes ./web/wsgi.py"
 
-web2:
+web2: #for load balancing
   image: tp33/django
   container_name: web2
   links:

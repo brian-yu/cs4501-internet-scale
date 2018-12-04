@@ -69,17 +69,17 @@ def profile(req):
     
 
 def update_profile(req):
+    auth = req.COOKIES.get('authenticator')
+    if not auth:
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("update_profile"))
+    url = 'http://exp-api:8000/api/v1/users/getid/{}/'.format(auth)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    if resp['ok']:
+        id = resp['user_id']
+    else:
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("update_profile"))
     if req.method == "POST":
-        auth = req.COOKIES.get('authenticator')
-        if not auth:
-            return HttpResponseRedirect(reverse("login") + "?next=" + reverse("update_profile"))
-        url = 'http://exp-api:8000/api/v1/users/getid/{}/'.format(auth)
-        resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-        resp = json.loads(resp_json)
-        if resp['ok']:
-            id = resp['user_id']
-        else:
-            return HttpResponseRedirect(reverse("login") + "?next=" + reverse("update_profile"))
         form = UpdateProfileForm(req.POST)
         if not form.is_valid():
             return auth_render(req, "update_profile.html", {'form': form})
@@ -91,8 +91,8 @@ def update_profile(req):
         resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
         resp = json.loads(resp_json)
         if resp['ok']:
-            return HttpResponse('success!')
-        return HttpResponse('failed')
+            return HttpResponseRedirect(reverse('profile'))
+        return HttpResponseRedirect(reverse('update_profile'))
     else:
         form = UpdateProfileForm()
         args = {'form': form}

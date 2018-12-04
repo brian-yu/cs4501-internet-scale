@@ -104,6 +104,7 @@ def user(request, id):
             obj = User.objects.get(pk=id)
             obj_dict = {}
             obj_dict['user'] = model_to_dict(obj)
+            obj_dict['user'].pop('password', None)
             obj_dict['items'] = [model_to_dict(m)for m in list(obj.item_set.all())]
             obj_dict['borrows'] = serialize_borrows(list(obj.borrowed_items.all()), 'lender')
             obj_dict['lends'] = serialize_borrows(list(obj.borrowed_items.all()), 'borrower')
