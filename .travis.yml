@@ -8,7 +8,8 @@ before_install:
   - mkdir -p ~/cs4501/db
   - docker run --name mysql -d -e MYSQL_ROOT_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql mysql:5.7.23
   - echo "Waiting for DB to start up..."
-  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.23 bash -c "while ! mysqladmin ping -p '\$3cureUS' -h db --silent; do sleep 1; done; mysql -uroot -p'\$3cureUS' -h db --execute=\"create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';\""
+  - sleep 30
+  - docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.23 mysql -uroot -p'$3cureUS' -h db -e "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';"  #bash -c "while ! mysqladmin ping -p '\$3cureUS' -h db --silent; do sleep 1; done; mysql -uroot -p'\$3cureUS' -h db --execute=\"create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';\""
   - docker-compose up -d
   - docker ps
 install:
