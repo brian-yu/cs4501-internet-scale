@@ -32,8 +32,34 @@ def home(req):
 
     return auth_render(req, 'home.html', resp['result'])
 
+def id_from_auth(req):
+    '''
+    takes in a request object, accesses the authenticator cookie, and returns the corresponding user id
+    returns None if either the authenticator did not exist or the the user was not logged in
+    '''
+    auth = req.COOKIES.get('authenticator')
+    # if user is not logged in (auth is None), redirect to login page
+    if not auth:
+        return None #HttpResponseRedirect(reverse("login") + "?next=" + reverse("profile"))
+    
+    url = 'http://exp-api:8000/api/v1/users/getid/{}/'.format(auth)
+    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    if resp['ok'] == False:
+        return None
+    return resp['user_id']
 
-def user(req, id):
+def user(req, data):
+    if type(data) is dict:
+        id = data['id']
+        myself = data['myself']
+    else:
+        id = data
+        my_id = id_from_auth(req)
+        if my_id == id:
+            myself = True
+        else:
+            myself = False
     url = 'http://exp-api:8000/api/v1/users/{}/'.format(id)
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
@@ -42,6 +68,8 @@ def user(req, id):
         return auth_render(req, 'user.html', {'ok': False})
 
     resp['result']['ok'] = True
+    resp['result']['myself'] = myself
+    
     return auth_render(req, 'user.html', resp['result'])
 
 
@@ -51,21 +79,11 @@ def profile(req):
     if not auth:
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("profile"))
     
-    url = 'http://exp-api:8000/api/v1/users/getid/{}/'.format(auth)
-    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-    resp = json.loads(resp_json)
-
-    if resp['ok'] == False:
+    id = id_from_auth(req)
+    if id == None:
         return auth_render(req, 'user.html', {'ok': False})
-    url = 'http://exp-api:8000/api/v1/users/{}/'.format(resp['user_id'])
-    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-    resp = json.loads(resp_json)
-
-    if resp['ok'] == False:
-        return auth_render(req, 'user.html', {'ok': False})
-    resp['result']['ok'] = True
-    resp['result']['myself'] = True
-    return auth_render(req, 'user.html', resp['result'])
+    dic = {'myself': True, 'id': id}
+    return user(req, dic)
     
 
 def update_profile(req):
@@ -198,6 +216,7 @@ def login(req):
 def logout(req):
     response = HttpResponseRedirect(reverse('index'))
     response.delete_cookie('authenticator')
+    # need to delete authenticator in the database backend
     return response
 
 
