@@ -25,7 +25,7 @@ SECRET_KEY = '&6v6jfg*$h#l+k@wp88h!f7yebhmp3(b=bi!w(hpud45pos&2f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'models-api', '0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'models-api', '0.0.0.0', '104.248.227.73']
 
 
 # Application definition
