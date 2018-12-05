@@ -140,6 +140,8 @@ class SeleniumTest(unittest.TestCase):
         searchbar.send_keys("brians biceps")
         searchbar.send_keys(Keys.ENTER)
 
+        time.sleep(2)
+
         assert "brians biceps" in self.driver.page_source
 
         item = self.driver.find_element(
