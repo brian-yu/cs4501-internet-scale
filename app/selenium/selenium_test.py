@@ -4,6 +4,9 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from django.test import TestCase
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
 
 import unittest
 
@@ -17,16 +20,32 @@ class SeleniumTest(unittest.TestCase):
                                        desired_capabilities=DesiredCapabilities.CHROME)
         # self.driver = webdriver.Remote(command_executor='http://127.0.0.1:4444/wd/hub',
         #                                desired_capabilities=DesiredCapabilities.CHROME)
-        # self.driver.get('http://web:8000')
+        self.driver.get('http://localhost:8000')
+
         # self.driver.get('http://127.0.0.1:8000')
-        self.driver.get("http://localhost:8000")
+        # self.driver.get("http://localhost:8000")
+        time.sleep(5)
+        self.driver.switch_to.default_content()
+
+        # try:
+        #     element = WebDriverWait(self.driver, 10).until(
+        #         EC.presence_of_element_located((By.ID, "")))
+        # finally:
+        #     driver.quit()
 
     def register(self):
+        self.driver.get('http://localhost:8000')
+        time.sleep(5)
+
         # register
+        # self.driver.get('http://localhost:8000/register/')
+        # self.driver.implicitly_wait(10)
+
         self.driver.find_element_by_xpath(
             '/html/body/nav/div[3]/ul/li[3]/a').click()
+
         self.assertEqual(self.driver.current_url,
-                         "http://web:8000/register/")
+                         "http://localhost:8000/register/")
 
         self.driver.find_element_by_xpath(
             '//*[@id="id_first_name"]').send_keys('te')
@@ -41,18 +60,18 @@ class SeleniumTest(unittest.TestCase):
         self.driver.find_element_by_xpath(
             '/html/body/div[1]/div[1]/div/form/table/tbody/tr[7]/td[2]/button').click()
         self.assertEqual(self.driver.current_url,
-                         "http://web:8000/register/")
+                         "http://localhost:8000/register/")
 
     def login(self):
         # login thru post item
         self.driver.find_element_by_xpath(
             '/html/body/nav/div[3]/ul/li[1]/a/button/span').click()
         self.assertEqual(self.driver.current_url,
-                         "http://web:8000/login/?next=/post_item/")
+                         "http://localhost:8000/login/?next=/post_item/")
         self.driver.find_element(
             By.XPATH, '//a[text()="Login"]').click()
         self.assertEqual(self.driver.current_url,
-                         "http://web:8000/login/")
+                         "http://localhost:8000/login/")
 
         self.driver.find_element_by_xpath(
             '//*[@id="id_email"]').send_keys('test@gmail.com')
@@ -61,13 +80,13 @@ class SeleniumTest(unittest.TestCase):
         self.driver.find_element_by_xpath(
             '/html/body/div[1]/div[1]/div/form/div/button').click()
         self.assertEqual(self.driver.current_url,
-                         "http://web:8000/")
+                         "http://localhost:8000/")
 
     def update_profile(self):
         # update profile
         # self.driver.find_element_by_xpath(
         #     '/html/body/nav/div[3]/ul/li[1]/a').click()
-        self.driver.get('http://web:8000/profile')
+        self.driver.get('http://localhost:8000/profile')
         self.driver.find_element_by_xpath(
             '/html/body/div[1]/div[1]/div/div[2]/a').click()
         self.driver.find_element_by_xpath(
@@ -76,7 +95,7 @@ class SeleniumTest(unittest.TestCase):
             '//*[@id="id_last_name"]').send_keys('t')
 
         self.assertEqual(self.driver.current_url,
-                         "http://web:8000/update_profile/")
+                         "http://localhost:8000/update_profile/")
 
         self.driver.find_element_by_xpath(
             '/html/body/div[1]/div[1]/div/form/table/tbody/tr[8]/td[2]/button').click()
@@ -87,7 +106,7 @@ class SeleniumTest(unittest.TestCase):
         post_item.click()
 
         self.assertEqual(self.driver.current_url,
-                         "http://web:8000/post_item/")
+                         "http://localhost:8000/post_item/")
 
         title = self.driver.find_element_by_name('title')
         title.send_keys("brians biceps")
@@ -126,10 +145,10 @@ class SeleniumTest(unittest.TestCase):
 
     def misc(self):
         # all items, my profile, logout
-        self.driver.get('http://web:8000/all_items')
+        self.driver.get('http://localhost:8000/all_items')
         assert "brians biceps" in self.driver.page_source
 
-        self.driver.get("http://web:8000/profile")
+        self.driver.get("http://localhost:8000/profile")
         assert "12345" in self.driver.page_source
 
     def logout(self):
