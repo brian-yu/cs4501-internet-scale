@@ -16,4 +16,4 @@ install:
   - echo "No dependencies"
 script:
   - docker exec -it models python manage.py test app.tests
-  - docker exec -it selenium-test python app/selenium_test.py
+  - docker exec -it selenium-test python selenium_test.py
