@@ -210,27 +210,22 @@ def create_user(request):
             email = form_data['email']
             zip_code = form_data['zip_code']
             password = form_data['password']
-            if len(User.objects.filter(email=email)) > 0:
-                return JsonResponse({'ok': False, 'error': "Email address already exists"})
             if 'phone_number' in form_data:
                 phone_number = form_data['phone_number']
-                obj = User.objects.create(
+            else:
+                phone_number = None
+            if 'overview' in form_data:
+                overview = form_data['overview']
+            else:
+                overview = None
+            if len(User.objects.filter(email=email)) > 0:
+                return JsonResponse({'ok': False, 'error': "Email address already exists"})
+            obj = User.objects.create(
                     first_name=first_name,
                     last_name=last_name,
                     email=email,
                     phone_number=phone_number,
-                    zip_code=zip_code,
-                    password=make_password(password),
-                    lender_rating_total=0,
-                    lender_rating_count=0,
-                    borrower_rating_total=0,
-                    borrower_rating_count=0
-                )
-            else:
-                obj = User.objects.create(
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
+                    overview=overview,
                     zip_code=zip_code,
                     password=make_password(password),
                     lender_rating_total=0,

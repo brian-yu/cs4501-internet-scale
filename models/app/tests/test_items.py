@@ -54,7 +54,7 @@ class ItemTestCase(TestCase):
             'http://models-api:8001/api/v1/items/create/', post_data1, format='json').content.decode('utf-8'))
 
         self.assertEqual(
-            response1["result"]["max_borrow_days"], '15')
+            response1["result"]["max_borrow_days"], 15)
         self.assertEqual(
             response1["result"]["title"], 'My Dog')
         self.assertEqual(
