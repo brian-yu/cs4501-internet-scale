@@ -79,7 +79,7 @@ haproxy:
     - web:web-api
     - web2:web-api2
   ports:
-    - "8080:80"
+    - "80:80"
   volumes:
     - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
 
