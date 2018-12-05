@@ -4,6 +4,9 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from django.test import TestCase
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
 
 import unittest
 
@@ -17,14 +20,30 @@ class SeleniumTest(unittest.TestCase):
                                        desired_capabilities=DesiredCapabilities.CHROME)
         # self.driver = webdriver.Remote(command_executor='http://127.0.0.1:4444/wd/hub',
         #                                desired_capabilities=DesiredCapabilities.CHROME)
-        # self.driver.get('http://web:8000')
+        self.driver.get('http://web:8000')
+
         # self.driver.get('http://127.0.0.1:8000')
-        self.driver.get("http://localhost:8000")
+        # self.driver.get("http://web:8000")
+        time.sleep(5)
+        self.driver.switch_to.default_content()
+
+        # try:
+        #     element = WebDriverWait(self.driver, 10).until(
+        #         EC.presence_of_element_located((By.ID, "")))
+        # finally:
+        #     driver.quit()
 
     def register(self):
+        self.driver.get('http://web:8000')
+        time.sleep(5)
+
         # register
+        # self.driver.get('http://web:8000/register/')
+        # self.driver.implicitly_wait(10)
+
         self.driver.find_element_by_xpath(
             '/html/body/nav/div[3]/ul/li[3]/a').click()
+
         self.assertEqual(self.driver.current_url,
                          "http://web:8000/register/")
 
