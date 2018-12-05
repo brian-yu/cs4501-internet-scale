@@ -27,9 +27,8 @@ class SeleniumTest(unittest.TestCase):
 
         # self.driver.get('http://127.0.0.1:8000')
         # self.driver.get(self.site_url + "")
-        time.sleep(5)
         self.driver.switch_to.default_content()
-
+        time.sleep(5)
         # try:
         #     element = WebDriverWait(self.driver, 10).until(
         #         EC.presence_of_element_located((By.ID, "")))
@@ -38,7 +37,6 @@ class SeleniumTest(unittest.TestCase):
 
     def register(self):
         self.driver.get(self.site_url)
-        time.sleep(5)
         # print(self.driver.page_source)
 
         # register
@@ -67,11 +65,13 @@ class SeleniumTest(unittest.TestCase):
                          self.site_url + "/register/")
 
     def login(self):
+        self.driver.get(self.site_url + "/login/")
+
         # login thru post item
-        self.driver.find_element_by_xpath(
-            '/html/body/nav/div[3]/ul/li[1]/a/button/span').click()
+        # self.driver.find_element_by_xpath(
+        #     '/html/body/nav/div[3]/ul/li[1]/a/button/span').click()
         self.assertEqual(self.driver.current_url,
-                         self.site_url + "/login/?next=/post_item/")
+                         self.site_url + "/login/")
         self.driver.find_element(
             By.XPATH, '//a[text()="Login"]').click()
         self.assertEqual(self.driver.current_url,
