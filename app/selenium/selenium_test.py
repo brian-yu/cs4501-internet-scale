@@ -18,6 +18,7 @@ class SeleniumTest(unittest.TestCase):
 
         # self.driver = webdriver.Chrome(
         #     "/Users/SJP/documents/personaldev/python/auto_selen/chromedriver")
+        time.sleep(5)
 
         self.driver = webdriver.Remote(command_executor='http://selenium-chrome:4444/wd/hub',
                                        desired_capabilities=DesiredCapabilities.CHROME)
@@ -28,7 +29,7 @@ class SeleniumTest(unittest.TestCase):
         # self.driver.get('http://127.0.0.1:8000')
         # self.driver.get(self.site_url + "")
         self.driver.switch_to.default_content()
-        time.sleep(10)
+        time.sleep(5)
         # try:
         #     element = WebDriverWait(self.driver, 10).until(
         #         EC.presence_of_element_located((By.ID, "")))
