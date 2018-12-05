@@ -91,16 +91,6 @@ selenium-chrome:
   ports:
     - "4444:4444"
 
-selenium-test:
-  image: tp33/django
-  container_name: selenium-test
-  links:
-    - selenium-chrome:selenium-chrome
-    - web:web
-  volumes:
-    - ./app/selenium:/app
-  command: bash -c "sleep 5 && pip install selenium==3.141.0 && python selenium_test.py"
-
 nginx:
   image: nginx:1.15.7
   container_name: nginx
