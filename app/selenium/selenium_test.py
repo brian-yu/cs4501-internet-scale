@@ -18,6 +18,7 @@ class SeleniumTest(unittest.TestCase):
 
         # self.driver = webdriver.Chrome(
         #     "/Users/SJP/documents/personaldev/python/auto_selen/chromedriver")
+        time.sleep(5)
 
         self.driver = webdriver.Remote(command_executor='http://selenium-chrome:4444/wd/hub',
                                        desired_capabilities=DesiredCapabilities.CHROME)
@@ -168,6 +169,5 @@ if __name__ == "__main__":
     test.login()
     test.update_profile()
     test.post_item()
-    test.search()
     test.misc()
     test.logout()

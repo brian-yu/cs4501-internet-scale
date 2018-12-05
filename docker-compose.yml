@@ -99,7 +99,7 @@ selenium-test:
     - web:web
   volumes:
     - ./app/selenium:/app
-  command: bash -c "sleep 5 && pip install selenium==3.141.0 && python selenium_test.py"
+  command: bash -c "sleep 10 && pip install selenium==3.141.0 && python selenium_test.py"
 
 nginx:
   image: nginx:1.15.7
