@@ -168,6 +168,5 @@ if __name__ == "__main__":
     test.login()
     test.update_profile()
     test.post_item()
-    test.search()
     test.misc()
     test.logout()
