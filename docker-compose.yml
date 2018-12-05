@@ -28,6 +28,7 @@ web:
   container_name: web
   links:
     - exp:exp-api
+    - nginx:nginx
   ports:
     - "8000:8000"
   volumes:
@@ -39,6 +40,7 @@ web2: #for load balancing
   container_name: web2
   links:
     - exp:exp-api
+    - nginx:nginx
   ports:
     - "8003:8000"
   volumes:
@@ -98,3 +100,11 @@ selenium-test:
   volumes:
     - ./app/selenium:/app
   command: bash -c "sleep 20 && pip install selenium==3.141.0 && python selenium_test.py"
+
+nginx:
+  image: nginx:1.15.7
+  container_name: nginx
+  volumes:
+    - ./web/web_frontend/static:/usr/share/nginx/html:ro
+  ports:
+    - "8081:80"
