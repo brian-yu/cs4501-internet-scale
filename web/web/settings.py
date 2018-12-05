@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '2+-s^e*f#8_fwxa(8xo9i&plhbzo)ppb=@)e(z*dv85yk61n#e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'models-api', 'www.sjpark.me', '0.0.0.0', '104.248.227.73']
 
 
 # Application definition
