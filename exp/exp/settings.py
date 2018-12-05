@@ -25,7 +25,11 @@ SECRET_KEY = 'pbt3x_mnu=*$3i5t&7*oayqva0mywjol+ia-h#3x4i42a9!kwq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'exp-api', 'kafka', 'es']
+=======
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', 'exp-api', '0.0.0.0', '104.248.227.73']
+>>>>>>> c726782c4504b62a76d8431df5f4a04ae5ce8472
 
 
 # Application definition
