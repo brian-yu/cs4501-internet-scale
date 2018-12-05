@@ -8,7 +8,7 @@ class AuthenticatorTestCase(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_authenticator_login():
+    def test_authenticator_login(self):
         form_data = {
             'first_name': 'Barack',
             'last_name': 'Obama',
@@ -19,4 +19,10 @@ class AuthenticatorTestCase(TestCase):
             'password': 'ilovemichellexoxo69'
         }
         res = json.loads(self.client.post('http://localhost:8000/api/v1/users/create/', form_data, format='json').content.decode('utf-8'))
-        res = json.loads(self.client.post('http://localhost:8000/api/v1/users/login/'))
+        form_data = {
+            'email': 'obama@usa.gov',
+            'password': 'ilovemichellexoxo69',
+        }
+        res = json.loads(self.client.post('http://localhost:8000/api/v1/login/', form_data, format='json').content.decode('utf-8'))
+        #exp = json.loads(r"""{"ok": true, "result": {"authenticator": "3118d398ee4b3d5a240d15f8d8ff3960f6f73bbb506be282a67e21eeac701d95"}}""")
+        self.assertEqual('authenticator' in res['result'], True)
