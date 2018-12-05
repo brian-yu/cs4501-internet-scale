@@ -133,7 +133,7 @@ class SeleniumTest(unittest.TestCase):
 
         # self.assertEqual(self.driver.text, "")
 
-    def search(self):
+        #  def search(self):
         # search for and click the item
         searchbar = self.driver.find_element_by_class_name("uk-search-input")
         searchbar.send_keys("brians biceps")
