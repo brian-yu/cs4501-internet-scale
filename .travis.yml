@@ -16,4 +16,4 @@ install:
   - echo "No dependencies"
 script:
   - docker exec -it models python manage.py test app.tests
-  - docker exec -it selenium-test python selenium_test.py
+  - docker run -it --name selenium-test -v ~/cs4501/app/shareshit/app/selenium:/app --link web:web --link selenium-chrome:selenium-chrome --link haproxy:haproxy tp33/django bash -c "sleep 5 && pip install selenium==3.141.0 && python selenium_test.py"

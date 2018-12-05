@@ -14,7 +14,7 @@ import unittest
 class SeleniumTest(unittest.TestCase):
     def setUp(self):
 
-        self.site_url = 'http://haproxy'
+        self.site_url = 'http://web:8000'
 
         # self.driver = webdriver.Chrome(
         #     "/Users/SJP/documents/personaldev/python/auto_selen/chromedriver")
