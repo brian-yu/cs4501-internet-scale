@@ -28,8 +28,4 @@ for out in output:
 
 print ("item recommendations done")
 
-# print(counts)
-
-# criticalMass = {k: counts[k] for k in counts if counts[k] >= 3}
-
 sc.stop()
