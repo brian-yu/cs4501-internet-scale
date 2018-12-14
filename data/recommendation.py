@@ -1,22 +1,35 @@
 from pyspark import SparkContext
 
+def allPairs(a):
+	pairs = []
+	a = list(a)
+	for i in range(len(a)):
+		for j in range(i+1, len(a)):
+			pairs.append((min(a[i], a[j]), max(a[i], a[j])))
+	return pairs
+
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
 data = sc.textFile("/tmp/data/test.log", 2)     # each worker loads a piece of the data file
 
-# data = data.distinct()
+data = data.distinct()
 
 pairs = data.map(lambda line: line.split("\t"))   # tell each worker to split each line of it's partition
-# pages = pairs.map(lambda pair: (pair[1], 1))      # re-layout the data to ignore the user id
 itemsByUser = pairs.groupByKey()
-# count = pages.reduceByKey(lambda x,y: int(x)+int(y))        # shuffle the data so that each key is only on one worker
-                                                  # and then reduce all the values by adding them together
+items = itemsByUser.map(lambda pair: pair[1])
+coclicks = items.flatMap(lambda item: allPairs(item))
+coclicks = coclicks.map(lambda pair: (pair, 1))
+count = coclicks.reduceByKey(lambda x,y: int(x)+int(y))
+critical = count.filter(lambda x: x[1] >= 3).map(lambda x: x[0])
+output = critical.collect()
 
-output = itemsByUser.collect()                          # bring the data back to the master node so we can print it out
-# for page_id, count in output:
-#     print ("page_id %s count %d" % (page_id, count))
-for user, items in output:
-    print ("user: {}, items: {}".format(user, list(items)))
-print ("Popular items done")
+for out in output:
+	print("pair: {}".format(out))
+
+print ("item recommendations done")
+
+# print(counts)
+
+# criticalMass = {k: counts[k] for k in counts if counts[k] >= 3}
 
 sc.stop()
