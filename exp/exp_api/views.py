@@ -213,6 +213,7 @@ def addToSpark(req):
     with open('/data/access.log', 'a') as log:
         log.write(str(user_id) + '\t' + str(item_id) + '\n')
     return JsonResponse({'ok': True})
+    # put into kafka
 
 def search(req):
     query = req.GET.get('query')
