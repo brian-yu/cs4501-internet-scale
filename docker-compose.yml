@@ -155,6 +155,6 @@ spark-worker:
     - 7016
     - 8881
   ports:
-    - 8081:8081
+    - 8082:8082
   volumes:
     - ./data:/tmp/data
