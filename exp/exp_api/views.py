@@ -204,9 +204,15 @@ def item_detail(req, id):
     result = json.dumps(res, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
 
-def addToSpark(req, user_id, item_id):
-    with open('access.log') as log:
-        log.write()
+@csrf_exempt
+def addToSpark(req):
+    # sent by POST request
+    data = req.POST
+    user_id = data['user_id']
+    item_id = data['item_id']
+    with open('/data/access.log', 'r+') as log:
+        log.write(str(user_id) + '\t' + str(item_id))
+    return JsonResponse({'ok': True})
 
 def search(req):
     query = req.GET.get('query')

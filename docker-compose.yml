@@ -20,7 +20,7 @@ exp:
   ports:
     - "8002:8000"
   volumes:
-    - ./exp:/app
+    - ./exp:/app/
     - ./data:/data
   command: "mod_wsgi-express start-server --reload-on-changes ./exp/wsgi.py"
 
