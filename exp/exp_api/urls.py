@@ -11,6 +11,7 @@ urlpatterns = [
     path('users/getid/<str:auth>/', views.getid),
     path('items/', views.items),
     path('items/<int:id>/', views.item_detail),
+    path('spark/', views.addToSpark),
 
     # CREATE requests
     path('users/create/', views.register),

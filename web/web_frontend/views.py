@@ -115,6 +115,7 @@ def update_profile(req):
 
 def item(req, id):
     url = 'http://exp-api:8000/api/v1/items/{}/'.format(id)
+    # add api call to addToSpark
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
 

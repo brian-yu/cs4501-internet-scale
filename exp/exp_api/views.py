@@ -204,6 +204,9 @@ def item_detail(req, id):
     result = json.dumps(res, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
 
+def addToSpark(req, user_id, item_id):
+    with open('access.log') as log:
+        log.write()
 
 def search(req):
     query = req.GET.get('query')
