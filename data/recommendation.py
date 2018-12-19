@@ -28,7 +28,16 @@ output = critical.collect()
 
 for out in output:
 	print("pair: {}".format(out))
+	# write to models
+	post_data = {'item1_id': int(out[0]), 'item2_id': int(out[1])}
+	url = 'http://models-api:8000/api/v1/recommendations/create/'
+	post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
 
+    req = urllib.request.Request(url, data=post_encoded, method='POST')
+	resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    if not resp['ok']:
+        print('Something went wrong when writing to models')
 print ("item recommendations done")
 
 sc.stop()
