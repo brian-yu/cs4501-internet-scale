@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, JsonResponse
-from .models import User, Review, Borrow, Item, Authenticator
+from .models import User, Review, Borrow, Item, Authenticator, Recommendation
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import ValidationError
@@ -406,7 +406,7 @@ def create_recommendation(request):
             item2 = Item.objects.get(id=item2_id)
 
             if item1.recommendations.objects().filter(recommended_item=item2):
-                return JsonResponse({'ok': True})
+                return JsonResponse({'result': 'recommendation already exists', 'ok': True})
 
             recommendation1 = Recommendation.objects.create(
                 item=item1,
@@ -418,7 +418,7 @@ def create_recommendation(request):
                 recommended_item=item1,
             )
             recommendation2.save()
-            return JsonResponse({'ok': True})
+            return JsonResponse({'result': 'recommendation created', 'ok': True})
         except:
             result = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
