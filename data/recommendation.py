@@ -33,11 +33,11 @@ for out in output:
 	url = 'http://models-api:8000/api/v1/recommendations/create/'
 	post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
 
-    req = urllib.request.Request(url, data=post_encoded, method='POST')
-	resp_json = urllib.request.urlopen(req2).read().decode('utf-8')
-    resp = json.loads(resp_json)
-    if not resp['ok']:
-        print('Something went wrong when writing to models')
+	req = urllib.request.Request(url, data=post_encoded, method='POST')
+	resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+	resp = json.loads(resp_json)
+	if not resp['ok']:
+		print('Something went wrong when writing to models')
 	print(resp['result'])
 		
 print ("item recommendations done")
