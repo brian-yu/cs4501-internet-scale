@@ -64,23 +64,23 @@
 	</div>
 	</div>
 	{% endif %}
-</div>
 
-<div class="uk-section">
-	{% if not borrows %}
-	<!-- do nothing -->
+
+	<div class="uk-section">
+		{% if not borrows %}
+		<!-- do nothing -->
+		{% else %}
+		<h3>Past Borrows</h3>
+
+		{% for b in borrows %}
+		<p>{{b.borrower.first_name}} {{b.borrower.last_name}} borrowed this from {{b.lender.first_name}}
+			{{b.lender.last_name}} on {{b.borrow_date}}</p>
+		{% endfor %}
+		{% endif %}
+	</div>
+
 	{% else %}
-	<h3>Past Borrows</h3>
-
-	{% for b in borrows %}
-	<p>{{b.borrower.first_name}} {{b.borrower.last_name}} borrowed this from {{b.lender.first_name}}
-		{{b.lender.last_name}} on {{b.borrow_date}}</p>
-	{% endfor %}
+	<h3>No item found!</h3>
 	{% endif %}
-</div>
 
-{% else %}
-<h3>No item found!</h3>
-{% endif %}
-
-{% endblock %}
+	{% endblock %}

@@ -3,4 +3,3 @@
 .vscode
 /models/app/migrations/*
 *.sqlite3
-./data/access.log
