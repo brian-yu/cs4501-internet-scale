@@ -118,6 +118,8 @@ spark-master:
   environment:
     MASTER: spark://spark-master:7077
     SPARK_CONF_DIR: /conf
+  links:
+    - models:models-api
   expose:
     - 7001
     - 7002

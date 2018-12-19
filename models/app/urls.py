@@ -10,6 +10,7 @@ urlpatterns = [
     path('items/create/', views.create_item),
     path('borrows/create/', views.create_borrow),
     path('reviews/create/', views.create_review),
+    path('recommendations/create/', views.create_recommendation),
 
     # GET and UPDATE requests
     path('users/<int:id>/', views.user),
@@ -17,6 +18,7 @@ urlpatterns = [
     path('items/<int:id>/', views.item),
     path('borrows/<int:id>/', views.borrow),
     path('reviews/<int:id>/', views.review),
+    path('recommendations/<int:id>/', views.recommendations),
 
     # DELETE requests
     path('users/<int:id>/delete/', views.delete_user),
