@@ -164,7 +164,8 @@ def item(request, id):
             obj_dict = {}
             obj_dict['item'] = model_to_dict( obj )
             obj_dict['owner'] = obj.owner.first_name + " " + obj.owner.last_name
-            obj_dict['borrows'] = serialize_borrows_item(list(Borrow.objects.filter(item=obj.id).order_by('-borrow_date')[:5]))
+            obj_dict['borrows'] = serialize_borrows_item(
+                list(Borrow.objects.filter(item=obj.id).order_by('-borrow_date')[:5]))
             obj_dict['recommendations'] = serialize_recommendation_item(
                 list(Recommendation.objects.filter(item=obj.id)))
             
