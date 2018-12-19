@@ -70,7 +70,7 @@ batch:
     - es:es
   volumes:
     - ./:/app
-  entrypoint: ./startES.sh
+  entrypoint: ./startKafkaStuff.sh
   #command: "python esScript.py" #<run a python script that pulls messages from Kafka and indexs that in ES>
 
 haproxy:
@@ -120,6 +120,7 @@ spark-master:
     SPARK_CONF_DIR: /conf
   links:
     - models:models-api
+    - kafka:kafka
   expose:
     - 7001
     - 7002
@@ -136,7 +137,7 @@ spark-master:
     - 8080:8080
   volumes:
     - ./data:/tmp/data
-  entrypoint: ./startSpark.sh
+  #entrypoint: ./data/startSpark.sh
 
 spark-worker:
   image: gettyimages/spark
