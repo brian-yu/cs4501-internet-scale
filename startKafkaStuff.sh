@@ -1,4 +1,4 @@
 #!/bin/bash
-python esScript.py
+python esScript.py &
 python sparkScript.py
 exec "$@"
