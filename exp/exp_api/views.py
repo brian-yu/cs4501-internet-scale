@@ -88,8 +88,6 @@ def user_detail(req, id):
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
         if not resp['ok']:
-            if resp['error'] == 'Invalid maximum borrow days':
-                return JsonResponse({'ok': False, 'error': 'Invalid maximum borrow days'})
             resp = json.dumps(
                 {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
             return HttpResponse(resp, content_type='application/json')
@@ -167,47 +165,59 @@ def create_item(req):
                 {'error': 'Missing field or malformed data in CREATE request for experience service. Here is the data we received: {}'.format(post_data), 'ok': False})
             return HttpResponse(result, content_type='application/json')
 
-
-def items(req):
-    return HttpResponse("<p>Items listing for exp_api!!</p>")
-
-
+@csrf_exempt
 def item_detail(req, id):
-    url = 'http://models-api:8000/api/v1/items/{}/'.format(id)
+    if req.method == "GET":
+        url = 'http://models-api:8000/api/v1/items/{}/'.format(id)
 
-    resp_json = urllib.request.urlopen(url).read().decode('utf-8')
-    resp = json.loads(resp_json)
+        resp_json = urllib.request.urlopen(url).read().decode('utf-8')
+        resp = json.loads(resp_json)
 
-    if resp['ok'] == False:
-        result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+        if resp['ok'] == False:
+            result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
+            return HttpResponse(result, content_type='application/json')
+
+        # to return everything
+        res = {}
+        condition = resp['result']['item']['condition']
+        if condition == 'E':
+            resp['result']['item']['condition'] = 'Excellent'
+        elif condition == 'G':
+            resp['result']['item']['condition'] = 'Good'
+        elif condition == 'O':
+            resp['result']['item']['condition'] = 'Fair'
+        else:
+            resp['result']['item']['condition'] = 'Poor'
+        res['item'] = resp['result']['item']
+
+        borrows = resp['result']['borrows']  # the 5 most recent borrows
+        for borrow in borrows:
+            borrow['borrow_date'] = datetime.datetime.strftime(
+                datetime.datetime.strptime(borrow['borrow_date'][:10], "%Y-%m-%d"), "%B %d, %Y")
+        res['borrows'] = resp['result']['borrows']
+
+        res['user_name'] = resp['result']['owner']
+        res['recommendations'] = resp['result']['recommendations']
+
+        res['ok'] = True
+        result = json.dumps(res, cls=DjangoJSONEncoder)
         return HttpResponse(result, content_type='application/json')
-
-    # to return everything
-    res = {}
-    condition = resp['result']['item']['condition']
-    if condition == 'E':
-        resp['result']['item']['condition'] = 'Excellent'
-    elif condition == 'G':
-        resp['result']['item']['condition'] = 'Good'
-    elif condition == 'O':
-        resp['result']['item']['condition'] = 'Fair'
-    else:
-        resp['result']['item']['condition'] = 'Poor'
-    res['item'] = resp['result']['item']
-
-    borrows = resp['result']['borrows']  # the 5 most recent borrows
-    for borrow in borrows:
-        borrow['borrow_date'] = datetime.datetime.strftime(
-            datetime.datetime.strptime(borrow['borrow_date'][:10], "%Y-%m-%d"), "%B %d, %Y")
-    res['borrows'] = resp['result']['borrows']
-
-    res['user_name'] = resp['result']['owner']
-    res['recommendations'] = resp['result']['recommendations']
-
-    res['ok'] = True
-    result = json.dumps(res, cls=DjangoJSONEncoder)
-    return HttpResponse(result, content_type='application/json')
-
+    # else: # update item
+    #     post_data = req.POST
+    #     good_data = {}
+    #     for key, val in post_data.items():
+    #         if val is not None and val != "":
+    #             good_data[key] = val
+    #     post_encoded = urllib.parse.urlencode(good_data).encode('utf-8')
+    #     url = 'http://models-api:8000/api/v1/items/{}/'.format(id)
+    #     req = urllib.request.Request(url, data=post_encoded, method='POST')
+    #     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    #     resp = json.loads(resp_json)
+    #     if not resp['ok']:
+    #         resp = json.dumps(
+    #             {'error': 'Missing field or malformed data in CREATE request for model service. Here is the data we received: {}'.format(post_data), 'ok': False})
+    #         return HttpResponse(resp, content_type='application/json')
+    #     return JsonResponse(resp)
 
 @csrf_exempt
 def addToSpark(req):
