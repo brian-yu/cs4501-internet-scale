@@ -208,11 +208,18 @@ def item_detail(req, id):
 def addToSpark(req):
     # sent by POST request
     data = req.POST
-    user_id = data['user_id']
-    item_id = data['item_id']
-    with open('/data/access.log', 'a') as log:
-        log.write(str(user_id) + '\t' + str(item_id) + '\n')
-    return JsonResponse({'ok': True})
+    try:
+        user_id = int(data['user_id'])
+        item_id = int(data['item_id'])
+        producer = KafkaProducer(bootstrap_servers='kafka:9092')
+        producer.send('new-recommendations-topic',
+                    json.dumps({'user_id': user_id, 'item_id': item_id}).encode('utf-8'))
+        return JsonResponse({'ok': True})
+    except:
+        return JsonResponse({'ok': False})
+    # with open('/data/access.log', 'a') as log:
+    #     log.write(str(user_id) + '\t' + str(item_id) + '\n')
+    # return JsonResponse({'ok': True})
     # put into kafka
 
 def search(req):

@@ -117,6 +117,7 @@ def item(req, id):
     url = 'http://exp-api:8000/api/v1/items/{}/'.format(id)
     resp_json = urllib.request.urlopen(url).read().decode('utf-8')
     resp = json.loads(resp_json)
+    
     user_id = id_from_auth(req)
     url = 'http://exp-api:8000/api/v1/spark/' # add to spark
     post_data = {'user_id': user_id, 'item_id': id}
@@ -126,6 +127,8 @@ def item(req, id):
     resp2 = json.loads(resp_json)
     if resp2['ok']:
         resp['spark'] = True
+    else:
+        resp['spark'] = False
     return auth_render(req, 'item.html', resp)
 
 

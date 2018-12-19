@@ -134,6 +134,7 @@ spark-master:
     - 8080:8080
   volumes:
     - ./data:/tmp/data
+  entrypoint: ./startSpark.sh
 
 spark-worker:
   image: gettyimages/spark
