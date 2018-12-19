@@ -38,6 +38,8 @@ for out in output:
     resp = json.loads(resp_json)
     if not resp['ok']:
         print('Something went wrong when writing to models')
+	print(resp['result'])
+		
 print ("item recommendations done")
 
 sc.stop()
