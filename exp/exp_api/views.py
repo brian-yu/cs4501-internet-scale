@@ -50,6 +50,7 @@ def all_items(req):
 def users(req):  # make this all users in the same zipcode
     return HttpResponse("<p>Hello there! Users listing for exp_api!!</p>")
 
+
 @csrf_exempt
 def user_detail(req, id):
     if req.method == "GET":
@@ -181,6 +182,7 @@ def item_detail(req, id):
         result = json.dumps({"ok": False}, cls=DjangoJSONEncoder)
         return HttpResponse(result, content_type='application/json')
 
+    # to return everything
     res = {}
     condition = resp['result']['item']['condition']
     if condition == 'E':
@@ -200,9 +202,12 @@ def item_detail(req, id):
     res['borrows'] = resp['result']['borrows']
 
     res['user_name'] = resp['result']['owner']
+    res['recommendations'] = resp['result']['recommendations']
+
     res['ok'] = True
     result = json.dumps(res, cls=DjangoJSONEncoder)
     return HttpResponse(result, content_type='application/json')
+
 
 @csrf_exempt
 def addToSpark(req):
@@ -213,10 +218,11 @@ def addToSpark(req):
         item_id = int(data['item_id'])
         producer = KafkaProducer(bootstrap_servers='kafka:9092')
         producer.send('new-recommendations-topic',
-                    json.dumps({'user_id': user_id, 'item_id': item_id}).encode('utf-8'))
+                      json.dumps({'user_id': user_id, 'item_id': item_id}).encode('utf-8'))
         return JsonResponse({'ok': True})
     except:
         return JsonResponse({'ok': False})
+
 
 def search(req):
     query = req.GET.get('query')
