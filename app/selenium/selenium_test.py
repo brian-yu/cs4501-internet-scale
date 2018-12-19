@@ -170,6 +170,6 @@ if __name__ == "__main__":
     test.register()
     test.login()
     test.update_profile()
-    test.post_item()
+    # test.post_item()
     test.misc()
     test.logout()
