@@ -39,7 +39,12 @@
 	<h3>You might also like:</h3>
 
 	{% for r in recommendations %}
-	<p>{{r}} </p>
+	<li>
+		<h5>{{r.title}}</h4>
+			<p>Condition: {{ r.condition }}</p>
+			<p>{{ r.description }}</p>
+			<p>{{ r.max_borrow_days }}</p>
+	</li>
 	{% endfor %}
 	{% endif %}
 </div>
