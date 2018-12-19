@@ -12,6 +12,7 @@ urlpatterns = [
     path('items/', views.items),
     path('items/<int:id>/', views.item_detail),
     path('spark/', views.addToSpark),
+    path('recommendations/', views.recommendations),
 
     # CREATE requests
     path('users/create/', views.register),
