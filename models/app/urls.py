@@ -18,6 +18,7 @@ urlpatterns = [
     path('items/<int:id>/', views.item),
     path('borrows/<int:id>/', views.borrow),
     path('reviews/<int:id>/', views.review),
+    path('recommendations/<int:id>/', views.recommendations),
 
     # DELETE requests
     path('users/<int:id>/delete/', views.delete_user),
