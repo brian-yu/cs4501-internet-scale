@@ -92,3 +92,9 @@ class Authenticator(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     authenticator = models.CharField(max_length=64, primary_key=True)
     date_created = models.DateField(auto_now=True)
+
+class Recommendation(models.Model):
+    item = models.ForeignKey(
+        Item, on_delete=models.CASCADE, related_name="recommendations")
+    recommended_item = models.ForeignKey(
+        Item, on_delete=models.CASCADE, related_name="recommended_to")

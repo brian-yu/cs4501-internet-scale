@@ -1,4 +1,7 @@
 from pyspark import SparkContext
+import urllib.request
+import urllib.parse
+import json
 
 def allPairs(a):
 	pairs = []
@@ -29,3 +32,38 @@ for out in output:
 print ("item recommendations done")
 
 sc.stop()
+
+'''
+itemsByUser => 
+		tp, [1,2,3,4,5]
+		bob, [1,2,3,4]
+items =>
+		[1,2,3,4,5]
+		[1,2,3,4]
+coClicks (just map) =>
+		[(1,2), (2,3) (1,3) ...]
+		[(1,2), (2,3) (1,3) ...]
+
+coclicks (with flatMap) =>
+		(1,2)
+		(2,3)
+		(1,3)
+		...
+		(1,2)
+		(2,3)
+		(1,3)
+		...
+coclicks map =>
+		(1,2), 1
+		(2,3), 1
+		(1,3), 1
+		...
+		(1,2), 1
+		(2,3), 1
+		(1,3), 1
+
+count =>
+	(1,2), 2
+	(2,3), 2
+	(1,3), 2
+'''
