@@ -150,9 +150,7 @@ def serialize_borrows_item(borrows):
 
 def serialize_recommendation_item(recommendations):
     return [
-                {
-                    'recommended_item': model_to_dict( m.recommended_item ),
-                } for m in recommendations
+                model_to_dict( m.recommended_item ) for m in recommendations
             ]
 
 @csrf_exempt
