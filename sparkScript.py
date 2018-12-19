@@ -19,7 +19,7 @@ while True:
     print('start of loop')
     try:
         for message in consumer:
-            with open('/data/access.log', 'a') as log:
+            with open('./data/access.log', 'a') as log:
                 new_recommendation = json.loads((message.value).decode('utf-8'))
                 user_id = new_recommendation['user_id']
                 item_id = new_recommendation['item_id']
