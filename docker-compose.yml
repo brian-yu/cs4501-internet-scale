@@ -120,6 +120,7 @@ spark-master:
     SPARK_CONF_DIR: /conf
   links:
     - models:models-api
+    - kafka:kafka
   expose:
     - 7001
     - 7002

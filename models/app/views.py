@@ -404,6 +404,10 @@ def create_recommendation(request):
             item2_id = form_data['item2_id']
             item1 = Item.objects.get(id=item1_id)
             item2 = Item.objects.get(id=item2_id)
+
+            if item1.recommendations.objects().filter(recommended_item=item2):
+                return JsonResponse({'ok': True})
+
             recommendation1 = Recommendation.objects.create(
                 item=item1,
                 recommended_item=item2,
