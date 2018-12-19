@@ -151,8 +151,7 @@ def serialize_borrows_item(borrows):
 def serialize_recommendation_item(recommendations):
     return [
                 {
-                    'item': m.item,
-                    'recommended_item': m.recommended_item,
+                    'recommended_item': model_to_dict( m.recommended_item ),
                 } for m in recommendations
             ]
 
@@ -166,7 +165,7 @@ def item(request, id):
             obj_dict['owner'] = obj.owner.first_name + " " + obj.owner.last_name
             obj_dict['borrows'] = serialize_borrows_item(list(Borrow.objects.filter(item=obj.id).order_by('-borrow_date')[:5]))
             obj_dict['recommendations'] = serialize_recommendation_item(
-                list(Recommendation.objects.filter(item=obj.id)))
+                obj.recommendations.all())
             
             return jsonResponse(obj_dict)
         except Item.DoesNotExist: # should never happen because we're always routing from a method
