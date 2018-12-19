@@ -151,8 +151,7 @@ def serialize_borrows_item(borrows):
 def serialize_recommendation_item(recommendations):
     return [
                 {
-                    'item': m.item,
-                    'recommended_item': m.recommended_item,
+                    'recommended_item': model_to_dict( m.recommended_item ),
                 } for m in recommendations
             ]
 
@@ -167,7 +166,7 @@ def item(request, id):
             obj_dict['borrows'] = serialize_borrows_item(
                 list(Borrow.objects.filter(item=obj.id).order_by('-borrow_date')[:5]))
             obj_dict['recommendations'] = serialize_recommendation_item(
-                list(Recommendation.objects.filter(item=obj.id)))
+                obj.recommendations.all())
             
             return jsonResponse(obj_dict)
         except Item.DoesNotExist: # should never happen because we're always routing from a method
@@ -411,37 +410,36 @@ def check_login(req):
 def create_recommendation(request):
     if request.method == "POST":
         form_data = request.POST
-        try:
-            item1_id = form_data['item1_id']
-            item2_id = form_data['item2_id']
-            item1 = Item.objects.get(id=item1_id)
-            item2 = Item.objects.get(id=item2_id)
+        # try:
+        item1_id = form_data['item1_id']
+        item2_id = form_data['item2_id']
+        item1 = Item.objects.get(id=item1_id)
+        item2 = Item.objects.get(id=item2_id)
 
-            if item1.recommendations.objects().filter(recommended_item=item2):
-                return JsonResponse({'result': 'recommendation already exists', 'ok': True})
+        if item1.recommendations.filter(recommended_item=item2):
+            return JsonResponse({'result': 'recommendation already exists', 'ok': True})
 
-            recommendation1 = Recommendation.objects.create(
-                item=item1,
-                recommended_item=item2,
-            )
-            recommendation1.save()
-            recommendation2 = Recommendation.objects.create(
-                item=item2,
-                recommended_item=item1,
-            )
-            recommendation2.save()
-            return JsonResponse({'result': 'recommendation created', 'ok': True})
-        except:
-            result = json.dumps(
-                {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
-            return HttpResponse(result, content_type='application/json')
+        recommendation1 = Recommendation.objects.create(
+            item=item1,
+            recommended_item=item2,
+        )
+        recommendation1.save()
+        recommendation2 = Recommendation.objects.create(
+            item=item2,
+            recommended_item=item1,
+        )
+        recommendation2.save()
+        return JsonResponse({'result': 'recommendation created', 'ok': True})
+        # except:
+        #     result = json.dumps(
+        #         {'error': 'Missing field or malformed data in CREATE request. Here is the data we received: {}'.format(form_data), 'ok': False})
+        #     return HttpResponse(result, content_type='application/json')
 
-def recommendations(request, item_id):
+def recommendations(request, id):
     res = []
-    item = Item.objects.get(id=item_id)
+    item = Item.objects.get(id=id)
     recommended_items = item.recommendations.all()
     for item in list(recommended_items.order_by('-id')):
         d = model_to_dict(item)
-        d['owner'] = model_to_dict(User.objects.get(pk=d['owner']))
         res.append(d)
     return jsonResponse(res)
