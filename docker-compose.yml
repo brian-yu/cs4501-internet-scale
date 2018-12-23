@@ -68,6 +68,7 @@ batch:
   links:
     - kafka:kafka
     - es:es
+    - models:models-api
   volumes:
     - ./:/app
   entrypoint: ./startKafkaStuff.sh

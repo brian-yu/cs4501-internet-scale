@@ -1,6 +1,12 @@
 .logo {
 	font-size: .8em;
 }
+h1{
+	text-align: center;
+}
+p{
+	text-align: center;
+}
 .item_title{
 	text-decoration: underline;
 }
